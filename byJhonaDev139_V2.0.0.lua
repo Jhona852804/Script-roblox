@@ -599,5 +599,5 @@ createButton(utilitiesWindow, "Encerrar Script", function()
     for _, gui in pairs(windows) do
         gui:Destroy()
     end
+    end
 end)
-end
