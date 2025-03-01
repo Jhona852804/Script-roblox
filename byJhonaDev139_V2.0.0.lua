@@ -183,7 +183,7 @@ RunService.RenderStepped:Connect(UpdateESP)
 createButton(visualWindow, "Ativar ESP", function()
     espEnabled = not espEnabled
 end)
-
+end
 createButton(utilitiesWindow, "Encerrar Script", function()
 for _, gui in pairs(windows) do gui:Destroy() end
 espEnabled = false
