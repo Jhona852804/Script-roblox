@@ -219,7 +219,7 @@ local function updatePlayerList()
                 openTrollWindow(targetPlayer)
             end)
             button.Size = UDim2.new(1, 0, 0, buttonHeight)  -- Definir o tamanho do botão
-            button.Position = UDim2.new(0, 0, 0, totalHeight)  -- Ajustar a posição do botão
+            button.Position = UDim2.new(0, 1, 0, totalHeight)  -- Ajustar a posição do botão
             totalHeight = totalHeight + buttonHeight  -- Atualizar a altura total
 
             -- Atualizar o tamanho do canvas para permitir a rolagem
