@@ -184,60 +184,10 @@ createButton(visualWindow, "Ativar ESP", function()
     espEnabled = not espEnabled
 end)
 
-
-
--- Criar um ScrollingFrame para permitir a rolagem da lista de jogadores
-local playerListFrame = Instance.new("ScrollingFrame")
-playerListFrame.Parent = listaWindow
-playerListFrame.Size = UDim2.new(1, 0, 1, 0)  -- Ocupa toda a janela
-playerListFrame.CanvasSize = UDim2.new(0, 0, 0, 0)  -- Inicialmente sem tamanho
-playerListFrame.ScrollBarThickness = 10  -- Espessura da barra de rolagem
-playerListFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
-
--- Função para abrir a janela "Troll" com botões de ações para o player escolhido
-local function openTrollWindow(targetPlayer)
-    local trollWindow = createWindow("Troll - " .. targetPlayer.Name, UDim2.new(0.5, 0, 0.4, 0))
-
-    -- Botões para ações do player...
-    -- (o restante da função permanece o mesmo)
-end
-
--- Função para atualizar a lista de jogadores
-local function updatePlayerList()
-    -- Limpar os botões antigos antes de atualizar
-    for _, child in pairs(playerListFrame:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-
-    -- Criar um botão para cada jogador na lista
-    local buttonHeight = 50  -- Altura de cada botão
-    local totalHeight = 0  -- Altura total necessária para todos os botões
-
-    for _, targetPlayer in pairs(Players:GetPlayers()) do
-        if targetPlayer ~= player then  -- Ignorar o próprio jogador
-            local button = createButton(playerListFrame, targetPlayer.Name, function()
-                openTrollWindow(targetPlayer)
-            end)
-            button.Size = UDim2.new(1, 0, 0, buttonHeight)  -- Definir o tamanho do botão
-            button.Position = UDim2.new(0, 0, 0, totalHeight)  -- Ajustar a posição do botão
-            totalHeight = totalHeight + buttonHeight  -- Atualizar a altura total
-
-            -- Atualizar o tamanho do canvas para permitir a rolagem
-            playerListFrame.CanvasSize = UDim2.new(0, 0, 0, totalHeight)
-        end
-    end
-end
-
--- Atualiza a lista sempre que um jogador entra ou sai
-Players.PlayerAdded:Connect(updatePlayerList)
-Players.PlayerRemoving:Connect(updatePlayerList)
-
--- Atualiza a lista inicialmente
-updatePlayerList()
--- 🔚 Encerrar Script
 createButton(utilitiesWindow, "Encerrar Script", function()
-        createWindow:destroy
-    end
-end
+for _, gui in pairs(windows) do gui:Destroy() end
+espEnabled = false
+for _, line in pairs(espLines) do line:Remove() end
+espLines = {}
+RunService:UnbindFromRenderStep("ESPUpdate")
+end)
