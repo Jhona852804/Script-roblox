@@ -241,3 +241,4 @@ updatePlayerList()
 createButton(utilitiesWindow, "Encerrar Script", function()
         createWindow:destroy
     end
+end
