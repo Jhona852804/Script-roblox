@@ -184,8 +184,7 @@ createButton(visualWindow, "Ativar ESP", function()
     espEnabled = not espEnabled
 end)
 
--- Criar a janela de lista de jogadores com um ScrollingFrame
-local listaWindow = createWindow("Player List", UDim2.new(0.7, 0, 0.3, 0))
+
 
 -- Criar um ScrollingFrame para permitir a rolagem da lista de jogadores
 local playerListFrame = Instance.new("ScrollingFrame")
