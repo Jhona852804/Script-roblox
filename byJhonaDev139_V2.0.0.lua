@@ -60,9 +60,8 @@ local playerWindow = createWindow("Jogador", UDim2.new(0.1, 0, 0.3, 0))
 local objectsWindow = createWindow("Objetos 3D", UDim2.new(0.3, 0, 0.3, 0))
 local visualWindow = createWindow("visual", UDim2.new(0.5,0,0.3,0))
 local TPWindow = createWindow("TP manager", UDim2.new(0.7, 0, 0.3, 0))
-local listaWindow = createWindow("Player List", UDim2.new(0.7, 0, 0.3, 0))
 local utilitiesWindow = createWindow("Utilitários", UDim2.new(0.7, 0, 0.3, 0))
-
+local listaWindow = createWindow("Player List", UDim2.new(0.7, 0, 0.3, 0))
 
 -- 🏃‍♂️ Ajustar velocidade do jogador
 createButton(playerWindow, "Aumentar Velocidade", function()
@@ -183,11 +182,16 @@ RunService.RenderStepped:Connect(UpdateESP)
 createButton(visualWindow, "Ativar ESP", function()
     espEnabled = not espEnabled
 end)
-end
+
+
+
+-- 🔚 Encerrar Script
 createButton(utilitiesWindow, "Encerrar Script", function()
-for _, gui in pairs(windows) do gui:Destroy() end
-espEnabled = false
-for _, line in pairs(espLines) do line:Remove() end
-espLines = {}
-RunService:UnbindFromRenderStep("ESPUpdate")
+    for _, gui in pairs(windows) do gui:Destroy() end
+    espEnabled = false
+    for _, line in pairs(espLines) do line:Remove() end
+    espLines = {}
+    RunService:UnbindFromRenderStep("ESPUpdate")
 end)
+
+------------------------------------------------------
