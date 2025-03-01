@@ -153,6 +153,7 @@ createButton(playerWindow, "Speed Edit", function()
     end
 end)
 
+-- Botão de super pulo
 createButton(playerWindow, "Super Pulo", function()
     local humanoid = character:FindFirstChildOfClass("Humanoid")
     if humanoid then
@@ -180,7 +181,6 @@ createButton(TPWindow, "TP Elev", function()
 end)  
 
 -- **Funções e Botões para a Categoria Objetos 3D**
-
 local function createBlock(name, position)
     -- Criar o modelo do bloco
     local block = Instance.new("Part")
@@ -235,6 +235,7 @@ createButton(objectsWindow, "Criar Esfera", function()
     sphere.Anchored = true
 end)
 
+-- função para criar o esp name
 
 local espNameColor = Color3.new(1, 1, 1) -- Cor padrão para ESP Names  
 local espName = {} -- Tabela para armazenar os labels ESP
@@ -348,7 +349,7 @@ createButton(visualWindow, "ESP Names", function()
 end)
 end
 
-
+-- função para criar Targeting Line
 createButton(visualWindow, "Targeting Line", function()
     local player = game.Players.LocalPlayer
     local character = player.Character
@@ -391,8 +392,6 @@ createButton(visualWindow, "Targeting Line", function()
         end)
     end
 end)
-
--- Variáveis globais
 
 
 -- Função para desenhar as linhas do ESP para todos os jogadores
@@ -534,6 +533,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
         ToggleESP()
     end
 end)
+end
 -- **Funções e Botões para a Categoria Utilitários**
 
 local function createItemIDWindow()
@@ -996,25 +996,7 @@ local function UpdateESP()
     end
 end
 
--- Função para criar a janela de configuração
-local function CreateESPConfigWindow()
-    local gui = Instance.new("ScreenGui")
-    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    -- Janela de configuração
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 200, 0, 250)
-    frame.Position = UDim2.new(0, 10, 0, 10)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    frame.Parent = gui
-
-    -- Título da janela
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 30)
-    title.Text = "ESP Config"
-    title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.Parent = frame
 
     -- Botões de cor
     local colors = {"White", "Red", "Blue", "Green", "Cyan", "Purple"}
@@ -1046,8 +1028,7 @@ local function CreateESPConfigWindow()
             end
             UpdateESP()
         end)
-
-        yOffset = yOffset + 35
+         yOffset = yOffset + 35
     end
 
     -- Botão de fechar a janela
@@ -1105,6 +1086,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
         ToggleESP()
     end
 end)
+end
 -- **Funções e Botões para a Categoria Utilitários**
 
 local function createItemIDWindow()
@@ -1170,37 +1152,4 @@ createButton(utilitiesWindow, "Encerrar Script", function()
     for _, gui in pairs(windows) do
         gui:Destroy()
     end
-    end
-end)
-
-            })
-        else
-            -- Notificação de erro (evento não encontrado)
-            game:GetService("StarterGui"):SetCore("SendNotification", {
-                Title = "Erro",
-                Text = "Evento remoto 'GiveItem' não encontrado.",
-                Icon = "rbxassetid://6031280882",
-                Duration = 3
-            })
-        end
-    else
-        -- Notificação de erro (ID inválido)
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "Erro",
-            Text = "Por favor, digite um número válido.",
-            Icon = "rbxassetid://6031094678",
-            Duration = 3
-        })
-    end
-end)
-end
--- Botão para abrir a janela de pegar item por ID
-createButton(playerWindow, "Pegar Item por ID", createItemIDWindow)
-
--- Botão para fechar o script 
-createButton(utilitiesWindow, "Encerrar Script", function()
-    for _, gui in pairs(windows) do
-        gui:Destroy()
-    end
-    
 end)
