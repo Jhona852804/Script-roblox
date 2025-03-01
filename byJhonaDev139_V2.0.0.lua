@@ -218,6 +218,7 @@ createButton(objectsWindow, "Adicionar Bloco", function()
     createBlock(blockName, blockPosition)  -- Cria o bloco
 end)
 
+-- função para criar o bloco
 createButton(objectsWindow, "Criar Cubo", function()
     local cube = Instance.new("Part", game.Workspace)
     cube.Size = Vector3.new(5, 5, 5)
@@ -226,6 +227,7 @@ createButton(objectsWindow, "Criar Cubo", function()
     cube.Anchored = true
 end)
 
+-- função para criar uma esfera
 createButton(objectsWindow, "Criar Esfera", function()
     local sphere = Instance.new("Part", game.Workspace)
     sphere.Shape = Enum.PartType.Ball
@@ -526,14 +528,8 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
         CreateESPConfigWindow()
     end
 end)
-
--- Comando para ativar/desativar o ESP (exemplo)
-game:GetService("UserInputService").InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Q then
-        ToggleESP()
-    end
-end)
 end
+
 -- **Funções e Botões para a Categoria Utilitários**
 
 local function createItemIDWindow()
@@ -699,56 +695,7 @@ createButton(playerWindow, "Speed Edit", function()
         okButton.MouseButton1Click:Connect(function()
             local speedInput = tonumber(textBox.Text) -- Converte o texto digitado para número
             if speedInput then
-                setSpeed(speedInput) -- Aplica a nova velocidade
-            else
-                -- Se o valor não for válido, exibe uma mensagem (você pode adicionar um alerta aqui)
-                print("Valor de velocidade inválido")
-            end
-        end)
 
-        -- Ao clicar no botão "Reset Speed", reseta a velocidade para o valor padrão
-        resetSpeedButton.MouseButton1Click:Connect(function()
-            -- Cancela o loop de velocidade
-            if speedLoop then
-                speedLoop:Disconnect()
-            end
-
-            -- Reseta a velocidade para o valor normal (padrão)
-            humanoid.WalkSpeed = 16
-        end)
-
-        -- Ao clicar no botão "Fechar", fecha a janela
-        closeButton.MouseButton1Click:Connect(function()
-            editSpeedWindow:Destroy() -- Remove a janela
-        end)
-    end
-end)
-
-createButton(playerWindow, "Super Pulo", function()
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        humanoid.JumpPower = 150 -- Aumenta a altura do pulo
-    end
-end)
-createButton(TPWindow, "TP Forward", function()
-    local root = character:FindFirstChild("HumanoidRootPart")
-    if root then
-        root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
-    end
-end)
-createButton(TPWindow, "TP Safe", function()  
-    local root = character:FindFirstChild("HumanoidRootPart")  
-    if root then  
-        root.CFrame = CFrame.new(0, 50, -8)  
-    end  
-end)  
-
-createButton(TPWindow, "TP Elev", function()  
-    local root = character:FindFirstChild("HumanoidRootPart")  
-    if root then  
-        root.CFrame = CFrame.new(0, 3, -8)  
-    end  
-end)  
 
 -- **Funções e Botões para a Categoria Objetos 3D**
 
@@ -953,141 +900,16 @@ createButton(visualWindow, "Targeting Line", function()
                                 local targetScreenPosition, onScreen = workspace.CurrentCamera:WorldToViewportPoint(targetHumanoidRootPart.Position)
                                 if onScreen then
                                     line.To = Vector2.new(targetScreenPosition.X, targetScreenPosition.Y)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- Variáveis globais
-
-
--- Função para desenhar as linhas do ESP para todos os jogadores
-local function DrawESP()
-    -- Limpar as linhas antigas
-    for _, line in pairs(espLines) do
-        line:Remove()
-    end
-    espLines = {}
-
-    -- Loop para desenhar as linhas para todos os jogadores
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local rootPart = player.Character.HumanoidRootPart
-            local line = Drawing.new("Line")
-            line.From = game.Workspace.CurrentCamera.CFrame.Position  -- Posição do jogador local
-            line.To = rootPart.Position
-            line.Color = espColor
-            line.Thickness = 2
-            line.Transparency = 1
-            table.insert(espLines, line)
-        end
-    end
-end
-
--- Função para atualizar as linhas do ESP
-local function UpdateESP()
-    if espEnabled then
-        DrawESP()
-    end
-end
-
-
-
-    -- Botões de cor
-    local colors = {"White", "Red", "Blue", "Green", "Cyan", "Purple"}
-    local yOffset = 40
-
-    for _, colorName in pairs(colors) do
-        local colorButton = Instance.new("TextButton")
-        colorButton.Size = UDim2.new(1, 0, 0, 30)
-        colorButton.Position = UDim2.new(0, 0, 0, yOffset)
-        colorButton.Text = colorName
-        colorButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        colorButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        colorButton.Parent = frame
-
-        -- Definindo a cor quando o botão for clicado
-        colorButton.MouseButton1Click:Connect(function()
-            if colorName == "White" then
-                espColor = Color3.fromRGB(255, 255, 255)
-            elseif colorName == "Red" then
-                espColor = Color3.fromRGB(255, 0, 0)
-            elseif colorName == "Blue" then
-                espColor = Color3.fromRGB(0, 0, 255)
-            elseif colorName == "Green" then
-                espColor = Color3.fromRGB(0, 255, 0)
-            elseif colorName == "Cyan" then
-                espColor = Color3.fromRGB(0, 255, 255)
-            elseif colorName == "Purple" then
-                espColor = Color3.fromRGB(255, 0, 255)
-            end
-            UpdateESP()
-        end)
-         yOffset = yOffset + 35
-    end
-
-    -- Botão de fechar a janela
-    local closeButton = Instance.new("TextButton")
-    closeButton.Size = UDim2.new(1, 0, 0, 30)
-    closeButton.Position = UDim2.new(0, 0, 0, yOffset)
-    closeButton.Text = "Fechar"
-    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    closeButton.Parent = frame
-
-    closeButton.MouseButton1Click:Connect(function()
-        gui:Destroy()
-    end)
-
-    -- Botão para parar o ESP
-    local stopButton = Instance.new("TextButton")
-    stopButton.Size = UDim2.new(1, 0, 0, 30)
-    stopButton.Position = UDim2.new(0, 0, 0, yOffset + 35)
-    stopButton.Text = "Parar ESP"
-    stopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    stopButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-    stopButton.Parent = frame
-
-    stopButton.MouseButton1Click:Connect(function()
-        espEnabled = false
-        UpdateESP()
-    end)
-end
-
--- Função para ativar/desativar o ESP
-local function ToggleESP()
-    espEnabled = not espEnabled
-    if espEnabled then
-        UpdateESP()
-    else
-        -- Limpar as linhas quando desativado
-        for _, line in pairs(espLines) do
-            line:Remove()
-        end
-        espLines = {}
-    end
-end
-
--- Criando a janela de configuração quando o jogador pressionar a tecla 'E'
-game:GetService("UserInputService").InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.E then
-        CreateESPConfigWindow()
-    end
-end)
-
--- Comando para ativar/desativar o ESP (exemplo)
-game:GetService("UserInputService").InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Q then
-        ToggleESP()
-    end
-end)
-end
--- **Funções e Botões para a Categoria Utilitários**
+                                                                                end
+                                                                            end
+                                                                        end
+                                                                    end
+                                                                end
+                                                            end
+                                                        end)
+                                                    end
+                                                end)
+   -- **Funções e Botões para a Categoria Utilitários**
 
 local function createItemIDWindow()
     local itemWindow = createWindow("Item ID", UDim2.new(0.5, 0, 0.3, 0))
