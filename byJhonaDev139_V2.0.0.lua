@@ -238,4 +238,6 @@ Players.PlayerRemoving:Connect(updatePlayerList)
 -- Atualiza a lista inicialmente
 updatePlayerList()
 -- 🔚 Encerrar Script
-createButton(utilitiesWindow, "Encerrar Script", function()for _, gui in pairs(windows) do gui:Destroy() end espEnabled = false for _, line in pairs(espLines) do line:Remove() end espLines = {} RunService:UnbindFromRenderStep("ESPUpdate") end)
+createButton(utilitiesWindow, "Encerrar Script", function()
+        createWindow:destroy
+    end
