@@ -600,3 +600,4 @@ createButton(utilitiesWindow, "Encerrar Script", function()
         gui:Destroy()
     end
 end)
+end
