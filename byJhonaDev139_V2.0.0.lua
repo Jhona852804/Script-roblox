@@ -219,7 +219,7 @@ local function updatePlayerList()
                 openTrollWindow(targetPlayer)
             end)
             button.Size = UDim2.new(1, 0, 0, buttonHeight)  -- Definir o tamanho do botão
-            button.Position = UDim2.new(0, 1, 0, totalHeight)  -- Ajustar a posição do botão
+            button.Position = UDim2.new(0, 0, 0, totalHeight)  -- Ajustar a posição do botão
             totalHeight = totalHeight + buttonHeight  -- Atualizar a altura total
 
             -- Atualizar o tamanho do canvas para permitir a rolagem
@@ -237,9 +237,14 @@ updatePlayerList()
 
 -- 🔚 Encerrar Script
 createButton(utilitiesWindow, "Encerrar Script", function()
-    for _, gui in pairs(windows) do gui:Destroy() end
+    -- Garantir que a janela de utilitários seja destruída corretamente
+    for _, gui in pairs(windows) do 
+        gui:Destroy() 
+    end
     espEnabled = false
-    for _, line in pairs(espLines) do line:Remove() end
+    for _, line in pairs(espLines) do 
+        line:Remove() 
+    end
     espLines = {}
     RunService:UnbindFromRenderStep("ESPUpdate")
 end)
