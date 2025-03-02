@@ -534,7 +534,63 @@ createButton(visualWindow, "ESP box ❗(em desenvolvimento)", function()
 end)
 
 -----------------------------------------------------:
-
+local function createItemIDWindow()  
+    local itemWindow = createWindow("Item ID", UDim2.new(0.5, 0, 0.3, 0))  
+  
+    local TextBox = Instance.new("TextBox", itemWindow)  
+    TextBox.Size = UDim2.new(1, -10, 0, 30)  
+    TextBox.Position = UDim2.new(0, 5, 0, 40)  
+    TextBox.PlaceholderText = "Digite o ID do item"  
+    TextBox.Text = ""  
+    TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
+    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)  
+    TextBox.Font = Enum.Font.SourceSans  
+    TextBox.TextSize = 18  
+  
+    local OkButton = Instance.new("TextButton", itemWindow)  
+    OkButton.Size = UDim2.new(1, -10, 0, 30)  
+    OkButton.Position = UDim2.new(0, 5, 0, 80)  
+    OkButton.Text = "OK"  
+    OkButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  
+    OkButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
+    OkButton.Font = Enum.Font.SourceSansBold  
+    OkButton.TextSize = 18  
+  
+    OkButton.MouseButton1Click:Connect(function()  
+    local itemID = tonumber(TextBox.Text) -- Converte para número  
+    if itemID then  
+        local remote = game.ReplicatedStorage:FindFirstChild("GiveItem") -- Nome do evento remoto  
+        if remote then  
+            remote:FireServer(itemID)  
+            -- Notificação de sucesso  
+            game:GetService("StarterGui"):SetCore("SendNotification", {  
+                Title = "Sucesso!",  
+                Text = "Tentando pegar o item com ID: " .. itemID,  
+                Icon = "rbxassetid://6031068427", -- Substitua por um ícone, ou deixe em branco  
+                Duration = 3  
+            })  
+        else  
+            -- Notificação de erro (evento não encontrado)  
+            game:GetService("StarterGui"):SetCore("SendNotification", {  
+                Title = "Erro",  
+                Text = "Evento remoto 'GiveItem' não encontrado.",  
+                Icon = "rbxassetid://6031280882",  
+                Duration = 3  
+            })  
+        end  
+    else  
+        -- Notificação de erro (ID inválido)  
+        game:GetService("StarterGui"):SetCore("SendNotification", {  
+            Title = "Erro",  
+            Text = "Por favor, digite um número válido.",  
+            Icon = "rbxassetid://6031094678",  
+            Duration = 3  
+        })  
+    end  
+end)  
+end  
+-- Botão para abrir a janela de pegar item por ID  
+createButton(playerWindow, "Pegar Item por ID", createItemIDWindow)
 -- 🔚 Encerrar Script
 createButton(utilitiesWindow, "Encerrar Script", function()
     for _, gui in pairs(windows) do gui:Destroy() end
