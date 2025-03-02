@@ -192,7 +192,7 @@ createButton(playerWindow, "Fly", function()
     layout.Padding = UDim.new(0, 10)
 
     local flying = true
-    local flySpeed = 50
+    local flySpeed = 100
     local movement = {up = 0, forward = 0}
     local flyConnection
 
