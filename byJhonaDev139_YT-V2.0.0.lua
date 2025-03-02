@@ -358,7 +358,7 @@ createButton(objectsWindow, "Criar luz", function()
     local light = Instance.new("PointLight")
     light.Parent = lightBlock
     light.Brightness = 5 -- Intensidade da luz
-    light.Range = 100 -- Alcance da luz
+    light.Range = 20 -- Alcance da luz
     light.Color = Color3.fromRGB(255, 255, 255) -- Cor da luz (Amarelo)
 
     -- Aplicar uma força inicial para o bloco cair naturalmente
