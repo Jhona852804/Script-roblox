@@ -351,14 +351,14 @@ createButton(objectsWindow, "Criar luz", function()
     lightBlock.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0) -- Posição inicial
     lightBlock.Anchored = false -- Habilita física
     lightBlock.Material = Enum.Material.Neon -- Dá um efeito brilhante
-    lightBlock.BrickColor = BrickColor.new("Bright red") -- Cor do bloco
+    lightBlock.BrickColor = BrickColor.new("Bright white") -- Cor do bloco
     lightBlock.Parent = game.Workspace
 
     -- Criar a luz dentro do bloco
     local light = Instance.new("PointLight")
     light.Parent = lightBlock
     light.Brightness = 5 -- Intensidade da luz
-    light.Range = 50 -- Alcance da luz
+    light.Range = 100 -- Alcance da luz
     light.Color = Color3.fromRGB(255, 255, 255) -- Cor da luz (Amarelo)
 
     -- Aplicar uma força inicial para o bloco cair naturalmente
