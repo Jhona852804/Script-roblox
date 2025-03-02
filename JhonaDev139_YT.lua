@@ -11,7 +11,6 @@ local ESP_Window = nil
 local ESP_Ativo = false
 local originalPosition = nil
 local isFrozen = false
-local itemWindowExists = false
 
 -- Tabela para armazenar as janelas criadas
 local windows = {}
