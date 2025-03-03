@@ -336,9 +336,6 @@ createButton(TPWindow, "TP Forward", function()
     root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
 end)
 
--- Variáveis globais para armazenar a posição original e o estado do TP
-
-
 createButton(TPWindow, "TP Safe", function()
     local root = character:WaitForChild("HumanoidRootPart")
 
@@ -374,42 +371,28 @@ createButton(TPWindow, "TP Safe", function()
 end)
 
 -- TP ALL PLAYERS
-createButton(TPWindow, "TP all players", function()
-    local Players = game:GetService("Players")
-    local localPlayer = Players.LocalPlayer
-    local character = localPlayer.Character
-    if not character then return end
-    local rootPart = character:FindFirstChild("HumanoidRootPart")
-    if not rootPart then return end
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 
-    -- Cria um pad de teleporte temporário
-    local teleportPad = Instance.new("Part")
-    teleportPad.Size = Vector3.new(10, 1, 10)
-    teleportPad.Anchored = true
-    teleportPad.Transparency = 1  -- invisível
-    teleportPad.CanCollide = true   -- importante para que o toque seja detectado
-    teleportPad.Parent = workspace
-
-    -- Posiciona o pad em frente ao seu personagem (ajuste conforme necessário)
-    teleportPad.CFrame = rootPart.CFrame * CFrame.new(0, -3, -10)
-
-    -- Para cada jogador (exceto você), simula o toque no pad
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= localPlayer and player.Character then
-            local targetRoot = player.Character:FindFirstChild("HumanoidRootPart")
-            if targetRoot then
-                -- Simula o toque no pad (fase de início do contato)
-                firetouchinterest(targetRoot, teleportPad, 0)
-                wait(0.1)
-                -- Simula a finalização do contato
-                firetouchinterest(targetRoot, teleportPad, 1)
-                print("Tentando teleportar: " .. player.Name)
-            end
-        end
+createButton(TPWindow, "TP all players (V)", function()
+local function desyncPlayer(target)
+    local rootPart = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    
+    if rootPart then
+        rootPart.Anchored = true  -- Congela para tentar desincronizar
+        wait(0.1)  -- Pequeno atraso para burlar algumas verificações
+        rootPart.Anchored = false  -- Descongela, mas pode estar fora de sincronia
+        rootPart.CFrame = localPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+        print("✅ Desync aplicado em:", target.Name)
     end
+end
 
-    wait(1)
-    teleportPad:Destroy()
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= localPlayer then
+        desyncPlayer(player)
+    end
+end
 end)
 
 
