@@ -584,7 +584,7 @@ end
 game.Players.PlayerAdded:Connect(setupPlayer)
 
 -- Função para ativar/desativar ESP e abrir a janela de personalização
-createButton(visualWindow, "esp", function()
+createButton(visualWindow, "Chams", function()
     espEnabled = not espEnabled
 
     if not espEnabled then
@@ -597,7 +597,7 @@ createButton(visualWindow, "esp", function()
         -- Criando a janela de personalização
         espWindow = Instance.new("Frame")
         espWindow.Size = UDim2.new(0, 300, 0, 440)
-        espWindow.Position = UDim2.new(0, 100, 0, 100)
+        espWindow.Position = UDim2.new(0, 150, 0, 100)
         espWindow.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         espWindow.Visible = espEnabled
 
