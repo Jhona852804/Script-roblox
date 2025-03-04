@@ -99,36 +99,6 @@ local TPWindow = createWindow("✨TP manager", UDim2.new(0.58, 0, 0.2, 0))
 local utilitiesWindow = createWindow("💡 Utilitários", UDim2.new(0.65, 0, 0.82, 0))
 local listaWindow = createWindow("🗒️ Player List", UDim2.new(0.77, 0, 0.2, 0))
 
-
-local godModeEnabled = false
-
-createButton(playerWindow, "God Mode", function()
-    local player = game.Players.LocalPlayer
-    local character = player.Character
-    if not character then return end
-
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid then return end
-
-    godModeEnabled = not godModeEnabled
-
-    if godModeEnabled then
-        humanoid.Health = math.huge -- Vida infinita
-        
-        -- Criando o escudo
-        local forceField = Instance.new("ForceField")
-        forceField.Parent = character
-    else
-        humanoid.Health = 100 -- Vida normal
-        
-        -- Removendo o escudo
-        local existingShield = character:FindFirstChildOfClass("ForceField")
-        if existingShield then
-            existingShield:Destroy()
-        end
-    end
-end)
-
 -- 🏃‍♂️ Ajustar velocidade do jogador
 local isSpeedIncreased = false -- Variável para controlar o estado da velocidade
 
@@ -318,7 +288,7 @@ local function preventAFK()
 end
 
 -- Criando o botão "ant AFK"
-createButton(playerWindow, "ant AFK", function()
+createButton(utilitiesWindow, "ant AFK", function()
     if not antAFKEnabled then
         antAFKEnabled = true
         showNotification("ant AFK enabled")  -- Exibe a notificação que o ant AFK foi ativado
@@ -706,7 +676,63 @@ createButton(visualWindow, "Chams", function()
         highlightObjects = {}
     end
 end)
+-----------------------------------------------------------
+local lagProtectionEnabled = false -- Variável de controle
 
+createButton(utilitiesWindow, "Anti-Lag", function()
+    lagProtectionEnabled = not lagProtectionEnabled -- Alterna entre ativado e desativado
+
+    -- Exibe a notificação com ícones diferentes dependendo do estado
+    game:GetService("StarterGui"):SetCore("SendNotification", {  
+        Title = "Anti-Lag",  
+        Text = lagProtectionEnabled and "Ant lag ON" or "Ant lag OFF",  
+        Icon = lagProtectionEnabled and "rbxassetid://6031071063" or "rbxassetid://6031071050",  -- Ícones diferentes para ON e OFF
+        Duration = 3  
+    })
+
+    if lagProtectionEnabled then
+        print("Anti-Lag ativado!") -- Mensagem opcional para depuração
+
+        -- Monitorar e remover spam de objetos
+        antiLagConnection = game:GetService("RunService").Stepped:Connect(function()
+            for _, obj in pairs(workspace:GetChildren()) do
+                if obj:IsA("Part") or obj:IsA("Sound") then
+                    if obj:GetChildren() and #obj:GetChildren() > 50 then
+                        obj:Destroy() -- Remove spam de objetos
+                    end
+                end
+            end
+        end)
+
+        -- Detectar loops de lag e suavizar FPS
+        fpsProtection = game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
+            if deltaTime > 0.1 then
+                warn("Possível lag detectado! Limitando FPS...")
+                game:GetService("RunService").RenderStepped:Wait(0.03)
+            end
+        end)
+
+        -- Monitorar consumo de memória
+        memoryCheck = task.spawn(function()
+            while lagProtectionEnabled do
+                local memoryUsage = collectgarbage("count") / 1024
+                if memoryUsage > 500 then
+                    warn("Memória muito alta! Limpando objetos inúteis...")
+                    collectgarbage()
+                end
+                wait(5)
+            end
+        end)
+
+    else
+        print("Anti-Lag desativado!") -- Mensagem opcional
+
+        -- Desconectar os eventos para parar a proteção
+        if antiLagConnection then antiLagConnection:Disconnect() end
+        if fpsProtection then fpsProtection:Disconnect() end
+        if memoryCheck then task.cancel(memoryCheck) end
+    end
+end)
 
 -----------------------------------------------------------
 -- botão de item ID
@@ -766,7 +792,7 @@ local function createItemIDWindow()
 end)  
 end  
 -- Botão para abrir a janela de pegar item por ID  
-createButton(playerWindow, "Pegar Item por ID", createItemIDWindow)
+createButton(utilitiesWindow, "Pegar Item por ID", createItemIDWindow)
 
 -----------------------------------------------------:
 -- 🔚 Encerrar Script
