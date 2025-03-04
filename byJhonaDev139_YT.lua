@@ -92,12 +92,12 @@ local function createHoldButton(parent, text, onHold, onRelease)
 end
 
 -- Criando janelas para categorias
-local playerWindow = createWindow("Jogador", UDim2.new(0.01, 0, 0.2, 0))
-local objectsWindow = createWindow("Objetos 3D", UDim2.new(0.20, 0, 0.2, 0))
-local visualWindow = createWindow("visual", UDim2.new(0.39,0,0.2,0))
-local TPWindow = createWindow("TP manager", UDim2.new(0.58, 0, 0.2, 0))
-local utilitiesWindow = createWindow("Utilitários", UDim2.new(0.65, 0, 0.82, 0))
-local listaWindow = createWindow("Player List", UDim2.new(0.77, 0, 0.2, 0))
+local playerWindow = createWindow("👦 Jogador", UDim2.new(0.01, 0, 0.2, 0))
+local objectsWindow = createWindow("🔲 Objetos 3D", UDim2.new(0.20, 0, 0.2, 0))
+local visualWindow = createWindow("👁️ Visual", UDim2.new(0.39,0,0.2,0))
+local TPWindow = createWindow("✨TP manager", UDim2.new(0.58, 0, 0.2, 0))
+local utilitiesWindow = createWindow("💡 Utilitários", UDim2.new(0.65, 0, 0.82, 0))
+local listaWindow = createWindow("🗒️ Player List", UDim2.new(0.77, 0, 0.2, 0))
 
 
 local godModeEnabled = false
@@ -282,7 +282,7 @@ local function toggleCollision()
 end
 
 -- Criando o botão na janela já existente (playerWindow)
-createButton(playerWindow, "Alternar Colisão", function()
+createButton(playerWindow, "Collision", function()
     toggleCollision()
 end)
 
@@ -397,7 +397,7 @@ end)
 
 
 -- 🏗️ Criar objetos 3D
-createButton(objectsWindow, "Criar luz", function()
+createButton(objectsWindow, "Light", function()
     -- Criar a parte (bloco)
     local lightBlock = Instance.new("Part")
     lightBlock.Size = Vector3.new(1, 1, 1) -- Tamanho do bloco
@@ -426,7 +426,7 @@ createButton(objectsWindow, "Criar luz", function()
     end)
 end)
 
-createButton(objectsWindow, "Criar Cubo", function()
+createButton(objectsWindow, "Create cube", function()
     local cube = Instance.new("Part", game.Workspace)
     cube.Size = Vector3.new(1, 1, 1)
     cube.Position = character.HumanoidRootPart.Position + Vector3.new(0, 1, 0)
