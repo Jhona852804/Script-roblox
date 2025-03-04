@@ -305,7 +305,80 @@ createButton(TPWindow, "TP Forward", function()
     local root = character:WaitForChild("HumanoidRootPart")
     root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
 end)
+local teleportEnabled = false  -- Controla o estado do botão
 
+createButton(TPWindow, "TraceTP", function()
+    if not teleportEnabled then
+        teleportEnabled = true
+        local line = Drawing.new("Line")
+        line.Thickness = 2
+        line.Color = Color3.fromRGB(255, 0, 0)
+
+        RunService.RenderStepped:Connect(function()
+            local closestPlayer = nil
+            local closestDist = math.huge  -- Começa com uma distância muito grande
+
+            for _, otherPlayer in pairs(Players:GetPlayers()) do
+                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                    if onScreen then
+                        -- Calcula a distância do centro da tela
+                        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                        local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                        local dist = (screenCenter - targetScreenPos).Magnitude
+
+                        -- Se for o mais próximo, atualiza o alvo
+                        if dist < closestDist then
+                            closestDist = dist
+                            closestPlayer = otherPlayer
+                        end
+                    end
+                end
+            end
+
+            -- Se encontrou um jogador, desenha a linha
+            if closestPlayer then
+                local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)
+                line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                line.To = Vector2.new(targetPos.X, targetPos.Y)
+                line.Visible = true
+            else
+                line.Visible = false  -- Esconde a linha se ninguém for encontrado
+            end
+        end)
+    else
+        teleportEnabled = false
+        -- Teleporta o personagem para o jogador alvo
+        local closestPlayer = nil
+        local closestDist = math.huge
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                if onScreen then
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                    local dist = (screenCenter - targetScreenPos).Magnitude
+
+                    if dist < closestDist then
+                        closestDist = dist
+                        closestPlayer = otherPlayer
+                    end
+                end
+            end
+        end
+
+        -- Se encontrou o jogador, teleporta
+        if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local myCharacter = player.Character
+            if myCharacter and myCharacter:FindFirstChild("HumanoidRootPart") then
+                myCharacter.HumanoidRootPart.CFrame = closestPlayer.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end
+end)
 createButton(TPWindow, "TP Safe", function()
     local root = character:WaitForChild("HumanoidRootPart")
 
