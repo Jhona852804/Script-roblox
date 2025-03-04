@@ -676,6 +676,32 @@ createButton(visualWindow, "Chams", function()
         highlightObjects = {}
     end
 end)
+
+-- FOG
+local fogEnabled = true  -- Variável para armazenar o estado do fog
+
+local function toggleFog()
+    if fogEnabled then
+        game.Lighting.FogStart = 100000  -- Remove o fog (distância muito grande)
+        game.Lighting.FogEnd = 100000
+    else
+        game.Lighting.FogStart = 0   -- Restaura o fog ao normal
+        game.Lighting.FogEnd = 1000
+    end
+    
+    -- Notificação visual
+    game:GetService("StarterGui"):SetCore("SendNotification", {  
+        Title = "Fog Toggle",  
+        Text = fogEnabled and "Fog ON" or "Fog OFF",  
+        Icon = fogEnabled and "rbxassetid://6031068427" or "rbxassetid://6031094678",  
+        Duration = 3  
+    })  
+
+    fogEnabled = not fogEnabled  -- Alterna entre ativado/desativado
+end
+
+-- Botão principal para ativar/desativar o fog
+createButton(visualWindow, "Fog", toggleFog)
 -----------------------------------------------------------
 local lagProtectionEnabled = false -- Variável de controle
 
