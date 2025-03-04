@@ -716,7 +716,7 @@ local function toggleFog()
     game:GetService("StarterGui"):SetCore("SendNotification", {  
         Title = "Fog Toggle",  
         Text = fogEnabled and "Fog ON" or "Fog OFF",  
-        Icon = fogEnabled and "rbxassetid://6031071063" or "rbxassetid://6031071050",  
+        Icon = fogEnabled and "rbxassetid://7072721443" or "rbxassetid://7072719333",  
         Duration = 3  
     })  
 
