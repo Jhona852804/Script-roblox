@@ -306,15 +306,24 @@ createButton(TPWindow, "TP Forward", function()
     root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
 end)
 local teleportEnabled = false  -- Controla o estado do botão
+--------------------------------------
+local teleportEnabled = false  -- Controla o estado do botão
+local line = nil  -- Armazena a linha globalmente
+local connection = nil  -- Armazena a conexão globalmente
 
 createButton(TPWindow, "TraceTP", function()
     if not teleportEnabled then
         teleportEnabled = true
-        local line = Drawing.new("Line")
-        line.Thickness = 2
-        line.Color = Color3.fromRGB(255, 0, 0)
 
-        RunService.RenderStepped:Connect(function()
+        -- Cria a linha se ela ainda não existir
+        if not line then
+            line = Drawing.new("Line")
+            line.Thickness = 2
+            line.Color = Color3.fromRGB(255, 0, 0)
+        end
+
+        -- Atualiza a linha a cada frame
+        connection = RunService.RenderStepped:Connect(function()
             local closestPlayer = nil
             local closestDist = math.huge  -- Começa com uma distância muito grande
 
@@ -347,8 +356,22 @@ createButton(TPWindow, "TraceTP", function()
                 line.Visible = false  -- Esconde a linha se ninguém for encontrado
             end
         end)
+
     else
         teleportEnabled = false
+
+        -- Remove a linha imediatamente ao teleportar
+        if line then
+            line:Remove()
+            line = nil
+        end
+
+        -- Desconecta a atualização da linha
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+
         -- Teleporta o personagem para o jogador alvo
         local closestPlayer = nil
         local closestDist = math.huge
@@ -379,6 +402,8 @@ createButton(TPWindow, "TraceTP", function()
         end
     end
 end)
+
+
 createButton(TPWindow, "TP Safe", function()
     local root = character:WaitForChild("HumanoidRootPart")
 
