@@ -676,31 +676,54 @@ createButton(visualWindow, "Chams", function()
         highlightObjects = {}
     end
 end)
-
+---------------------------------
 -- FOG
-local fogEnabled = true  -- Variável para armazenar o estado do fog
+local fogEnabled = true  -- Estado do fog
+local fogStart = 0
+local fogEnd = 1000
+local fogStartConnection, fogEndConnection  -- Conexões para congelar valores
 
 local function toggleFog()
+    local lighting = game:GetService("Lighting")
+
     if fogEnabled then
-        game.Lighting.FogStart = 100000  -- Remove o fog (distância muito grande)
-        game.Lighting.FogEnd = 100000
+        -- Salva os valores atuais antes de remover o fog
+        fogStart = lighting.FogStart
+        fogEnd = lighting.FogEnd
+        
+        -- Remove o fog
+        lighting.FogStart = 100000
+        lighting.FogEnd = 100000
+        
+        -- Congela os valores para impedir mudanças externas
+        fogStartConnection = lighting:GetPropertyChangedSignal("FogStart"):Connect(function()
+            lighting.FogStart = 100000
+        end)
+        fogEndConnection = lighting:GetPropertyChangedSignal("FogEnd"):Connect(function()
+            lighting.FogEnd = 100000
+        end)
     else
-        game.Lighting.FogStart = 0   -- Restaura o fog ao normal
-        game.Lighting.FogEnd = 1000
+        -- Restaura os valores originais
+        lighting.FogStart = fogStart
+        lighting.FogEnd = fogEnd
+        
+        -- Descongela, permitindo que o jogo altere novamente
+        if fogStartConnection then fogStartConnection:Disconnect() end
+        if fogEndConnection then fogEndConnection:Disconnect() end
     end
-    
+
     -- Notificação visual
     game:GetService("StarterGui"):SetCore("SendNotification", {  
         Title = "Fog Toggle",  
         Text = fogEnabled and "Fog ON" or "Fog OFF",  
-        Icon = fogEnabled and "rbxassetid://6031068427" or "rbxassetid://6031094678",  
+        Icon = fogEnabled and "rbxassetid://6031071063" or "rbxassetid://6031071050",  
         Duration = 3  
     })  
 
-    fogEnabled = not fogEnabled  -- Alterna entre ativado/desativado
+    fogEnabled = not fogEnabled  -- Alterna o estado
 end
 
--- Botão principal para ativar/desativar o fog
+-- Botão para ativar/desativar o fog
 createButton(visualWindow, "Fog", toggleFog)
 -----------------------------------------------------------
 local lagProtectionEnabled = false -- Variável de controle
