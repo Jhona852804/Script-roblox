@@ -28,7 +28,7 @@ local function createWindow(title, position)
     -- Configuração da janela  
     Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)  
     Frame.Position = position  
-    Frame.Size = UDim2.new(0, 200, 0, 300)  
+    Frame.Size = UDim2.new(0, 200, 0, 350)  
     Frame.Active = true  
     Frame.Draggable = true  
 
@@ -604,49 +604,98 @@ createButton(visualWindow, "Targeting Line", function()
 end)
 
 -- Função para atualizar ESP Names  
-local function updateESPNameColor(target)  
-    if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then  
-        local hrp = target.Character.HumanoidRootPart  
-        local label = hrp:FindFirstChild("ESPLabel")  
+local espNameColor = Color3.new(1, 1, 1) -- Cor padrão para ESP Names
 
-        if not label then  
-            label = Instance.new("BillboardGui", hrp)  
-            label.Size = UDim2.new(0, 200, 0, 50)  
-            label.AlwaysOnTop = true  
-            label.Name = "ESPLabel"  
+-- Função para criar ou atualizar ESP Name
+local function updateESPNameColor(target)
+    if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local hrp = target.Character.HumanoidRootPart
+        local label = hrp:FindFirstChild("ESPLabel")
 
-            local textLabel = Instance.new("TextLabel", label)  
-            textLabel.Size = UDim2.new(1, 0, 1, 0)  
-            textLabel.Text = target.Name  
-            textLabel.TextColor3 = espNameColor  
-            textLabel.BackgroundTransparency = 1  
+        -- Criar o label caso não exista
+        if not label then
+            label = Instance.new("BillboardGui", hrp)
+            label.Size = UDim2.new(0, 100, 0, 10)
+            label.Adornee = hrp
+            label.AlwaysOnTop = true
+            label.Name = "ESPLabel"
 
-            RunService.RenderStepped:Connect(function()  
-                textLabel.TextColor3 = espNameColor  
-            end)  
-        end  
-    end  
-end  
+            local frame = Instance.new("Frame", label)
+            frame.Size = UDim2.new(1, 0, 1, 0)
+            frame.BackgroundTransparency = 1
 
--- Botão ESP Names  
-createButton(visualWindow, "ESP Names", function()  
-    local espNameConfigWindow = createWindow("ESP Names Config", UDim2.new(0.5, 0, 0.3, 0))  
-        
-    createButton(espNameConfigWindow, "White", function() espNameColor = Color3.new(1, 1, 1) end)
-    createButton(espNameConfigWindow, "Red", function() espNameColor = Color3.new(1, 0, 0) end)  
-    createButton(espNameConfigWindow, "Green", function() espNameColor = Color3.new(0, 1, 0) end)  
-    createButton(espNameConfigWindow, "Blue", function() espNameColor = Color3.new(0, 0, 1) end)  
+            local textLabel = Instance.new("TextLabel", frame)
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.Text = target.Name
+            textLabel.TextColor3 = espNameColor
+            textLabel.BackgroundTransparency = 1
+            textLabel.TextScaled = true
+            textLabel.Name = "ESPText"
+        end
+    end
+end
 
-    createButton(espNameConfigWindow, "Close", function()  
-        espNameConfigWindow:Destroy()  
-    end)  
+-- Atualiza a cor do ESP dinamicamente
+RunService.RenderStepped:Connect(function()
+    for _, target in pairs(Players:GetPlayers()) do
+        if target ~= player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = target.Character.HumanoidRootPart
+            local label = hrp:FindFirstChild("ESPLabel")
+            if label and label:FindFirstChild("Frame") and label.Frame:FindFirstChild("ESPText") then
+                label.Frame.ESPText.TextColor3 = espNameColor
+            end
+        end
+    end
+end)
 
-    for _, target in pairs(Players:GetPlayers()) do  
-        if target ~= player then  
-            updateESPNameColor(target)  
-        end  
-    end  
-end)  
+-- Função para remover os ESP Names
+local function removeESPNames()
+    for _, target in pairs(Players:GetPlayers()) do
+        if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = target.Character.HumanoidRootPart
+            local label = hrp:FindFirstChild("ESPLabel")
+            if label then
+                label:Destroy()
+            end
+        end
+    end
+end
+
+-- Função para abrir a janela de personalização de cores
+local function openESPNameConfigWindow()
+    local espNameConfigWindow = createWindow("ESP Names Config", UDim2.new(0.5, 0, 0.3, 0))
+
+    -- Botões para mudar a cor do ESP Name
+    createButton(espNameConfigWindow, "Branco", function() espNameColor = Color3.new(1, 1, 1) end)
+    createButton(espNameConfigWindow, "Vermelho", function() espNameColor = Color3.new(1, 0, 0) end)
+    createButton(espNameConfigWindow, "Azul", function() espNameColor = Color3.new(0, 0, 1) end)
+    createButton(espNameConfigWindow, "Verde", function() espNameColor = Color3.new(0, 1, 0) end)
+    createButton(espNameConfigWindow, "Ciano", function() espNameColor = Color3.new(0, 1, 1) end)
+    createButton(espNameConfigWindow, "Roxo", function() espNameColor = Color3.new(1, 0, 1) end)
+
+    -- Botão para parar o ESP Names
+    createButton(espNameConfigWindow, "Parar ESP", function()
+        removeESPNames()
+        espNameConfigWindow:Destroy()
+    end)
+
+    -- Botão para fechar a janela
+    createButton(espNameConfigWindow, "Fechar", function()
+        espNameConfigWindow:Destroy()
+    end)
+
+    -- Criar ESP para todos os jogadores
+    for _, target in pairs(Players:GetPlayers()) do
+        if target ~= player then
+            updateESPNameColor(target)
+        end
+    end
+end
+
+-- Botão para abrir a janela de personalização
+createButton(visualWindow, "ESP Names", function()
+    openESPNameConfigWindow()
+end)
 
 
 -- 🔍 ESP Lines
