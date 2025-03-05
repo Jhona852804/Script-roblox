@@ -512,44 +512,55 @@ createButton(objectsWindow, "Criar Esfera", function()
 end)
 
 -- 🎯 Targeting Line
-createButton(visualWindow, "Targeting Line", function()
-    local line = Drawing.new("Line")
-    line.Thickness = 2
-    line.Color = Color3.fromRGB(255, 0, 0)
+local line = nil  
+local connection = nil  
 
-    RunService.RenderStepped:Connect(function()
-        local closestPlayer = nil
-        local closestDist = math.huge  -- Começa com uma distância muito grande
+createButton(visualWindow, "Targeting Line", function()  
+    if line then  
+        line:Remove()  -- Remove a linha existente  
+        line = nil  
 
-        for _, otherPlayer in pairs(Players:GetPlayers()) do
-            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+        if connection then  
+            connection:Disconnect()  -- Para de atualizar a linha  
+            connection = nil  
+        end  
+        return  -- Sai da função para evitar recriar a linha imediatamente  
+    end  
+
+    line = Drawing.new("Line")  
+    line.Thickness = 2  
+    line.Color = Color3.fromRGB(255, 0, 0)  
+
+    connection = RunService.RenderStepped:Connect(function()  
+        local closestPlayer = nil  
+        local closestDist = math.huge  
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do  
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then  
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)  
                 
-                if onScreen then
-                    -- Calcula a distância do centro da tela
-                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
-                    local dist = (screenCenter - targetScreenPos).Magnitude
+                if onScreen then  
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)  
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)  
+                    local dist = (screenCenter - targetScreenPos).Magnitude  
 
-                    -- Se for o mais próximo, atualiza o alvo
-                    if dist < closestDist then
-                        closestDist = dist
-                        closestPlayer = otherPlayer
-                    end
-                end
-            end
-        end
+                    if dist < closestDist then  
+                        closestDist = dist  
+                        closestPlayer = otherPlayer  
+                    end  
+                end  
+            end  
+        end  
 
-        -- Se encontrou um jogador, desenha a linha
-        if closestPlayer then
-            local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)
-            line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
-            line.To = Vector2.new(targetPos.X, targetPos.Y)
-            line.Visible = true
-        else
-            line.Visible = false  -- Esconde a linha se ninguém for encontrado
-        end
-    end)
+        if closestPlayer then  
+            local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)  
+            line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)  
+            line.To = Vector2.new(targetPos.X, targetPos.Y)  
+            line.Visible = true  
+        else  
+            line.Visible = false  
+        end  
+    end)  
 end)
 
 -- Função para atualizar ESP Names  
