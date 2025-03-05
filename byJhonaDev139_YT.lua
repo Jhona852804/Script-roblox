@@ -288,16 +288,7 @@ local function preventAFK()
 end
 
 -- Criando o botão "ant AFK"
-createButton(utilitiesWindow, "ant AFK", function()
-    if not antAFKEnabled then
-        antAFKEnabled = true
-        showNotification("ant AFK enabled")  -- Exibe a notificação que o ant AFK foi ativado
-        spawn(preventAFK)  -- Começa a prevenir o AFK
-    else
-        antAFKEnabled = false
-        showNotification("ant AFK disable")  -- Exibe a notificação que o ant AFK foi desativado
-    end
-end)
+
 ---------------------------------------------- _ Fim da função AFK
 
 -- 📍 Teleporte
@@ -930,6 +921,18 @@ end
 -- Botão para ativar/desativar o fog
 createButton(visualWindow, "Fog", toggleFog)
 -----------------------------------------------------------
+
+-- 🔚 Encerrar Script
+createButton(utilitiesWindow, "Encerrar Script", function()
+    for _, gui in pairs(windows) do gui:Destroy() end
+    espEnabled = false
+    for _, line in pairs(espLines) do line:Remove() end
+    espLines = {}
+    RunService:UnbindFromRenderStep("ESPUpdate")
+end)
+
+
+
 local lagProtectionEnabled = false -- Variável de controle
 
 createButton(utilitiesWindow, "Anti-Lag", function()
@@ -984,6 +987,17 @@ createButton(utilitiesWindow, "Anti-Lag", function()
         if antiLagConnection then antiLagConnection:Disconnect() end
         if fpsProtection then fpsProtection:Disconnect() end
         if memoryCheck then task.cancel(memoryCheck) end
+    end
+end)
+
+createButton(utilitiesWindow, "ant AFK", function()
+    if not antAFKEnabled then
+        antAFKEnabled = true
+        showNotification("ant AFK enabled")  -- Exibe a notificação que o ant AFK foi ativado
+        spawn(preventAFK)  -- Começa a prevenir o AFK
+    else
+        antAFKEnabled = false
+        showNotification("ant AFK disable")  -- Exibe a notificação que o ant AFK foi desativado
     end
 end)
 
@@ -1048,11 +1062,4 @@ end
 createButton(utilitiesWindow, "Pegar Item por ID", createItemIDWindow)
 
 -----------------------------------------------------:
--- 🔚 Encerrar Script
-createButton(utilitiesWindow, "Encerrar Script", function()
-    for _, gui in pairs(windows) do gui:Destroy() end
-    espEnabled = false
-    for _, line in pairs(espLines) do line:Remove() end
-    espLines = {}
-    RunService:UnbindFromRenderStep("ESPUpdate")
-end)
+
