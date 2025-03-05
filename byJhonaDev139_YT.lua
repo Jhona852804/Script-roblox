@@ -510,7 +510,56 @@ createButton(objectsWindow, "Criar Esfera", function()
     sphere.BrickColor = BrickColor.new("Bright blue")
     sphere.Anchored = true
 end)
+----------------------------
 
+--🎯 Targeting Line
+createButton(visualWindow, "Targeting Circle", function()
+    if circle then  
+        circle:Remove()  -- Remove o círculo existente  
+        circle = nil  
+
+        if connection then  
+            connection:Disconnect()  -- Para de atualizar o círculo  
+            connection = nil  
+        end  
+        return  -- Sai da função para evitar recriar o círculo imediatamente  
+    end  
+
+    circle = Drawing.new("Circle")  
+    circle.Thickness = 2  
+    circle.Color = Color3.fromRGB(255, 0, 0)
+    circle.Radius = 30  -- Ajuste o raio conforme necessário
+    circle.Filled = false
+    connection = RunService.RenderStepped:Connect(function()
+        local closestPlayer = nil  
+        local closestDist = math.huge  
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do  
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("Head") then  
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.Head.Position)
+                
+                if onScreen then  
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)  
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)  
+                    local dist = (screenCenter - targetScreenPos).Magnitude  
+
+                    if dist < closestDist then  
+                        closestDist = dist  
+                        closestPlayer = otherPlayer  
+                    end  
+                end  
+            end  
+        end  
+
+        if closestPlayer then  
+            local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.Head.Position)  
+            circle.Position = Vector2.new(targetPos.X, targetPos.Y)  
+            circle.Visible = true  
+        else  
+            circle.Visible = false  
+        end  
+    end)
+end)
 -- 🎯 Targeting Line
 local line = nil  
 local connection = nil  
