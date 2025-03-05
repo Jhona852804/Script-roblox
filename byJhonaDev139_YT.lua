@@ -496,7 +496,7 @@ end)
 
 createButton(objectsWindow, "Create cube", function()
     local cube = Instance.new("Part", game.Workspace)
-    cube.Size = Vector3.new(1, 1, 1)
+    cube.Size = Vector3.new(5, 5, 5)
     cube.Position = character.HumanoidRootPart.Position + Vector3.new(0, 1, 0)
     cube.BrickColor = BrickColor.new("Bright red")
     cube.Anchored = true
@@ -551,6 +551,52 @@ createButton(visualWindow, "Targeting Line", function()
         end
     end)
 end)
+
+-- Função para atualizar ESP Names  
+local function updateESPNameColor(target)  
+    if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then  
+        local hrp = target.Character.HumanoidRootPart  
+        local label = hrp:FindFirstChild("ESPLabel")  
+
+        if not label then  
+            label = Instance.new("BillboardGui", hrp)  
+            label.Size = UDim2.new(0, 200, 0, 50)  
+            label.AlwaysOnTop = true  
+            label.Name = "ESPLabel"  
+
+            local textLabel = Instance.new("TextLabel", label)  
+            textLabel.Size = UDim2.new(1, 0, 1, 0)  
+            textLabel.Text = target.Name  
+            textLabel.TextColor3 = espNameColor  
+            textLabel.BackgroundTransparency = 1  
+
+            RunService.RenderStepped:Connect(function()  
+                textLabel.TextColor3 = espNameColor  
+            end)  
+        end  
+    end  
+end  
+
+-- Botão ESP Names  
+createButton(visualWindow, "ESP Names", function()  
+    local espNameConfigWindow = createWindow("ESP Names Config", UDim2.new(0.5, 0, 0.3, 0))  
+        
+    createButton(espNameConfigWindow, "White", function() espNameColor = Color3.new(1, 1, 1) end)
+    createButton(espNameConfigWindow, "Red", function() espNameColor = Color3.new(1, 0, 0) end)  
+    createButton(espNameConfigWindow, "Green", function() espNameColor = Color3.new(0, 1, 0) end)  
+    createButton(espNameConfigWindow, "Blue", function() espNameColor = Color3.new(0, 0, 1) end)  
+
+    createButton(espNameConfigWindow, "Close", function()  
+        espNameConfigWindow:Destroy()  
+    end)  
+
+    for _, target in pairs(Players:GetPlayers()) do  
+        if target ~= player then  
+            updateESPNameColor(target)  
+        end  
+    end  
+end)  
+
 
 -- 🔍 ESP Lines
 local function UpdateESP()
