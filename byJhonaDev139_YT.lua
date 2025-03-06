@@ -98,6 +98,41 @@ local visualWindow = createWindow("Visual", UDim2.new(0.39,0,0.2,0))
 local TPWindow = createWindow("TP manager", UDim2.new(0.58, 0, 0.2, 0))
 local utilitiesWindow = createWindow("Menu", UDim2.new(0.65, 0, 0.82, 0))
 local listaWindow = createWindow("Player List", UDim2.new(500, 0, 0.2, 0))
+------------------------------------------------------------------------------------
+
+-- Criando o ScreenGui e o TextLabel para exibir o FPS
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 100, 0, 25)
+fpsLabel.Position = UDim2.new(0, 10, 0, 10)
+fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+fpsLabel.BackgroundTransparency = 0.5
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsLabel.TextSize = 17
+fpsLabel.Text = "FPS: Calculando..."
+fpsLabel.Parent = screenGui
+
+-- Função para calcular e atualizar o FPS
+local lastTime = tick()
+local frameCount = 0
+local fps = 0
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    frameCount = frameCount + 1
+    local currentTime = tick()
+
+    -- Calcula o FPS a cada segundo
+    if currentTime - lastTime >= 1 then
+        fps = frameCount
+        frameCount = 0
+        lastTime = currentTime
+
+        -- Atualiza o TextLabel com o valor do FPS
+        fpsLabel.Text = "FPS: " .. fps
+    end
+end)
 
 -- 🏃‍♂️ Ajustar velocidade do jogador
 local isSpeedIncreased = false -- Variável para controlar o estado da velocidade
