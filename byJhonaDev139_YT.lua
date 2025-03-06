@@ -296,8 +296,132 @@ createButton(TPWindow, "TP Forward", function()
     local root = character:WaitForChild("HumanoidRootPart")
     root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
 end)
-local teleportEnabled = false  -- Controla o estado do botão
+  -- Controla o estado do botão
 --------------------------------------
+local teleportEnabled = 0  -- Controla o estado do botão (0 = apenas desenhar, 1 = teleportar e seguir, 2 = parar de seguir)
+local line = nil  -- Armazena a linha globalmente
+local connection = nil  -- Armazena a conexão globalmente
+local followPlayer = nil  -- Armazena o jogador que está sendo seguido
+local followConnection = nil  -- Conexão de seguimento para atualizar a posição
+local freezeOffset = Vector3.new(3, 0, 0)  -- Define o "congelamento" da posição com uma distância fixa do jogador
+
+createButton(TPWindow, "FollowTarget", function()
+    -- Primeiro clique: apenas desenha a linha
+    if teleportEnabled == 0 then
+        teleportEnabled = 1  -- Passa para o próximo estado (de teleportar e seguir)
+
+        -- Cria a linha se ela ainda não existir
+        if not line then
+            line = Drawing.new("Line")
+            line.Thickness = 2
+            line.Color = Color3.fromRGB(255, 0, 0)
+        end
+
+        -- Atualiza a linha a cada frame
+        connection = RunService.RenderStepped:Connect(function()
+            local closestPlayer = nil
+            local closestDist = math.huge  -- Começa com uma distância muito grande
+
+            for _, otherPlayer in pairs(Players:GetPlayers()) do
+                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                    if onScreen then
+                        -- Calcula a distância do centro da tela
+                        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                        local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                        local dist = (screenCenter - targetScreenPos).Magnitude
+
+                        -- Se for o mais próximo, atualiza o alvo
+                        if dist < closestDist then
+                            closestDist = dist
+                            closestPlayer = otherPlayer
+                        end
+                    end
+                end
+            end
+
+            -- Se encontrou um jogador, desenha a linha
+            if closestPlayer then
+                local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)
+                line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                line.To = Vector2.new(targetPos.X, targetPos.Y)
+                line.Visible = true
+            else
+                line.Visible = false  -- Esconde a linha se ninguém for encontrado
+            end
+        end)
+
+    -- Segundo clique: teleportar e começar a seguir
+    elseif teleportEnabled == 1 then
+        teleportEnabled = 2  -- Passa para o próximo estado (parar de seguir)
+
+        -- Remove a linha imediatamente ao teleportar
+        if line then
+            line:Remove()
+            line = nil
+        end
+
+        -- Desconecta a atualização da linha
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+
+        -- Teleporta o personagem para o jogador alvo
+        local closestPlayer = nil
+        local closestDist = math.huge
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                if onScreen then
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                    local dist = (screenCenter - targetScreenPos).Magnitude
+
+                    if dist < closestDist then
+                        closestDist = dist
+                        closestPlayer = otherPlayer
+                    end
+                end
+            end
+        end
+
+        -- Se encontrou o jogador, teleporta e começa a seguir
+        if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local myCharacter = player.Character
+            if myCharacter and myCharacter:FindFirstChild("HumanoidRootPart") then
+                -- Teleporta o personagem para o jogador
+                myCharacter.HumanoidRootPart.CFrame = closestPlayer.Character.HumanoidRootPart.CFrame
+
+                -- Inicia o seguimento com um offset de posição fixo
+                followPlayer = closestPlayer
+                followConnection = RunService.RenderStepped:Connect(function()
+                    if followPlayer and followPlayer.Character then
+                        -- A posição do personagem é "congelada" em relação ao jogador, com o offset
+                        local targetPos = followPlayer.Character.HumanoidRootPart.Position + freezeOffset
+                        myCharacter.HumanoidRootPart.CFrame = CFrame.new(targetPos)
+                    end
+                end)
+            end
+        end
+
+    -- Terceiro clique: parar de seguir
+    elseif teleportEnabled == 2 then
+        teleportEnabled = 0  -- Volta ao estado inicial (apenas desenhar)
+
+        -- Para de seguir
+        if followConnection then
+            followConnection:Disconnect()  -- Desconecta a conexão de seguir
+            followPlayer = nil  -- Reseta o jogador seguido
+        end
+    end
+end)
+
+-------------------------------------------------------
+local teleportEnabled = false
 local teleportEnabled = false  -- Controla o estado do botão
 local line = nil  -- Armazena a linha globalmente
 local connection = nil  -- Armazena a conexão globalmente
@@ -459,18 +583,18 @@ end)
 createButton(objectsWindow, "Light", function()
     -- Criar a parte (bloco)
     local lightBlock = Instance.new("Part")
-    lightBlock.Size = Vector3.new(1, 1, 1) -- Tamanho do bloco
+    lightBlock.Size = Vector3.new(0.5, 0.5, 0.5) -- Tamanho do bloco
     lightBlock.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0) -- Posição inicial
     lightBlock.Anchored = false -- Habilita física
     lightBlock.Material = Enum.Material.Neon -- Dá um efeito brilhante
-    lightBlock.BrickColor = BrickColor.new("Bright red") -- Cor do bloco
+    lightBlock.BrickColor = BrickColor.new("Bright White") -- Cor do bloco
     lightBlock.Parent = game.Workspace
 
     -- Criar a luz dentro do bloco
     local light = Instance.new("PointLight")
     light.Parent = lightBlock
     light.Brightness = 5 -- Intensidade da luz
-    light.Range = 50 -- Alcance da luz
+    light.Range = 65 -- Alcance da luz
     light.Color = Color3.fromRGB(255, 255, 255) -- Cor da luz (Amarelo)
 
     -- Aplicar uma força inicial para o bloco cair naturalmente
@@ -488,7 +612,7 @@ end)
 createButton(objectsWindow, "Create cube", function()
     local cube = Instance.new("Part", game.Workspace)
     cube.Size = Vector3.new(5, 5, 5)
-    cube.Position = character.HumanoidRootPart.Position + Vector3.new(0, 1, 0)
+    cube.Position = character.HumanoidRootPart.Position + Vector3.new(0, 5, 0)
     cube.BrickColor = BrickColor.new("Bright red")
     cube.Anchored = true
 end)
