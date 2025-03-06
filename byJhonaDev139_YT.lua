@@ -794,7 +794,7 @@ createButton(visualWindow, "Chams", function()
         -- Criando a janela de personalização
         espWindow = Instance.new("Frame")
         espWindow.Size = UDim2.new(0, 300, 0, 440)
-        espWindow.Position = UDim2.new(0, 150, 0, 100)
+        espWindow.Position = UDim2.new(0, 250, 0, 50)
         espWindow.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         espWindow.Visible = espEnabled
 
@@ -1108,7 +1108,7 @@ local function createItemIDWindow()
 end)  
 end  
 -- Botão para abrir a janela de pegar item por ID  
-createButton(utilitiesWindow, "Vet item ID", createItemIDWindow)
+createButton(utilitiesWindow, "Get item ID", createItemIDWindow)
 
 -----------------------------------------------------:
 
