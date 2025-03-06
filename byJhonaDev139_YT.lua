@@ -303,7 +303,7 @@ local line = nil  -- Armazena a linha globalmente
 local connection = nil  -- Armazena a conexão globalmente
 local followPlayer = nil  -- Armazena o jogador que está sendo seguido
 local followConnection = nil  -- Conexão de seguimento para atualizar a posição
-local freezeOffset = Vector3.new(3, 0, 0)  -- Define o "congelamento" da posição com uma distância fixa do jogador
+local freezeOffset = Vector3.new(0, 0, 0)  -- Define o "congelamento" da posição com uma distância fixa do jogador
 
 createButton(TPWindow, "FollowTarget", function()
     -- Primeiro clique: apenas desenha a linha
