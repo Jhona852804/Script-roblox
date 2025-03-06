@@ -860,10 +860,6 @@ RunService.RenderStepped:Connect(UpdateESP)
 createButton(visualWindow, "Esp line ", function()
     espEnabled = not espEnabled
 end)
-
-
-
-
 -- ESP
 local espEnabled = false  
 local highlightObjects = {}  
@@ -1047,6 +1043,58 @@ createButton(visualWindow, "Chams", function()
     end
 end)
 ---------------------------------
+
+-- Variável de controle para alternar a transparência
+local isTransparent = false
+
+-- Definir o botão para ativar/desativar a transparência
+createButton(visualWindow, "Xray", function()
+    -- Função para aplicar a transparência
+    local function applyTransparency()
+        -- Loop para verificar todos os blocos no jogo
+        for _, obj in pairs(workspace:GetDescendants()) do
+            -- Verifica se o objeto é do tipo 'BasePart' (como blocos)
+            if obj:IsA("BasePart") then
+                obj.Transparency = 0.5  -- Define a transparência para 50%
+            end
+        end
+    end
+
+    -- Função para restaurar os blocos ao normal
+    local function restoreBlocks()
+        -- Loop para verificar todos os blocos no jogo
+        for _, obj in pairs(workspace:GetDescendants()) do
+            -- Verifica se o objeto é do tipo 'BasePart' (como blocos)
+            if obj:IsA("BasePart") then
+                obj.Transparency = 0  -- Restaura a transparência para 0 (totalmente opaco)
+            end
+        end
+    end
+
+    -- Alterna entre aplicar a transparência ou restaurar os blocos
+    if not isTransparent then
+        applyTransparency()
+    else
+        restoreBlocks()
+    end
+
+    -- Alterna o estado
+    isTransparent = not isTransparent
+
+    -- Conectar uma função que monitora novos blocos que aparecerem
+    workspace.DescendantAdded:Connect(function(descendant)
+        if descendant:IsA("BasePart") then
+            if isTransparent then
+                -- Aplica a transparência nos novos blocos
+                descendant.Transparency = 0.5
+            else
+                -- Restaura a transparência dos novos blocos
+                descendant.Transparency = 0
+            end
+        end
+    end)
+end)
+
 -- FOG
 local fogEnabled = true  -- Estado do fog
 local fogStart = 0
