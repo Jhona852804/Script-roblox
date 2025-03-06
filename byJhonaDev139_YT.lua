@@ -211,7 +211,7 @@ createButton(playerWindow, "Fly", function()
         function() movement.up = 3 end, 
         function() movement.up = 0 end
     )
-    createHoldButton(buttonContainer, "-Y (To descend)", 
+    createHoldButton(buttonContainer, "-Y (down)", 
         function() movement.up = -3 end, 
         function() movement.up = 0 end
     )
@@ -794,7 +794,7 @@ createButton(visualWindow, "Chams", function()
         -- Criando a janela de personalização
         espWindow = Instance.new("Frame")
         espWindow.Size = UDim2.new(0, 300, 0, 440)
-        espWindow.Position = UDim2.new(0, 250, 0, 50)
+        espWindow.Position = UDim2.new(0, 1000, 0, 100)
         espWindow.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         espWindow.Visible = espEnabled
 
