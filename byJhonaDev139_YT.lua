@@ -799,6 +799,7 @@ createButton(visualWindow, "Chams", function()
         espWindow.Visible = espEnabled
         espWindow.Active = true  
         espWindow.Draggable = true
+            
         local titleLabel = Instance.new("TextLabel")
         titleLabel.Text = "Personalizar ESP"
         titleLabel.Size = UDim2.new(0, 280, 0, 30)
