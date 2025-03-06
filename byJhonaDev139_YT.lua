@@ -92,17 +92,17 @@ local function createHoldButton(parent, text, onHold, onRelease)
 end
 
 -- Criando janelas para categorias
-local playerWindow = createWindow("👦 Jogador", UDim2.new(0.01, 0, 0.2, 0))
-local objectsWindow = createWindow("🔲 Objetos 3D", UDim2.new(0.20, 0, 0.2, 0))
-local visualWindow = createWindow("👁️ Visual", UDim2.new(0.39,0,0.2,0))
-local TPWindow = createWindow("✨TP manager", UDim2.new(0.58, 0, 0.2, 0))
-local utilitiesWindow = createWindow("💡 Utilitários", UDim2.new(0.65, 0, 0.82, 0))
-local listaWindow = createWindow("🗒️ Player List", UDim2.new(0.77, 0, 0.2, 0))
+local playerWindow = createWindow("Player", UDim2.new(0.01, 0, 0.2, 0))
+local objectsWindow = createWindow("Object 3D", UDim2.new(0.20, 0, 0.2, 0))
+local visualWindow = createWindow("Visual", UDim2.new(0.39,0,0.2,0))
+local TPWindow = createWindow("TP manager", UDim2.new(0.58, 0, 0.2, 0))
+local utilitiesWindow = createWindow("Menu", UDim2.new(0.65, 0, 0.82, 0))
+local listaWindow = createWindow("Player List", UDim2.new(500, 0, 0.2, 0))
 
 -- 🏃‍♂️ Ajustar velocidade do jogador
 local isSpeedIncreased = false -- Variável para controlar o estado da velocidade
 
-createButton(playerWindow, "Alternar Velocidade", function()
+createButton(playerWindow, "Speed", function()
     local humanoid = character:FindFirstChildOfClass("Humanoid")
     if humanoid then
         if isSpeedIncreased then
@@ -121,7 +121,7 @@ local isJumpIncreased = false -- Variável para controlar o estado do pulo
 local allowAirJump = false -- Variável para controlar o estado
 local jumped = false -- Variável para detectar o pulo
 
-createButton(playerWindow, "Alternar Pulo no Ar", function()
+createButton(playerWindow, "Inf Jump", function()
     allowAirJump = not allowAirJump -- Alterna o estado
 end)
 
@@ -207,11 +207,11 @@ createButton(playerWindow, "Fly", function()
     end)
 
     -- Botões de clique contínuo (hold) para controlar o movimento
-    createHoldButton(buttonContainer, "+Y (Subir)", 
+    createHoldButton(buttonContainer, "+Y (go up)", 
         function() movement.up = 3 end, 
         function() movement.up = 0 end
     )
-    createHoldButton(buttonContainer, "-Y (Descer)", 
+    createHoldButton(buttonContainer, "-Y (To descend)", 
         function() movement.up = -3 end, 
         function() movement.up = 0 end
     )
@@ -493,7 +493,7 @@ createButton(objectsWindow, "Create cube", function()
     cube.Anchored = true
 end)
 
-createButton(objectsWindow, "Criar Esfera", function()
+createButton(objectsWindow, "Create sphere", function()
     local sphere = Instance.new("Part", game.Workspace)
     sphere.Shape = Enum.PartType.Ball
     sphere.Size = Vector3.new(5, 5, 5)
@@ -733,7 +733,7 @@ end
 RunService.RenderStepped:Connect(UpdateESP)
 
 -- 🚀 Ativar/Desativar ESP
-createButton(visualWindow, "Ativar ESP ", function()
+createButton(visualWindow, "Esp line ", function()
     espEnabled = not espEnabled
 end)
 
@@ -841,7 +841,7 @@ createButton(visualWindow, "Chams", function()
         local rgbEffectButton = Instance.new("TextButton")
         rgbEffectButton.Text = "Efeito RGB"
         rgbEffectButton.Size = UDim2.new(0, 280, 0, 30)
-        rgbEffectButton.Position = UDim2.new(0, 10, 0, 270)
+        rgbEffectButton.Position = UDim2.new(0, 10, 0, 275)
         rgbEffectButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         rgbEffectButton.Parent = espWindow
 
@@ -873,7 +873,7 @@ createButton(visualWindow, "Chams", function()
 
         -- Botão para desativar o ESP
         local stopESPButton = Instance.new("TextButton")
-        stopESPButton.Text = "Parar ESP"
+        stopESPButton.Text = "stop esp"
         stopESPButton.Size = UDim2.new(0, 280, 0, 30)
         stopESPButton.Position = UDim2.new(0, 10, 0, 310)
         stopESPButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
@@ -894,7 +894,7 @@ createButton(visualWindow, "Chams", function()
 
         -- Botão para fechar a janela de personalização
         local closeButton = Instance.new("TextButton")
-        closeButton.Text = "Fechar"
+        closeButton.Text = "Close"
         closeButton.Size = UDim2.new(0, 280, 0, 30)
         closeButton.Position = UDim2.new(0, 10, 0, 350)
         closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
@@ -972,7 +972,7 @@ createButton(visualWindow, "Fog", toggleFog)
 -----------------------------------------------------------
 
 -- 🔚 Encerrar Script
-createButton(utilitiesWindow, "Encerrar Script", function()
+createButton(utilitiesWindow, "Stop Script", function()
     for _, gui in pairs(windows) do gui:Destroy() end
     espEnabled = false
     for _, line in pairs(espLines) do line:Remove() end
@@ -1030,7 +1030,7 @@ createButton(utilitiesWindow, "Anti-Lag", function()
         end)
 
     else
-        print("Anti-Lag desativado!") -- Mensagem opcional
+        
 
         -- Desconectar os eventos para parar a proteção
         if antiLagConnection then antiLagConnection:Disconnect() end
@@ -1082,7 +1082,7 @@ local function createItemIDWindow()
             remote:FireServer(itemID)  
             -- Notificação de sucesso  
             game:GetService("StarterGui"):SetCore("SendNotification", {  
-                Title = "Sucesso!",  
+                Title = "Sucess!",  
                 Text = "Tentando pegar o item com ID: " .. itemID,  
                 Icon = "rbxassetid://6031068427", -- Substitua por um ícone, ou deixe em branco  
                 Duration = 3  
@@ -1108,7 +1108,7 @@ local function createItemIDWindow()
 end)  
 end  
 -- Botão para abrir a janela de pegar item por ID  
-createButton(utilitiesWindow, "Pegar Item por ID", createItemIDWindow)
+createButton(utilitiesWindow, "Vet item ID", createItemIDWindow)
 
 -----------------------------------------------------:
 
