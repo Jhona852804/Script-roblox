@@ -1,12 +1,12 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local Camera = game.Workspace.CurrentCamera
-local RunService = game:GetService("RunService")
-local espEnabled = false
-local espLines = {}
-local espColor = Color3.fromRGB(255, 255, 255)  -- Cor inicial: Branco
+--local Players = game:GetService("Players")
+--local ReplicatedStorage = game:GetService("ReplicatedStorage")
+--local player = Players.LocalPlayer
+--local character = player.Character or player.CharacterAdded:Wait()
+--local Camera = game.Workspace.CurrentCamera
+--local RunService = game:GetService("RunService")
+--local espEnabled = false
+--local espLines = {}
+--local espColor = Color3.fromRGB(255, 255, 255)  -- Cor inicial: Branco
 local ESP_Window = nil
 local ESP_Ativo = false
 local originalPosition = nil
@@ -14,7 +14,7 @@ local isFrozen = false
 
 
 -- Tabela para armazenar as janelas criadas
-local windows = {}
+--local windows = {}
 
 -- Função para criar janelas móveis
 local function createWindow(title, position)
@@ -33,7 +33,7 @@ local function createWindow(title, position)
     Frame.Draggable = true  
 
     -- Configuração do título da janela
-    TitleLabel.Text = title  
+  --  TitleLabel.Text = title  
     TitleLabel.Size = UDim2.new(1, 0, 0, 30)  
     TitleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  
@@ -50,7 +50,7 @@ end
 
 -- Função para criar botões
 local function createButton(parent, text, callback)
-    local button = Instance.new("TextButton", parent)
+--    local button = Instance.new("TextButton", parent)
     button.Text = text
     button.Size = UDim2.new(1, 0, 0, 50)
     button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -59,7 +59,7 @@ local function createButton(parent, text, callback)
     button.TextSize = 16
     button.MouseButton1Click:Connect(callback)
 end
-local function createHoldButton(parent, text, onHold, onRelease)
+--local function createHoldButton(parent, text, onHold, onRelease)
     local button = Instance.new("TextButton", parent)
     button.Text = text
     button.Size = UDim2.new(1, 0, 0, 50)
@@ -78,8 +78,8 @@ local function createHoldButton(parent, text, onHold, onRelease)
                 wait(0.1) -- Intervalo de execução (ajuste conforme necessário)
             end
         end)
-    end)
-
+ --   end)
+--
     button.MouseButton1Up:Connect(function()
         holding = false
         if onRelease then onRelease() end
@@ -92,16 +92,16 @@ local function createHoldButton(parent, text, onHold, onRelease)
 end
 
 -- Criando janelas para categorias
-local playerWindow = createWindow("Player", UDim2.new(0.01, 0, 0.2, 0))
-local objectsWindow = createWindow("Object 3D", UDim2.new(0.20, 0, 0.2, 0))
-local visualWindow = createWindow("Visual", UDim2.new(0.39,0,0.2,0))
-local TPWindow = createWindow("TP manager", UDim2.new(0.58, 0, 0.2, 0))
-local utilitiesWindow = createWindow("Menu", UDim2.new(0.65, 0, 0.82, 0))
-local listaWindow = createWindow("Player List", UDim2.new(500, 0, 0.2, 0))
+--local playerWindow = createWindow("Player", UDim2.new(0.01, 0, 0.2, 0))
+--local objectsWindow = createWindow("Object 3D", UDim2.new(0.20, 0, 0.2, 0))
+--local visualWindow = createWindow("Visual", UDim2.new(0.39,0,0.2,0))
+--local TPWindow = createWindow("TP manager", UDim2.new(0.58, 0, 0.2, 0))
+--local utilitiesWindow = createWindow("Menu", UDim2.new(0.65, 0, 0.82, 0))
+--local listaWindow = createWindow("Player List", UDim2.new(500, 0, 0.2, 0))
 ------------------------------------------------------------------------------------
 
 -- Criando o ScreenGui e o TextLabel para exibir o FPS
-local screenGui = Instance.new("ScreenGui")
+--local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local fpsLabel = Instance.new("TextLabel")
