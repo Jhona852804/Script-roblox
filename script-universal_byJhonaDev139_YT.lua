@@ -42,7 +42,7 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
 titleLabel.Size = UDim2.new(1, 0, 0, 30)
 titleLabel.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
-titleLabel.Text = "By JhonaDev139"
+titleLabel.Text = "By JhonaDev139_YT     V3.0.0"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Parent = mainFrame
 
