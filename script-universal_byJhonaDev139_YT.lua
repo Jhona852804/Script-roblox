@@ -880,6 +880,28 @@ end},
     end},
 },
     ["MENU"] = {
+	{name = "GetTools", func = function()
+    local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+
+-- Containers onde as Tools costumam ficar
+local lugares = {
+    game:GetService("Workspace"),
+    game:GetService("ReplicatedStorage"),
+    game:GetService("StarterPack")
+}
+
+for _, lugar in ipairs(lugares) do
+    for _, item in ipairs(lugar:GetDescendants()) do
+        if item:IsA("Tool") and item:FindFirstChild("Handle") then
+            local clone = item:Clone()
+            clone.Parent = backpack
+        end
+    end
+end
+
+print("Todas as tools possíveis foram clonadas pro seu inventário.")
+			end},
     	{name = "ant-lag", func = function()
     lagProtectionEnabled = not lagProtectionEnabled -- Alterna entre ativado e desativado
 
