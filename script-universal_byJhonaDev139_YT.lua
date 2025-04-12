@@ -45,6 +45,9 @@ titleLabel.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
 titleLabel.Text = "By JhonaDev139_YT     V3.0.0"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Parent = mainFrame
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
 
 -- Painel Esquerdo para Categorias
 local leftPanel = Instance.new("Frame")
@@ -87,6 +90,9 @@ rightLayout.Padding = UDim.new(0, 5)
     btn.Text = buttonName
     btn.TextColor3 = Color3.new(1, 1, 1)
     btn.Parent = parent
+	local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
     btn.Background.Transparency = 0.3
 
     if actionFunction then
@@ -102,6 +108,9 @@ local function createButton(parent, text, onClick)
     button.Font = Enum.Font.SourceSans
     button.TextSize = 14
     button.Parent = parent
+	local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
     button.MouseButton1Click:Connect(onClick)
     return button
 end
@@ -114,6 +123,9 @@ local function createHoldButton(parent, text, onHoldStart, onHoldStop)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.Font = Enum.Font.SourceSans
     button.TextSize = 14
+	local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
     button.Parent = parent
 
     button.MouseButton1Down:Connect(onHoldStart)
