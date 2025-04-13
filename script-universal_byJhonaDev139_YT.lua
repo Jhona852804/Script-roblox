@@ -342,6 +342,92 @@ end},
 		{name = "Aimbot", func = function()
 				loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/aimbot-byJhonaDev139_YT'))()
 			end},
+		
+		{name = "Line vision", func = function()
+    if _G.linhaVisaoAtiva then
+        _G.linhaVisaoAtiva = false
+
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            local char = plr.Character
+            if char then
+                for _, obj in pairs(char:GetDescendants()) do
+                    if obj.Name == "LinhaVisao" then
+                        obj:Destroy()
+                    end
+                end
+            end
+        end
+
+        if _G.loopLinha then
+            _G.loopLinha:Disconnect()
+            _G.loopLinha = nil
+        end
+
+        return
+    end
+
+    _G.linhaVisaoAtiva = true
+
+    local function criarLinha(plr)
+        if plr == game.Players.LocalPlayer then return end
+        local char = plr.Character
+        if not char or not char:FindFirstChild("Head") then return end
+
+        local att0 = Instance.new("Attachment", char.Head)
+        att0.Name = "LinhaVisao"
+
+        local part = Instance.new("Part", char)
+        part.Anchored = true
+        part.CanCollide = false
+        part.Transparency = 1
+        part.Size = Vector3.new(0.1, 0.1, 0.1)
+        part.Name = "LinhaVisao"
+
+        local att1 = Instance.new("Attachment", part)
+        att1.Name = "LinhaVisao"
+
+        local beam = Instance.new("Beam", char)
+        beam.Attachment0 = att0
+        beam.Attachment1 = att1
+        beam.Width0 = 0.05
+        beam.Width1 = 0.05
+        beam.Color = ColorSequence.new(Color3.new(1, 0, 0))
+        beam.FaceCamera = true
+        beam.LightInfluence = 0
+        beam.Name = "LinhaVisao"
+
+        part.Position = char.Head.Position + (char.Head.CFrame.LookVector * 10)
+    end
+
+    local function criarEmTodos()
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            criarLinha(plr)
+        end
+    end
+
+    criarEmTodos()
+
+    game.Players.PlayerAdded:Connect(function(plr)
+        plr.CharacterAdded:Connect(function()
+            wait(1)
+            if _G.linhaVisaoAtiva then
+                criarLinha(plr)
+            end
+        end)
+    end)
+
+    _G.loopLinha = game:GetService("RunService").RenderStepped:Connect(function()
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            if plr ~= game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
+                local head = plr.Character.Head
+                local part = plr.Character:FindFirstChild("LinhaVisao")
+                if part then
+                    part.Position = head.Position + (head.CFrame.LookVector * 10)
+                end
+            end
+        end
+    end)
+end},
 {name = "Chams", func = function()
     chamsEnabled = not chamsEnabled  -- Alternar entre ligado/desligado
 
