@@ -1,0 +1,35 @@
+-- Variáveis falsas e aleatórias
+local Umenckx12 = "jdbd92iw06457lcndhslxnd"
+local tglenfgH = "93kdje83kdir075oe"
+local Rkifkty8 = 456
+local TrgTkfofm = "kdiri4úrkrirur83õe97" -- Parte 1 da chave real
+
+local kxndoc = function() return "kdnxiepemcjrjsmfn" end
+local Gxv3 = "meio estranho"
+local VxPz = "mxndieldjdjd" -- Parte 2 da chave real
+
+local mcowprbdl = {
+    "mxlwp mf hc el", "mxlwdirkxmwo", 2025, function() return "038474020484749" end
+}
+
+local yT56kdjc = "9326295973"
+local Opykjf9 = "2025" -- Parte 3 da chave real
+
+local inutil3 = {}
+for i = 1, 5 do
+    inutil3[i] = "ndisld chslske"
+end
+
+-- Função principal do aimbot
+return function(recebida)
+    local chaveCompleta = TrgT .. VxPz .. Opy9
+
+    if recebida ~= chaveCompleta then
+        warn("Chave inválida. Aimbot bloqueado.")
+        return
+    end
+
+    -- Aqui entra o código real do aimbot
+    print("Aimbot ativado!")
+    -- Código do aimbot aqui...
+end
