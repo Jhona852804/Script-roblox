@@ -339,6 +339,9 @@ end},
     },-- Fechamento da tabela "Player"
     
     ["Visual"] = {
+		{name = "Aimbot", func = function()
+				loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/aimbot-byJhonaDev139_YT'))()
+			end},
 {name = "Chams", func = function()
     chamsEnabled = not chamsEnabled  -- Alternar entre ligado/desligado
 
