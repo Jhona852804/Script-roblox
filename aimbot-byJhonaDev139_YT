@@ -1,35 +1,163 @@
--- Variáveis falsas e aleatórias
-local Umenckx12 = "jdbd92iw06457lcndhslxnd"
-local tglenfgH = "93kdje83kdir075oe"
-local Rkifkty8 = 456
-local TrgTkfofm = "kdiri4úrkrirur83õe97" -- Parte 1 da chave real
+-- Aimbot com FOV centralizado, cantos arredondados, título e prioridade por distância real
 
-local kxndoc = function() return "kdnxiepemcjrjsmfn" end
-local Gxv3 = "meio estranho"
-local VxPz = "mxndieldjdjd" -- Parte 2 da chave real
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "AimbotUI"
 
-local mcowprbdl = {
-    "mxlwp mf hc el", "mxlwdirkxmwo", 2025, function() return "038474020484749" end
-}
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 200, 0, 180)
+frame.Position = UDim2.new(0, 10, 0.5, -90)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.Active = true
+frame.Draggable = true
 
-local yT56kdjc = "9326295973"
-local Opykjf9 = "2025" -- Parte 3 da chave real
+-- Cantos arredondados
+local corner = Instance.new("UICorner", frame)
+corner.CornerRadius = UDim.new(0, 12)
 
-local inutil3 = {}
-for i = 1, 5 do
-    inutil3[i] = "ndisld chslske"
+-- Título
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 20)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "Aimbot"
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 16
+
+-- Botão de ativar/desativar
+local toggleButton = Instance.new("TextButton", frame)
+toggleButton.Size = UDim2.new(1, 0, 0, 30)
+toggleButton.Position = UDim2.new(0, 0, 0, 25)
+toggleButton.Text = "Ativar Aimbot"
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+
+local increaseFovBtn = Instance.new("TextButton", frame)
+increaseFovBtn.Size = UDim2.new(1, 0, 0, 25)
+increaseFovBtn.Position = UDim2.new(0, 0, 0, 60)
+increaseFovBtn.Text = "Aumentar FOV"
+increaseFovBtn.TextColor3 = Color3.new(1, 1, 1)
+increaseFovBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+
+local decreaseFovBtn = Instance.new("TextButton", frame)
+decreaseFovBtn.Size = UDim2.new(1, 0, 0, 25)
+decreaseFovBtn.Position = UDim2.new(0, 0, 0, 90)
+decreaseFovBtn.Text = "Diminuir FOV"
+decreaseFovBtn.TextColor3 = Color3.new(1, 1, 1)
+decreaseFovBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+
+local closeBtn = Instance.new("TextButton", frame)
+closeBtn.Size = UDim2.new(1, 0, 0, 30)
+closeBtn.Position = UDim2.new(0, 0, 0, 125)
+closeBtn.Text = "Encerrar Script"
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
+
+-- Aimbot lógica
+local aimbotActive = false
+local fovCircle
+local runService = game:GetService("RunService")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local camera = workspace.CurrentCamera
+local radius = 100
+local connection
+
+local function createFOV()
+	if fovCircle then fovCircle:Remove() end
+	fovCircle = Drawing.new("Circle")
+	fovCircle.Visible = true
+	fovCircle.Radius = radius
+	fovCircle.Thickness = 2
+	fovCircle.Transparency = 1
+	fovCircle.Color = Color3.fromRGB(255, 0, 0)
 end
 
--- Função principal do aimbot
-return function(recebida)
-    local chaveCompleta = TrgT .. VxPz .. Opy9
-
-    if recebida ~= chaveCompleta then
-        warn("Chave inválida. Aimbot bloqueado.")
-        return
-    end
-
-    -- Aqui entra o código real do aimbot
-    print("Aimbot ativado!")
-    -- Código do aimbot aqui...
+local function removeFOV()
+	if fovCircle then
+		fovCircle:Remove()
+		fovCircle = nil
+	end
 end
+
+-- Aqui você pode ajustar a posição do círculo manualmente, caso queira:
+local function updateFOVPos()
+	if fovCircle then
+		fovCircle.Position = Vector2.new(camera.ViewportSize.X / 1.89, camera.ViewportSize.Y / 2)
+	end
+end
+
+local function getClosestPlayer()
+	local closest = nil
+	local shortestDist = math.huge
+
+	for _, player in pairs(players:GetPlayers()) do
+		if player ~= localPlayer and player.Character and player.Character:FindFirstChild("Head") then
+			local head = player.Character.Head
+			local screenPos, onScreen = camera:WorldToViewportPoint(head.Position)
+			if onScreen then
+				local screenDist = (Vector2.new(screenPos.X, screenPos.Y) - Vector2.new(camera.ViewportSize.X/2, camera.ViewportSize.Y/2)).Magnitude
+				if screenDist <= radius then
+					local realDist = (localPlayer.Character.HumanoidRootPart.Position - head.Position).Magnitude
+					if realDist < shortestDist then
+						shortestDist = realDist
+						closest = head
+					end
+				end
+			end
+		end
+	end
+
+	return closest
+end
+
+local function enableAimbot()
+	createFOV()
+	connection = runService.RenderStepped:Connect(function()
+		updateFOVPos()
+
+		local target = getClosestPlayer()
+		if target then
+			local currentLook = camera.CFrame.LookVector
+local direction = (target.Position - camera.CFrame.Position).Unit
+local smoothness = 0.4 -- AQUI você controla a "força": quanto menor, mais suave
+
+local newLook = currentLook:Lerp(direction, smoothness)
+camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + newLook)
+		end
+	end)
+end
+
+local function disableAimbot()
+	if connection then connection:Disconnect() end
+	removeFOV()
+end
+
+-- Botão toggle
+toggleButton.MouseButton1Click:Connect(function()
+	aimbotActive = not aimbotActive
+	toggleButton.Text = aimbotActive and "Desativar Aimbot" or "Ativar Aimbot"
+	if aimbotActive then
+		enableAimbot()
+	else
+		disableAimbot()
+	end
+end)
+
+-- Ajustes FOV
+increaseFovBtn.MouseButton1Click:Connect(function()
+	radius = radius + 10
+	if fovCircle then fovCircle.Radius = radius end
+end)
+
+decreaseFovBtn.MouseButton1Click:Connect(function()
+	radius = math.max(10, radius - 10)
+	if fovCircle then fovCircle.Radius = radius end
+end)
+
+-- Encerrar
+closeBtn.MouseButton1Click:Connect(function()
+	if connection then connection:Disconnect() end
+	removeFOV()
+	gui:Destroy()
+end)
