@@ -1043,6 +1043,57 @@ end},
     
     },
         ["3D"] = {
+		{name = "Object Destroy", func = function()
+    lineActive = not lineActive  -- Alterna entre ativado e desativado
+
+    if lineActive then
+        -- Criar a linha
+        local camera = game.Workspace.CurrentCamera
+        local player = game.Players.LocalPlayer
+        local mouse = player:GetMouse()
+
+        line = Instance.new("Part")
+        line.Size = Vector3.new(0.1, 0.1, 500)  -- Comprimento da linha
+        line.Anchored = true
+        line.CanCollide = false
+        line.BrickColor = BrickColor.new("Bright red")
+        line.Material = Enum.Material.Neon
+        line.Parent = game.Workspace
+
+        -- Atualiza a linha e detecta o objeto tocado
+        game:GetService("RunService").RenderStepped:Connect(function()
+            if lineActive and camera then
+                local origin = camera.CFrame.Position
+                local direction = camera.CFrame.LookVector * 500  -- Extensão da linha
+
+                -- Define a posição e rotação da linha
+                line.Position = origin + (direction / 2)
+                line.CFrame = CFrame.lookAt(origin, origin + direction)
+
+                -- Raycast para encontrar o objeto tocado
+                local ray = Ray.new(origin, direction)
+                local hit, position = game.Workspace:FindPartOnRay(ray, player.Character)
+
+                if hit then
+                    targetObject = hit  -- Salva o objeto tocado
+                else
+                    targetObject = nil
+                end
+            end
+        end)
+    else
+        -- Desativa a linha e apaga o objeto se estiver tocando algo
+        if line then
+            line:Destroy()
+            line = nil
+        end
+
+        if targetObject then
+            targetObject:Destroy()  -- Remove o objeto do jogo
+            targetObject = nil
+        end
+    end
+end},
         
 {name = "Light Orb", func = function()
     local player = game.Players.LocalPlayer
