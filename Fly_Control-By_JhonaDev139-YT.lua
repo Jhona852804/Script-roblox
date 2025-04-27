@@ -1,3 +1,21 @@
+local function createHoldButton(parent, text, onHoldStart, onHoldStop)
+    local button = Instance.new("TextButton")
+    button.Text = text
+    button.Size = UDim2.new(1, -10, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+    button.Parent = parent
+
+    button.MouseButton1Down:Connect(onHoldStart)
+    button.MouseButton1Up:Connect(onHoldStop)
+
+    return button
+end
+
+
+
 local character = game.Players.LocalPlayer.Character
     local rootPart = character and character:FindFirstChild("HumanoidRootPart")
     
