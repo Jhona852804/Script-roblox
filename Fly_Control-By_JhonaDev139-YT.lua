@@ -1,18 +1,62 @@
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local character = player.Character or player.CharacterAdded:Wait()
-local Camera = game.Workspace.CurrentCamera
-local RunService = game:GetService("RunService")
-local hrp = character:FindFirstChild("HumanoidRootPart")
-local humanoid = character:WaitForChild("Humanoid")
-
--- Cria a ScreenGui e define como pai (use game.CoreGui ou PlayerGui conforme preferir)
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DeltaExecutorGui"
 screenGui.Parent = game.CoreGui  -- ou: game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local function createButton(parent, buttonName, actionFunction)
+-- Cria a janela principal (MainFrame)
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 400, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+mainFrame.BorderSizePixel = 2
+mainFrame.Parent = screenGui
+mainFrame.Active = true      -- necessário para receber input
+mainFrame.Draggable = true   -- torna a janela arrastável
+mainFrame.BackgroundTransparency = 0.5  -- Deixa 50% transparente (0 = opaco, 1 = totalmente invisível)
+
+-- Cria a barra de título
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
+titleLabel.Text = "By JhonaDev139"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.Parent = mainFrame
+
+-- Painel Esquerdo para Categorias
+local leftPanel = Instance.new("Frame")
+leftPanel.Name = "LeftPanel"
+leftPanel.Size = UDim2.new(0, 120, 1, -30)
+leftPanel.Position = UDim2.new(0, 0, 0, 30)
+leftPanel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+leftPanel.BorderSizePixel = 1
+leftPanel.Parent = mainFrame
+leftPanel.BackgroundTransparency = 0.3  -- 50% transparente
+
+-- Layout para organizar os botões de categorias com espaçamento
+local leftLayout = Instance.new("UIListLayout")
+leftLayout.Parent = leftPanel
+leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
+leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
+
+-- Painel Direito para Ações
+local rightPanel = Instance.new("Frame")
+rightPanel.Name = "RightPanel"
+rightPanel.Size = UDim2.new(1, -120, 1, -30)
+rightPanel.Position = UDim2.new(0, 120, 0, 31)
+rightPanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+rightPanel.BorderSizePixel = 1
+rightPanel.Parent = mainFrame
+rightPanel.BackgroundTransparency = 0.3
+
+-- Layout para organizar os botões de ações com espaçamento
+local rightLayout = Instance.new("UIListLayout")
+rightLayout.Parent = rightPanel
+rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
+rightLayout.Padding = UDim.new(0, 5)
+
+-- Função genérica para criar um botão (usado tanto para categorias quanto para ações)
+ local function createButton(parent, buttonName, actionFunction)
     local btn = Instance.new("TextButton")
     btn.Name = buttonName
     btn.Size = UDim2.new(1, -10, 0, 30)  -- largura com margem e altura de 30 pixels
@@ -54,9 +98,6 @@ local function createHoldButton(parent, text, onHoldStart, onHoldStop)
 
     return button
 end
-
-
-
 local character = game.Players.LocalPlayer.Character
     local rootPart = character and character:FindFirstChild("HumanoidRootPart")
     
