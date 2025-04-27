@@ -2,21 +2,6 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DeltaExecutorGui"
 screenGui.Parent = game.CoreGui  -- ou: game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Cria a janela principal (MainFrame)
-
-
-local leftLayout = Instance.new("UIListLayout")
-leftLayout.Parent = leftPanel
-leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
-leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
-
-
--- Layout para organizar os botões de ações com espaçamento
-local rightLayout = Instance.new("UIListLayout")
-rightLayout.Parent = rightPanel
-rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
-rightLayout.Padding = UDim.new(0, 5)
-
 -- Função genérica para criar um botão (usado tanto para categorias quanto para ações)
  local function createButton(parent, buttonName, actionFunction)
     local btn = Instance.new("TextButton")
