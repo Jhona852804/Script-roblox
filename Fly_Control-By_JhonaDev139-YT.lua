@@ -1,3 +1,17 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local character = player.Character or player.CharacterAdded:Wait()
+local Camera = game.Workspace.CurrentCamera
+local RunService = game:GetService("RunService")
+local hrp = character:FindFirstChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Cria a ScreenGui e define como pai (use game.CoreGui ou PlayerGui conforme preferir)
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "DeltaExecutorGui"
+screenGui.Parent = game.CoreGui  -- ou: game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
 local function createHoldButton(parent, text, onHoldStart, onHoldStop)
     local button = Instance.new("TextButton")
     button.Text = text
