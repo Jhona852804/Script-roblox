@@ -12,6 +12,33 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DeltaExecutorGui"
 screenGui.Parent = game.CoreGui  -- ou: game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+local function createButton(parent, buttonName, actionFunction)
+    local btn = Instance.new("TextButton")
+    btn.Name = buttonName
+    btn.Size = UDim2.new(1, -10, 0, 30)  -- largura com margem e altura de 30 pixels
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    btn.Text = buttonName
+    btn.TextColor3 = Color3.new(1, 1, 1)
+    btn.Parent = parent
+    btn.Background.Transparency = 0.3
+
+    if actionFunction then
+        btn.MouseButton1Click:Connect(actionFunction)
+    end
+ end
+local function createButton(parent, text, onClick)
+    local button = Instance.new("TextButton")
+    button.Text = text
+    button.Size = UDim2.new(1, -10, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+    button.Parent = parent
+    button.MouseButton1Click:Connect(onClick)
+    return button
+end
+
 local function createHoldButton(parent, text, onHoldStart, onHoldStop)
     local button = Instance.new("TextButton")
     button.Text = text
