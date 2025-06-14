@@ -1,0 +1,373 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+
+
+
+local Window = Rayfield:CreateWindow({
+   Name = "GS hub | V4.0.0",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Carregando...",
+   LoadingSubtitle = "by JhonaDev139 - YT",
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Get Key",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local Tab = Window:CreateTab("Player", 4483362458) -- Title, Image
+local Divider = Tab:CreateDivider()
+local Button = Tab:CreateButton({
+   Name = "Fly",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/Fly_Control-By_JhonaDev139-YT.lua'))()
+   end,
+})
+
+
+
+
+local Divider = Tab:CreateDivider()
+local running = false -- Agora está fora do Callback!
+local running = false -- Agora está fora do Callback!
+
+local Toggle = Tab:CreateToggle({
+   Name = "NoClip",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+
+      if Value then
+         running = true
+         task.spawn(function()
+            while running do
+               for _, part in ipairs(character:GetChildren()) do
+                  if part:IsA("BasePart") then
+                     part.CanCollide = false
+                  end
+               end
+               task.wait(0.1)
+            end
+         end)
+      else
+         running = false
+         -- Quando desligar, restaura a colisão
+         for _, part in ipairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+               part.CanCollide = true
+            end
+         end
+         print("Colisão ativada")
+      end
+   end,
+})
+
+
+local Slider = Tab:CreateSlider({
+   Name = "Velocidade",
+   Range = {0, 100}, -- Pode ajustar o máximo se quiser
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16, -- Valor padrão, 16 é o padrão no Roblox
+   Flag = "SpeedSlider",
+   Callback = function(Value)
+      -- Atualiza a velocidade do personagem
+      humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+      if humanoid then
+         humanoid.WalkSpeed = Value
+      end
+   end,
+})
+local Tab = Window:CreateTab("Visual", 4483362458)
+local Divider = Tab:CreateDivider()
+-- Variáveis principais
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+
+local espEnabled = false
+local espColor = Color3.fromRGB(255,255,255)
+local espObjects = {} -- Para guardar os ESPs
+
+-- Função para criar o ESP para um jogador
+local function createESP(player)
+    if player == LocalPlayer then return end -- Ignora a si mesmo
+    if not player.Character or not player.Character:FindFirstChild("Head") then return end
+
+    local Billboard = Instance.new("BillboardGui")
+    Billboard.Name = "ESP_" .. player.Name
+    Billboard.Adornee = player.Character:FindFirstChild("Head")
+    Billboard.Parent = player.Character
+    Billboard.Size = UDim2.new(0, 200, 0, 50)
+    Billboard.StudsOffset = Vector3.new(0, 2, 0)
+    Billboard.AlwaysOnTop = true
+
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Parent = Billboard
+    TextLabel.Size = UDim2.new(1, 0, 1, 0)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.TextColor3 = espColor
+    TextLabel.TextStrokeTransparency = 0
+    TextLabel.TextScaled = true
+    TextLabel.Font = Enum.Font.SourceSansBold
+    TextLabel.Text = ""
+
+    espObjects[player] = {
+        Billboard = Billboard,
+        TextLabel = TextLabel
+    }
+end
+
+-- Função para remover o ESP de um jogador
+local function removeESP(player)
+    if espObjects[player] then
+        espObjects[player].Billboard:Destroy()
+        espObjects[player] = nil
+    end
+end
+
+-- Atualizador do ESP (executado a cada frame)
+RunService.RenderStepped:Connect(function()
+    if espEnabled then
+        for player, data in pairs(espObjects) do
+            if player and player.Character and player.Character:FindFirstChild("Head") then
+                local distance = math.floor((LocalPlayer.Character.Head.Position - player.Character.Head.Position).Magnitude)
+                data.TextLabel.TextColor3 = espColor
+                data.TextLabel.Text = player.Name .. " | " .. distance .. " studs"
+            else
+                removeESP(player) -- Remove se o jogador não tiver mais Character
+            end
+        end
+    end
+end)
+
+-- Monitorar novos jogadores entrando
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        task.wait(1) -- Espera carregar o Character
+        if espEnabled then
+            createESP(player)
+        end
+    end)
+end)
+
+-- Monitorar jogadores atuais
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if espEnabled then
+                createESP(player)
+            end
+        end)
+        if player.Character then
+            createESP(player)
+        end
+    end
+end
+
+-- Toggle para ativar/desativar o ESP
+Tab:CreateToggle({
+    Name = "ESP name",
+    CurrentValue = false,
+    Callback = function(Value)
+        espEnabled = Value
+
+        if espEnabled then
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer and not espObjects[player] then
+                    createESP(player)
+                end
+            end
+        else
+            for player, _ in pairs(espObjects) do
+                removeESP(player)
+            end
+        end
+    end
+})
+
+-- ColorPicker para mudar a cor do ESP
+Tab:CreateColorPicker({
+    Name = "ESP Color",
+    Color = Color3.fromRGB(255, 255, 255),
+    Flag = "ESPColorPicker",
+    Callback = function(Value)
+        espColor = Value
+    end
+})
+
+
+-- Serviços
+local Players    = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Camera     = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+-- Variáveis
+local ESPEnabled  = false
+local ESPColor    = Color3.fromRGB(255, 255, 255)
+local PlayerDrawings = {}
+
+-- Projeção Manual 3D para 2D
+local function WorldToScreen(position)
+    local cameraCFrame = Camera.CFrame
+    local cameraPos = cameraCFrame.Position
+
+    local relPos = position - cameraPos
+
+    local x = relPos:Dot(cameraCFrame.RightVector)
+    local y = relPos:Dot(cameraCFrame.UpVector)
+    local z = relPos:Dot(cameraCFrame.LookVector)
+
+    if z <= 0.1 then
+        return nil
+    end
+
+    local screenSize = Camera.ViewportSize
+    local fov = math.rad(Camera.FieldOfView)
+    local aspectRatio = screenSize.X / screenSize.Y
+
+    local screenX = (0.5 + (x / (z * math.tan(fov / 2))) / (2 * aspectRatio)) * screenSize.X
+    local screenY = (0.5 - (y / (z * math.tan(fov / 2))) / 2) * screenSize.Y
+
+    return Vector2.new(screenX, screenY)
+end
+
+-- Função ÚNICA para desenhar (MODULAR)
+local function DrawESP(player, drawing, screenPos)
+    -- [Aqui é onde você desenha o que quiser]
+    drawing.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+    drawing.To = screenPos
+    drawing.Color = ESPColor
+    drawing.Visible = true
+end
+
+local function CreateDrawingFor(player)
+    local line = Drawing.new("Line")
+    line.Thickness = 2
+    line.Transparency = 1
+    line.Visible = false
+    PlayerDrawings[player] = line
+end
+
+local function RemoveDrawingFor(player)
+    if PlayerDrawings[player] then
+        PlayerDrawings[player]:Remove()
+        PlayerDrawings[player] = nil
+    end
+end
+
+-- Atualiza a cada frame
+RunService.RenderStepped:Connect(function()
+    if not ESPEnabled then return end
+
+    for player, drawing in pairs(PlayerDrawings) do
+        if player.Character and player.Character:FindFirstChild("Head") then
+            local head = player.Character.Head
+            local screenPos = WorldToScreen(head.Position)
+
+            if screenPos then
+                DrawESP(player, drawing, screenPos)
+            else
+                drawing.Visible = false
+            end
+        else
+            drawing.Visible = false
+        end
+    end
+end)
+
+-- Eventos para novo player / player saindo
+Players.PlayerAdded:Connect(function(player)
+    if player ~= LocalPlayer then
+        CreateDrawingFor(player)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    RemoveDrawingFor(player)
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        CreateDrawingFor(player)
+    end
+end
+
+-- Botões com Rayfield
+Tab:CreateToggle({
+    Name = " ESP",
+    CurrentValue = false,
+    Callback = function(Value)
+        ESPEnabled = Value
+        if not Value then
+            for player in pairs(PlayerDrawings) do
+                PlayerDrawings[player].Visible = false
+            end
+        end
+    end,
+})
+
+Tab:CreateColorPicker({
+    Name  = "Cor ESP box",
+    Color = ESPColor,
+    Flag  = "Flag1",
+    Callback = function(Value)
+        ESPColor = Value
+    end,
+})
+
+
+local Tab = Window:CreateTab("TP manager", 4483362458)
+local Divider = Tab:CreateDivider()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local root = character:WaitForChild("HumanoidRootPart")
+
+local distance = 10 -- Distância inicial do TP
+
+-- Slider para escolher a distância
+local Slider = Tab:CreateSlider({
+   Name = "Distância do TP",
+   Range = {0, 100},
+   Increment = 1,
+   Suffix = "Studs",
+   CurrentValue = 10,
+   Flag = "TPSlider",
+   Callback = function(Value)
+      distance = Value -- Atualiza a distância escolhida
+   end,
+})
+
+-- Botão para ativar o teleporte
+local Button = Tab:CreateButton({
+   Name = "Teleport Forward",
+   Callback = function()
+      root.CFrame = root.CFrame * CFrame.new(0, 0, -distance) -- Teleporta com a distância escolhida
+   end,
+})
