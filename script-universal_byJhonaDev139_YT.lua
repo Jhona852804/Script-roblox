@@ -15,7 +15,8 @@ local originalPosition = nil
 local isFrozen = false
 local hrp = character:FindFirstChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
-
+local flying = false
+local velocity = nil
 
 
 
@@ -300,16 +301,9 @@ local categories = {
 end},
 
 -- Variável para controlar o estado do fly
-local flying = false
-local velocity = nil
+
 
 {name = "Fly V2", func = function()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local hrp = character:WaitForChild("HumanoidRootPart")
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    local uis = game:GetService("UserInputService")
-    local runService = game:GetService("RunService")
 
     -- Alternar estado
     flying = not flying
