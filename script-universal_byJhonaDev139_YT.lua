@@ -301,20 +301,33 @@ end},
 
 
 {name = "Colision", func = function()
-    
-    -- Função para alternar a colisão do personagem
-    local function toggleCollision()
-        collisionEnabled = not collisionEnabled
+{name = "Colision", func = function()
+    -- Verifica se o loop já está ativo
+    _G.collisionLoop = _G.collisionLoop or false
+
+    if not _G.collisionLoop then
+        _G.collisionLoop = true
+        -- Inicia o loop de desativar colisão a cada 1ms
+        task.spawn(function()
+            while _G.collisionLoop do
+                for _, part in pairs(character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+                task.wait(0.001)
+            end
+        end)
+    else
+        -- Para o loop e restaura a colisão
+        _G.collisionLoop = false
         for _, part in pairs(character:GetChildren()) do
             if part:IsA("BasePart") then
-                part.CanCollide = collisionEnabled
+                part.CanCollide = true
             end
         end
     end
-
-    -- Alterna a colisão imediatamente quando o botão for pressionado
-    toggleCollision()
-    end},
+end},
     
     {name = "Ant-AFK", func = function()
     
