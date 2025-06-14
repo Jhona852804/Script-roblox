@@ -16,7 +16,8 @@ local isFrozen = false
 local hrp = character:FindFirstChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 local flying = false
-local velocity = nil
+local bodyVel = nil
+
 
 
 
@@ -303,29 +304,29 @@ end},
 -- Variável para controlar o estado do fly
 
 
-{name = "Fly V2", func = function()
 
-    -- Alternar estado
+
+{name = "Fly", func = function()
+    
+
+    -- Alternar entre ativar e desativar o fly
     flying = not flying
 
     if flying then
-        -- Ativa o modo Fly
         humanoid.PlatformStand = true
 
-        -- Cria o LinearVelocity
-        velocity = Instance.new("LinearVelocity")
-        velocity.Name = "FlyVelocity"
-        velocity.Attachment0 = Instance.new("Attachment", hrp)
-        velocity.MaxForce = math.huge
-        velocity.RelativeTo = Enum.ActuatorRelative.ToWorld
-        velocity.Velocity = Vector3.zero
-        velocity.Parent = hrp
+        bodyVel = Instance.new("BodyVelocity")
+        bodyVel.Name = "FlyVelocity"
+        bodyVel.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+        bodyVel.Velocity = Vector3.zero
+        bodyVel.P = 1250
+        bodyVel.Parent = hrp
 
-        -- Movimento com base no input
+        -- Loop de movimento
         task.spawn(function()
-            while flying and velocity do
-                local move = Vector3.zero
+            while flying and bodyVel and bodyVel.Parent do
                 local cam = workspace.CurrentCamera
+                local move = Vector3.zero
 
                 if uis:IsKeyDown(Enum.KeyCode.W) then
                     move += cam.CFrame.LookVector
@@ -346,22 +347,19 @@ end},
                     move -= cam.CFrame.UpVector
                 end
 
-                -- Aplica movimento (com velocidade máxima)
-                velocity.Velocity = move.Magnitude > 0 and move.Unit * 60 or Vector3.zero
-
+                bodyVel.Velocity = move.Magnitude > 0 and move.Unit * 60 or Vector3.zero
                 task.wait()
             end
         end)
     else
-        -- Desativa fly
-        if velocity then
-            velocity:Destroy()
-            velocity = nil
-        end
+        -- Desativar o fly
         humanoid.PlatformStand = false
+        if bodyVel then
+            bodyVel:Destroy()
+            bodyVel = nil
+        end
     end
 end},
-
 
 {name = "Colision", func = function()
     local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
