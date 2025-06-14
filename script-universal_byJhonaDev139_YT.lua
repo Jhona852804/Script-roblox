@@ -301,7 +301,6 @@ end},
 
 
 {name = "Colision", func = function()
-{name = "Colision", func = function()
     -- Verifica se o loop já está ativo
     _G.collisionLoop = _G.collisionLoop or false
 
