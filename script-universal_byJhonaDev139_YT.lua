@@ -36,6 +36,13 @@ mainFrame.Parent = screenGui
 mainFrame.Active = true      -- necessário para receber input
 mainFrame.Draggable = true   -- torna a janela arrastável
 mainFrame.BackgroundTransparency = 0.5  -- Deixa 50% transparente (0 = opaco, 1 = totalmente invisível)
+local success, particleScript = pcall(function()
+	return loadstring(game:HttpGet("https://raw.githubusercontent.com/SEU-USUARIO/REPO/main/particles.lua"))()
+end)
+
+if success and particleScript then
+	particleScript(mainFrame, 40, 100)  -- (frame alvo, quantidade, distância máx)
+end
 
 -- Cria a barra de título
 local titleLabel = Instance.new("TextLabel")
