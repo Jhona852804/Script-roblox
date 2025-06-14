@@ -36,13 +36,7 @@ mainFrame.Parent = screenGui
 mainFrame.Active = true      -- necessário para receber input
 mainFrame.Draggable = true   -- torna a janela arrastável
 mainFrame.BackgroundTransparency = 0.5  -- Deixa 50% transparente (0 = opaco, 1 = totalmente invisível)
-local success, particleScript = pcall(function()
-	return loadstring(game:HttpGet("https://raw.githubusercontent.com/SEU-USUARIO/REPO/main/particles.lua"))()
-end)
 
-if success and particleScript then
-	particleScript(mainFrame, 40, 100)  -- (frame alvo, quantidade, distância máx)
-end
 
 -- Cria a barra de título
 local titleLabel = Instance.new("TextLabel")
@@ -64,7 +58,7 @@ leftPanel.Position = UDim2.new(0, 0, 0, 30)
 leftPanel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 leftPanel.BorderSizePixel = 1
 leftPanel.Parent = mainFrame
-leftPanel.BackgroundTransparency = 0.3  -- 50% transparente
+leftPanel.BackgroundTransparency = 1  -- 50% transparente
 
 -- Layout para organizar os botões de categorias com espaçamento
 local leftLayout = Instance.new("UIListLayout")
@@ -80,7 +74,7 @@ rightPanel.Position = UDim2.new(0, 120, 0, 31)
 rightPanel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 rightPanel.BorderSizePixel = 1
 rightPanel.Parent = mainFrame
-rightPanel.BackgroundTransparency = 0.3
+rightPanel.BackgroundTransparency = 1
 
 -- Layout para organizar os botões de ações com espaçamento
 local rightLayout = Instance.new("UIListLayout")
@@ -139,6 +133,14 @@ corner.Parent = button
     button.MouseButton1Up:Connect(onHoldStop)
 
     return button
+end
+
+local success, particleScript = pcall(function()
+	return loadstring(game:HttpGet("https://raw.githubusercontent.com/SEU-USUARIO/REPO/main/particles.lua"))()
+end)
+
+if success and particleScript then
+	particleScript(mainFrame, 40, 100)  -- (frame alvo, quantidade, distância máx)
 end
 
 local speedToggle = false       -- false: velocidade normal; true: velocidade aumentada
