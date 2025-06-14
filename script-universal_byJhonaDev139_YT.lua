@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local character = player.Character or player.CharacterAdded:Wait()
 local Camera = game.Workspace.CurrentCamera
 local RunService = game:GetService("RunService")
-
+local running = false
 local espEnabled = false
 local espLines = {}
 local espColor = Color3.fromRGB(255, 255, 255)
@@ -152,7 +152,7 @@ local isJumpIncreased = false -- Variável para controlar o estado do pulo
 local jumped = false -- Variável para detectar o pulo
 
 local allowAirJump = false -- Controla se o jogador pode pular no ar
-local collisionEnabled = true
+
 local antAFKEnabled = false
 local connection = nil  
 
@@ -299,32 +299,33 @@ local categories = {
     end)
 end},
 
+-- Variável fora do botão para manter o estado
+
 
 {name = "Colision", func = function()
-    -- Verifica se o loop já está ativo
-    _G.collisionLoop = _G.collisionLoop or false
+    local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 
-    if not _G.collisionLoop then
-        _G.collisionLoop = true
-        -- Inicia o loop de desativar colisão a cada 1ms
+    if not running then
+        running = true
         task.spawn(function()
-            while _G.collisionLoop do
-                for _, part in pairs(character:GetChildren()) do
+            while running do
+                for _, part in ipairs(character:GetChildren()) do
                     if part:IsA("BasePart") then
                         part.CanCollide = false
                     end
                 end
-                task.wait(0.001)
+                task.wait(0.1) -- tempo entre cada verificação
             end
         end)
     else
-        -- Para o loop e restaura a colisão
-        _G.collisionLoop = false
-        for _, part in pairs(character:GetChildren()) do
+        running = false
+        -- Restaura colisão
+        for _, part in ipairs(character:GetChildren()) do
             if part:IsA("BasePart") then
                 part.CanCollide = true
             end
         end
+        print("Colisão ativada")
     end
 end},
     
