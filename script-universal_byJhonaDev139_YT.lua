@@ -299,7 +299,74 @@ local categories = {
     end)
 end},
 
--- Variável fora do botão para manter o estado
+-- Variável para controlar o estado do fly
+local flying = false
+local velocity = nil
+
+{name = "Fly V2", func = function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    local uis = game:GetService("UserInputService")
+    local runService = game:GetService("RunService")
+
+    -- Alternar estado
+    flying = not flying
+
+    if flying then
+        -- Ativa o modo Fly
+        humanoid.PlatformStand = true
+
+        -- Cria o LinearVelocity
+        velocity = Instance.new("LinearVelocity")
+        velocity.Name = "FlyVelocity"
+        velocity.Attachment0 = Instance.new("Attachment", hrp)
+        velocity.MaxForce = math.huge
+        velocity.RelativeTo = Enum.ActuatorRelative.ToWorld
+        velocity.Velocity = Vector3.zero
+        velocity.Parent = hrp
+
+        -- Movimento com base no input
+        task.spawn(function()
+            while flying and velocity do
+                local move = Vector3.zero
+                local cam = workspace.CurrentCamera
+
+                if uis:IsKeyDown(Enum.KeyCode.W) then
+                    move += cam.CFrame.LookVector
+                end
+                if uis:IsKeyDown(Enum.KeyCode.S) then
+                    move -= cam.CFrame.LookVector
+                end
+                if uis:IsKeyDown(Enum.KeyCode.A) then
+                    move -= cam.CFrame.RightVector
+                end
+                if uis:IsKeyDown(Enum.KeyCode.D) then
+                    move += cam.CFrame.RightVector
+                end
+                if uis:IsKeyDown(Enum.KeyCode.Space) then
+                    move += cam.CFrame.UpVector
+                end
+                if uis:IsKeyDown(Enum.KeyCode.LeftControl) then
+                    move -= cam.CFrame.UpVector
+                end
+
+                -- Aplica movimento (com velocidade máxima)
+                velocity.Velocity = move.Magnitude > 0 and move.Unit * 60 or Vector3.zero
+
+                task.wait()
+            end
+        end)
+    else
+        -- Desativa fly
+        if velocity then
+            velocity:Destroy()
+            velocity = nil
+        end
+        humanoid.PlatformStand = false
+    end
+end},
 
 
 {name = "Colision", func = function()
