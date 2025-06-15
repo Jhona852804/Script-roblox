@@ -1756,4 +1756,16 @@ end
 
 -- Função para criar os botões de categorias no painel esquerdo
 local function loadCategories()
-    for categoryName, _ in pairs(categories)
+    for categoryName, _ in pairs(categories) do
+        createButton(leftPanel, categoryName, function()
+            loadActions(categoryName)
+        end)
+    end
+end
+
+-- Inicializa os botões de categorias e carrega uma categoria padrão (a primeira encontrada)
+loadCategories()
+for categoryName, _ in pairs(categories) do
+    loadActions(categoryName)
+    break
+end
