@@ -45,14 +45,14 @@ local btnCarregar = Instance.new("TextButton")
 btnCarregar.Size = UDim2.new(1, -20, 0, 40)
 btnCarregar.Position = UDim2.new(0, 10, 0, 10)
 btnCarregar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-btnCarregar.Text = "Carregar Script"
+btnCarregar.Text = "Reset Script"
 btnCarregar.TextColor3 = Color3.new(1,1,1)
 btnCarregar.Font = Enum.Font.GothamBold
 btnCarregar.TextSize = 14
 btnCarregar.Parent = miniFrame
 
 btnCarregar.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/script-universal_byJhonaDev139_YT.lua'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/universal-ByJhonaDev139-new.luau'))()
     screenGui:Destroy() -- Remove toda a interface
 end)
 
