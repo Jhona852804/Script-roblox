@@ -423,7 +423,22 @@ end},
 		{name = "Aimbot", func = function()
 				loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/aimbot-byJhonaDev139_YT'))()
 			end},
-		
+		-- Fora do botão para manter o estado
+local shiftLockEnabled = false
+
+{name = "Shift Lock", func = function()
+    local settings = UserSettings():GetService("UserGameSettings")
+
+    shiftLockEnabled = not shiftLockEnabled
+
+    if shiftLockEnabled then
+        settings.RotationType = Enum.RotationType.CameraRelative
+        print("Shift Lock ativado")
+    else
+        settings.RotationType = Enum.RotationType.MovementRelative
+        print("Shift Lock desativado")
+    end
+end},
 		{name = "Line vision", func = function()
     if _G.linhaVisaoAtiva then
         _G.linhaVisaoAtiva = false
