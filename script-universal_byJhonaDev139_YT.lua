@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local character = player.Character or player.CharacterAdded:Wait()
 local Camera = game.Workspace.CurrentCamera
 local RunService = game:GetService("RunService")
-local settings = UserSettings():GetService("UserGameSettings")
+
 local running = false
 local espEnabled = false
 local espLines = {}
@@ -428,7 +428,7 @@ end},
 
 
 {name = "Shift Lock", func = function()
-    
+    local settings = UserSettings():GetService("UserGameSettings")
 
     shiftLockEnabled = not shiftLockEnabled
 
