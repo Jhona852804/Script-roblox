@@ -5,6 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local character = player.Character or player.CharacterAdded:Wait()
 local Camera = game.Workspace.CurrentCamera
 local RunService = game:GetService("RunService")
+local settings = UserSettings():GetService("UserGameSettings")
 local running = false
 local espEnabled = false
 local espLines = {}
@@ -17,7 +18,7 @@ local hrp = character:FindFirstChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 local flying = false
 local bodyVel = nil
-
+local shiftLockEnabled = false
 
 
 
@@ -424,10 +425,10 @@ end},
 				loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/aimbot-byJhonaDev139_YT'))()
 			end},
 		-- Fora do botão para manter o estado
-local shiftLockEnabled = false
+
 
 {name = "Shift Lock", func = function()
-    local settings = UserSettings():GetService("UserGameSettings")
+    
 
     shiftLockEnabled = not shiftLockEnabled
 
