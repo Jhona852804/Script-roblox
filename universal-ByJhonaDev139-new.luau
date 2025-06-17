@@ -209,112 +209,124 @@ local function criarParticulaMatrix()
 end
 
 -- Loop de partículas  
+local funcoesParticulas = {
+    criarParticulaFogo = criarParticulaFogo,
+    criarParticulaNeon = criarParticulaNeon,
+    criarParticulaChuva = criarParticulaChuva,
+    criarParticulaMatrix = criarParticulaMatrix
+}
+
 RunService.RenderStepped:Connect(function()
     for i = 1, 3 do
-        if tipoAtual == 1 then
-            semParticula()
-        elseif tipoAtual == 2 then
-            criarParticulaFogo()
-        elseif tipoAtual == 3 then
-            criarParticulaNeon() -- Novo estilo
-        elseif tipoAtual == 4 then
-            criarParticulaChuva()
-        elseif tipoAtual == 5 then
-criarParticulaMatrix()
+        local func = funcoesParticulas[tipoAtual]
+        if func then
+            func()
         end
     end
 end)
--- Botão separado e arrastável para alternar partículas  
--- Aplicar estilo moderno
-local function aplicarEstilo(uiElement, corBorda, raio)
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, raio or 6)
-    corner.Parent = uiElement
+-- Interface de Seleção de Partículas (independente do script principal)
+do
+    local efeitos = {
+        ["Sem Partícula"] = function() tipoAtual = "none" end,
+        ["Fogo"] = function() tipoAtual = "criarParticulaFogo" end,
+        ["Neon"] = function() tipoAtual = "criarParticulaNeon" end,
+        ["Chuva"] = function() tipoAtual = "criarParticulaChuva" end,
+        ["Matrix"] = function() tipoAtual = "criarParticulaMatrix" end,
+    }
 
-    local stroke = Instance.new("UIStroke")
-    stroke.Thickness = 1.5
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    stroke.Color = corBorda or Color3.fromRGB(60, 60, 60)
-    stroke.Parent = uiElement
+    -- Criar o GUI se não existir
+    local screenGui = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("ParticulaGui") 
+        or Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+    screenGui.Name = "ParticulaGui"
+    screenGui.ResetOnSpawn = false
+
+    -- Função de estilo
+    local function aplicarEstilo(ui, cor, raio)
+        local uiCorner = Instance.new("UICorner")
+        uiCorner.CornerRadius = UDim.new(0, raio or 6)
+        uiCorner.Parent = ui
+
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 1.2
+        stroke.Color = cor or Color3.fromRGB(70, 70, 70)
+        stroke.Parent = ui
+    end
+
+    -- Janela principal
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 180, 0, 40)
+    frame.Position = UDim2.new(0, 100, 0, 120)
+    frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    frame.BorderSizePixel = 0
+    frame.Active = true
+    frame.Draggable = true
+    frame.Parent = screenGui
+    aplicarEstilo(frame)
+
+    -- Botão de minimizar
+    local toggle = Instance.new("TextButton")
+    toggle.Size = UDim2.new(1, 0, 0, 40)
+    toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    toggle.Text = "Selecionar Animação ▼"
+    toggle.TextColor3 = Color3.new(1, 1, 1)
+    toggle.TextSize = 14
+    toggle.Font = Enum.Font.GothamBold
+    toggle.Parent = frame
+    aplicarEstilo(toggle, Color3.fromRGB(60, 60, 60), 6)
+
+    -- Área com rolagem
+    local scroll = Instance.new("ScrollingFrame")
+    scroll.Position = UDim2.new(0, 0, 0, 40)
+    scroll.Size = UDim2.new(1, 0, 0, 0)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    scroll.BackgroundTransparency = 1
+    scroll.ScrollBarThickness = 4
+    scroll.BorderSizePixel = 0
+    scroll.Visible = false
+    scroll.Parent = frame
+
+    -- Layout da lista
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 4)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = scroll
+
+    local aberta = false
+    local function atualizarLista()
+        aberta = not aberta
+        scroll.Visible = aberta
+        toggle.Text = aberta and "Selecionar Animação ▲" or "Selecionar Animação ▼"
+
+        if aberta then
+            task.wait() -- Garante que layout.AbsoluteContentSize esteja atualizado
+            scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+            scroll.Size = UDim2.new(1, 0, 0, math.min(layout.AbsoluteContentSize.Y + 10, 160))
+            frame.Size = UDim2.new(0, 180, 0, scroll.Size.Y.Offset + 40)
+        else
+            frame.Size = UDim2.new(0, 180, 0, 40)
+        end
+    end
+
+    toggle.MouseButton1Click:Connect(atualizarLista)
+
+    -- Criar os botões com base nos efeitos
+    for nome, funcao in pairs(efeitos) do
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, -10, 0, 30)
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        btn.Text = nome
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.Font = Enum.Font.Gotham
+        btn.TextSize = 13
+        btn.Parent = scroll
+        aplicarEstilo(btn, Color3.fromRGB(80, 80, 80), 4)
+
+        btn.MouseButton1Click:Connect(function()
+            funcao()
+            atualizarLista()
+        end)
+    end
 end
-
--- Janela principal
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 160, 0, 40)
-frame.Position = UDim2.new(0, 100, 0, 100)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-frame.Parent = screenGui
-aplicarEstilo(frame)
-
--- Botão de minimizar
-local toggle = Instance.new("TextButton")
-toggle.Size = UDim2.new(1, 0, 0, 40)
-toggle.Position = UDim2.new(0, 0, 0, 0)
-toggle.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-toggle.TextColor3 = Color3.new(1, 1, 1)
-toggle.Text = "Selecionar Animação ▼"
-toggle.Font = Enum.Font.GothamBold
-toggle.TextSize = 14
-toggle.Parent = frame
-aplicarEstilo(toggle, Color3.fromRGB(50, 50, 50), 6)
-
--- Lista de botões com rolagem
-local scroll = Instance.new("ScrollingFrame")
-scroll.Size = UDim2.new(1, 0, 0, 0)
-scroll.Position = UDim2.new(0, 0, 0, 40)
-scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-scroll.ScrollBarThickness = 4
-scroll.BackgroundTransparency = 1
-scroll.BorderSizePixel = 0
-scroll.Visible = false
-scroll.Parent = frame
-
--- Layout da lista
-local layout = Instance.new("UIListLayout")
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.Padding = UDim.new(0, 4)
-layout.Parent = scroll
-
--- Alternar exibição da lista
-local aberta = false
-local function atualizarLista()
-	aberta = not aberta
-	scroll.Visible = aberta
-	toggle.Text = aberta and "Selecionar Animação ▲" or "Selecionar Animação ▼"
-
-	if aberta then
-		wait()
-		scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
-		frame.Size = UDim2.new(0, 500, 0, math.min(layout.AbsoluteContentSize.Y + 50, 200))
-		scroll.Size = UDim2.new(1, 0, 1, -40)
-	else
-		frame.Size = UDim2.new(0, 160, 0, 40)
-	end
-end
-
-toggle.MouseButton1Click:Connect(atualizarLista)
-
--- Gerar os botões
-for nome, func in pairs(efeitos) do
-	local botao = Instance.new("TextButton")
-	botao.Size = UDim2.new(1, -8, 0, 30)
-	botao.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	botao.TextColor3 = Color3.new(1, 1, 1)
-	botao.Text = nome
-	botao.Font = Enum.Font.Gotham
-	botao.TextSize = 13
-	botao.Parent = scroll
-	aplicarEstilo(botao, Color3.fromRGB(80, 80, 80), 4)
-
-	botao.MouseButton1Click:Connect(function()
-		tipoAtual = nome
-		atualizarLista()
-	end)
-end
-
 
 
 
