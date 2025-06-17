@@ -107,6 +107,9 @@ ParticleFolder.Parent = mainFrame
 
 -- Tipos de partículas  
 local tipoAtual = 1
+local function semParticula()
+    print('escape')
+end
 
 local function criarParticulaFogo()  
 local part = Instance.new("Frame")  
@@ -209,13 +212,15 @@ end
 RunService.RenderStepped:Connect(function()
     for i = 1, 3 do
         if tipoAtual == 1 then
-            criarParticulaFogo()
+            semParticula()
         elseif tipoAtual == 2 then
-            criarParticulaNeon()
+            criarParticulaFogo()
         elseif tipoAtual == 3 then
-            criarParticulaChuva() -- Novo estilo
+            criarParticulaNeon() -- Novo estilo
         elseif tipoAtual == 4 then
-            criarParticulaMatrix()
+            criarParticulaChuva()
+        elseif tipoAtual == 5
+criarParticulaMatrix()
         end
     end
 end)
@@ -234,7 +239,7 @@ partButton.Parent = screenGui
 
 partButton.MouseButton1Click:Connect(function()
     tipoAtual += 1
-    if tipoAtual > 4 then -- Agora são 3 estilos
+    if tipoAtual > 5 then -- Agora são 3 estilos
         tipoAtual = 1
     end
 end)
