@@ -97,7 +97,7 @@ titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Parent = mainFrame
 
 local titleCorner = Instance.new("UICorner")  
-titleCorner.CornerRadius = UDim.new(0, 0)  
+titleCorner.CornerRadius = UDim.new(0, 1)  
 titleCorner.Parent = titleLabel
 
 -- Pasta para partículas  
@@ -220,9 +220,9 @@ leftPanel.Name = "leftPanel"
 leftPanel.Size = UDim2.new(0, 100, 1, -30)
 leftPanel.Position = UDim2.new(0, 0, 0, 30)
 leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-leftPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Ajuste a altura conforme necessário
+leftPanel.CanvasSize = UDim2.new(0, 0, 0, 100) -- Ajuste a altura conforme necessário
 leftPanel.ScrollBarThickness = 6
-leftPanel.ScrollBarImageColor3 = Color3.fromRGB(255, 140, 0)
+leftPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
 leftPanel.Parent = mainFrame
 
 -- Layout para organizar os botões de categorias com espaçamento
@@ -239,7 +239,7 @@ rightPanel.Position = UDim2.new(0, 100, 0, 30)
 rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 rightPanel.CanvasSize = UDim2.new(0, 0, 0, 1000) -- Altura virtual
 rightPanel.ScrollBarThickness = 6
-rightPanel.ScrollBarImageColor3 = Color3.fromRGB(255, 140, 0)
+rightPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
 rightPanel.Parent = mainFrame
 
 -- Layout para organizar os botões de ações com espaçamento
