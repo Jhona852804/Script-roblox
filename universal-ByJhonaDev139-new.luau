@@ -21,6 +21,16 @@ local hrp = character:FindFirstChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 local LocalPlayer = Players.LocalPlayer
      
+local function aplicarEstilo(ui, cor, raio)
+	local uiCorner = Instance.new("UICorner")
+	uiCorner.CornerRadius = UDim.new(0, raio or 6)
+	uiCorner.Parent = ui
+
+	local stroke = Instance.new("UIStroke")
+	stroke.Thickness = 1.2
+	stroke.Color = cor or Color3.fromRGB(70, 70, 70)
+	stroke.Parent = ui
+end
 
 -- Cria a ScreenGui e define como pai  
 local screenGui = Instance.new("ScreenGui")  
@@ -72,33 +82,30 @@ btnFechar.MouseButton1Click:Connect(function()
 end)
 
 -- Cria a janela principal (MainFrame)  
-local mainFrame = Instance.new("Frame")  
-mainFrame.Name = "MainFrame"  
-mainFrame.Size = UDim2.new(0, 480, 0, 330)  
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)  
-mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
-mainFrame.BorderSizePixel = 2  
-mainFrame.Parent = screenGui  
-mainFrame.Active = true  
-mainFrame.Draggable = true  
-mainFrame.BackgroundTransparency = 0.5
+-- Cria a janela principal (MainFrame)
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 480, 0, 330)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainFrame.BackgroundTransparency = 0
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+aplicarEstilo(mainFrame, Color3.fromRGB(60, 60, 60), 10)
 
-local mainCorner = Instance.new("UICorner")  
-mainCorner.CornerRadius = UDim.new(0, 10)  
-mainCorner.Parent = mainFrame
-
--- Cria a barra de título  
-local titleLabel = Instance.new("TextLabel")  
-titleLabel.Name = "TitleLabel"  
-titleLabel.Size = UDim2.new(1, 0, 0, 30)  
-titleLabel.BackgroundColor3 = Color3.fromRGB(5, 5, 5)  
-titleLabel.Text = "By JhonaDev139"  
-titleLabel.TextColor3 = Color3.new(1, 1, 1)  
+-- Cria a barra de título
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 35)
+titleLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+titleLabel.Text = "By JhonaDev139"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 14
 titleLabel.Parent = mainFrame
-
-local titleCorner = Instance.new("UICorner")  
-titleCorner.CornerRadius = UDim.new(0, 1)  
-titleCorner.Parent = titleLabel
+aplicarEstilo(titleLabel, Color3.fromRGB(60, 60, 60), 10)
 
 -- Pasta para partículas  
 local ParticleFolder = Instance.new("Folder")  
