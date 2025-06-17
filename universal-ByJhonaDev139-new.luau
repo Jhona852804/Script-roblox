@@ -20,9 +20,6 @@ local isFrozen = false
 local hrp = character:FindFirstChild("HumanoidRootPart")  
 local humanoid = character:WaitForChild("Humanoid")
 local LocalPlayer = Players.LocalPlayer
-local ativo = false
-local linhas = {}
-local conexoes = {}
      
 
 -- Cria a ScreenGui e define como pai  
@@ -796,7 +793,9 @@ end},
 
 
 {name = "ESP Line", func = (function()
-
+local ativo = false
+local linhas = {}
+local conexoes = {}
         return function()
 
             if not ativo then
