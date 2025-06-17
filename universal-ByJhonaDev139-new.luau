@@ -795,26 +795,32 @@ end},
 
 {name = "ESP Line", func = (function()
     local ativo = false
+    local esp = {}
     local conexoes = {}
-    local linhas = {}
 
     return function()
         if not ativo then
             ativo = true
-            local offset = Vector3.new(-1.5, -2.5, 1.5)
-            local Camera = workspace.CurrentCamera
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
 
-            local function criarLinha(player)
+            local pontosBox = {
+                Vector3.new(-1.5, 2.5, -1.5),
+                Vector3.new(1.5, 2.5, -1.5),
+                Vector3.new(1.5, 2.5, 1.5),
+                Vector3.new(-1.5, 2.5, 1.5),
+                Vector3.new(-1.5, -2.5, -1.5),
+                Vector3.new(1.5, -2.5, -1.5),
+                Vector3.new(1.5, -2.5, 1.5),
+                Vector3.new(-1.5, -2.5, 1.5),
+            }
+
+            local function criarESP(player)
                 if player == LocalPlayer then return end
 
-                local line = Drawing.new("Line")
-                line.Thickness = 1.5
-                line.Color = Color3.new(1, 0, 0)
-                line.Visible = false
-                linhas[player] = line
+                local linha = Drawing.new("Line")
+                linha.Color = Color3.new(1, 0, 0)
+                linha.Thickness = 2
+                linha.Visible = false
+                esp[player] = linha
 
                 conexoes[player] = RunService.RenderStepped:Connect(function()
                     local char = player.Character
@@ -822,46 +828,56 @@ end},
                     local hum = char and char:FindFirstChildOfClass("Humanoid")
 
                     if hrp and hum and hum.Health > 0 then
-                        local ponto1 = hrp.Position + offset
-                        local ponto2 = hrp.Position
+                        local menorX, menorY = math.huge, math.huge
+                        local maiorX, maiorY = -math.huge, -math.huge
+                        local visivel = false
 
-                        local pos1, vis1 = Camera:WorldToViewportPoint(ponto1)
-                        local pos2, vis2 = Camera:WorldToViewportPoint(ponto2)
+                        for _, offset in ipairs(pontosBox) do
+                            local ponto3D = hrp.Position + offset
+                            local ponto2D, naTela = Camera:WorldToViewportPoint(ponto3D)
 
-                        if vis1 and vis2 then
-                            line.From = Vector2.new(pos1.X, pos1.Y)
-                            line.To = Vector2.new(pos2.X, pos2.Y)
-                            line.Visible = true
+                            if naTela then
+                                visivel = true
+                                menorX = math.min(menorX, ponto2D.X)
+                                menorY = math.min(menorY, ponto2D.Y)
+                                maiorX = math.max(maiorX, ponto2D.X)
+                                maiorY = math.max(maiorY, ponto2D.Y)
+                            end
+                        end
+
+                        if visivel then
+                            local centroX = (menorX + maiorX) / 2
+                            local centroY = (menorY + maiorY) / 2
+
+                            linha.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y) -- Parte inferior central da tela
+                            linha.To = Vector2.new(centroX, centroY)
+                            linha.Visible = true
                         else
-                            line.Visible = false
+                            linha.Visible = false
                         end
                     else
-                        line.Visible = false
+                        linha.Visible = false
                     end
                 end)
             end
 
-            for _, p in ipairs(Players:GetPlayers()) do
-                criarLinha(p)
-            end
+            for _, p in pairs(Players:GetPlayers()) do criarESP(p) end
 
-            table.insert(conexoes, Players.PlayerAdded:Connect(criarLinha))
-
-            table.insert(conexoes, Players.PlayerRemoving:Connect(function(player)
-                if conexoes[player] then conexoes[player]:Disconnect() end
-                if linhas[player] then linhas[player]:Remove() end
-                conexoes[player], linhas[player] = nil, nil
+            table.insert(conexoes, Players.PlayerAdded:Connect(criarESP))
+            table.insert(conexoes, Players.PlayerRemoving:Connect(function(p)
+                if conexoes[p] then conexoes[p]:Disconnect() end
+                if esp[p] then esp[p]:Remove() end
+                conexoes[p], esp[p] = nil, nil
             end))
         else
             ativo = false
-            for _, conn in pairs(conexoes) do
-                if typeof(conn) == "RBXScriptConnection" then conn:Disconnect() end
+            for _, c in pairs(conexoes) do
+                if typeof(c) == "RBXScriptConnection" then c:Disconnect() end
             end
-            for _, line in pairs(linhas) do
-                if line then line:Remove() end
+            for _, e in pairs(esp) do
+                if e then e:Remove() end
             end
-            conexoes = {}
-            linhas = {}
+            conexoes, esp = {}, {}
         end
     end
 end)()},
