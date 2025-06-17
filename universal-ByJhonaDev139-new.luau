@@ -263,7 +263,7 @@ aplicarEstilo(toggle, Color3.fromRGB(50, 50, 50), 6)
 
 -- Lista de botões com rolagem
 local scroll = Instance.new("ScrollingFrame")
-scroll.Size = UDim2.new(1, 0, 0, 0)
+scroll.Size = UDim2.new(0, 10, 0, 10)
 scroll.Position = UDim2.new(0, 0, 0, 40)
 scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 scroll.ScrollBarThickness = 4
