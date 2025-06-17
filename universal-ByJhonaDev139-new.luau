@@ -796,63 +796,84 @@ end},
     local linhas = {}
     local conexoes = {}
 
-    local function toScreen(pos)
-        local cam = workspace.CurrentCamera
-        local camCFrame = cam.CFrame
-        local camPos = camCFrame.Position
-        local camLook = camCFrame.LookVector
-
-        local dir = pos - camPos
-        local right = camCFrame.RightVector
-        local up = camCFrame.UpVector
-
-        local x = dir:Dot(right)
-        local y = dir:Dot(up)
-        local z = dir:Dot(camLook)
-
-        if z < 0.1 then return nil end
-
-        local fov = cam.FieldOfView
-        local screenCenter = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
-        local aspectRatio = cam.ViewportSize.X / cam.ViewportSize.Y
-
-        local scale = math.tan(math.rad(fov / 2)) * z
-        local screenX = (x / scale) * screenCenter.X + screenCenter.X
-        local screenY = (-y / scale) * screenCenter.Y + screenCenter.Y
-
-        return Vector2.new(screenX, screenY)
-    end
-
     return function()
         if not ativo then
             ativo = true
-            local Players = game:GetService("Players")
-            local RunService = game:GetService("RunService")
-            local Camera = workspace.CurrentCamera
-            local LocalPlayer = Players.LocalPlayer
 
-            local function criarLinha(player)
-                if player == LocalPlayer then return end
+            local gui = Instance.new("ScreenGui")
+            gui.Name = "ESPLineGui"
+            gui.ResetOnSpawn = false
+            gui.IgnoreGuiInset = true
+            gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            gui.DisplayOrder = 100
+            gui.Parent = player:FindFirstChildOfClass("PlayerGui") or player.PlayerGui
 
-                local line = Drawing.new("Line")
-                line.Thickness = 1.5
-                line.Color = Color3.new(1, 0, 0)
+            local function criarLinha(alvo)
+                if alvo == player then return end
+
+                local frame = Instance.new("Frame")
+                frame.BackgroundTransparency = 1
+                frame.BorderSizePixel = 0
+                frame.AnchorPoint = Vector2.new(0.5, 0.5)
+                frame.Size = UDim2.new(0, 0, 0, 0)
+                frame.ZIndex = 1
+                frame.Visible = false
+                frame.Name = alvo.Name .. "_ESPPoint"
+                frame.Parent = gui
+
+                local line = Instance.new("Frame")
+                line.AnchorPoint = Vector2.new(0.5, 0.5)
+                line.BackgroundColor3 = espColor
+                line.BorderSizePixel = 0
+                line.ZIndex = 1
+                line.Parent = gui
                 line.Visible = false
-                linhas[player] = line
 
-                conexoes[player] = RunService.RenderStepped:Connect(function()
-                    local char = player.Character
-                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                    local head = char and char:FindFirstChild("Head")
+                linhas[alvo] = {frame = frame, line = line}
+
+                conexoes[alvo] = RunService.RenderStepped:Connect(function()
+                    local char = alvo.Character
+                    local root = char and char:FindFirstChild("HumanoidRootPart")
                     local hum = char and char:FindFirstChildOfClass("Humanoid")
 
-                    if hrp and head and hum and hum.Health > 0 then
-                        local target2D = toScreen(head.Position)
-                        local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                    if root and hum and hum.Health > 0 then
+                        local pontos3D = {
+                            Vector3.new(-1.5, 2.5, -1.5),
+                            Vector3.new(1.5, 2.5, -1.5),
+                            Vector3.new(1.5, -2.5, 1.5),
+                            Vector3.new(-1.5, -2.5, 1.5),
+                        }
 
-                        if target2D then
-                            line.From = screenBottom
-                            line.To = target2D
+                        local minX, minY = math.huge, math.huge
+                        local maxX, maxY = -math.huge, -math.huge
+                        local visible = false
+
+                        for _, offset in ipairs(pontos3D) do
+                            local world = root.Position + offset
+                            local screenPos, onScreen = Camera:WorldToScreenPoint(world)
+                            if onScreen then
+                                minX = math.min(minX, screenPos.X)
+                                minY = math.min(minY, screenPos.Y)
+                                maxX = math.max(maxX, screenPos.X)
+                                maxY = math.max(maxY, screenPos.Y)
+                                visible = true
+                            end
+                        end
+
+                        if visible then
+                            local cx = (minX + maxX) / 2
+                            local cy = (minY + maxY) / 2
+
+                            frame.Position = UDim2.new(0, cx, 0, cy)
+                            frame.Visible = false
+
+                            local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                            local delta = Vector2.new(cx, cy) - screenBottom
+                            local distance = delta.Magnitude
+
+                            line.Position = UDim2.new(0, (cx + screenBottom.X) / 2, 0, (cy + screenBottom.Y) / 2)
+                            line.Size = UDim2.new(0, 2, 0, distance)
+                            line.Rotation = math.deg(math.atan2(delta.Y, delta.X)) + 90
                             line.Visible = true
                         else
                             line.Visible = false
@@ -866,17 +887,22 @@ end},
             for _, p in pairs(Players:GetPlayers()) do criarLinha(p) end
 
             table.insert(conexoes, Players.PlayerAdded:Connect(criarLinha))
-
             table.insert(conexoes, Players.PlayerRemoving:Connect(function(p)
                 if conexoes[p] then conexoes[p]:Disconnect() end
-                if linhas[p] then linhas[p]:Remove() end
+                if linhas[p] then
+                    if linhas[p].frame then linhas[p].frame:Destroy() end
+                    if linhas[p].line then linhas[p].line:Destroy() end
+                end
                 conexoes[p], linhas[p] = nil, nil
             end))
 
         else
             ativo = false
             for _, c in pairs(conexoes) do if typeof(c) == "RBXScriptConnection" then c:Disconnect() end end
-            for _, l in pairs(linhas) do if l then l:Remove() end end
+            for _, esp in pairs(linhas) do
+                if esp.frame then esp.frame:Destroy() end
+                if esp.line then esp.line:Destroy() end
+            end
             conexoes, linhas = {}, {}
         end
     end
