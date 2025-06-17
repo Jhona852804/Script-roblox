@@ -273,6 +273,8 @@ do
     toggle.Font = Enum.Font.GothamBold
     toggle.Parent = frame
     aplicarEstilo(toggle, Color3.fromRGB(60, 60, 60), 6)
+    toggle.Active = true
+    toggle.Draggable = true
 
     -- Área com rolagem
     local scroll = Instance.new("ScrollingFrame")
