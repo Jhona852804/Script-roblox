@@ -864,7 +864,7 @@ end},
             linhas = {}
         end
     end
-end)()}
+end)()},
     
   {name = "ESP Box",  func = (function()
         local espAtivo = false
