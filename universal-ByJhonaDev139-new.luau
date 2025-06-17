@@ -214,7 +214,7 @@ RunService.RenderStepped:Connect(function()
             criarParticulaNeon()
         elseif tipoAtual == 3 then
             criarParticulaChuva() -- Novo estilo
-        elseif tipoAtual == 3 then
+        elseif tipoAtual == 4 then
             criarParticulaMatrix()
         end
     end
@@ -234,7 +234,7 @@ partButton.Parent = screenGui
 
 partButton.MouseButton1Click:Connect(function()
     tipoAtual += 1
-    if tipoAtual > 3 then -- Agora são 3 estilos
+    if tipoAtual > 4 then -- Agora são 3 estilos
         tipoAtual = 1
     end
 end)
