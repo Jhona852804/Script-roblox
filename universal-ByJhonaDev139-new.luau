@@ -792,90 +792,67 @@ end},
 end},
 
 
+
+-- Depois disso você pode usar normalmente dentro de qualquer botão:
 {name = "ESP Line", func = (function()
-local ativo = false
-local linhas = {}
-local conexoes = {}
-        return function()
+    local ativo = false
+    local linhas = {}
+    local conexoes = {}
 
-            if not ativo then
-                ativo = true
+    return function()
+        if not ativo then
+            ativo = true
+            local offset = Vector3.new(-1.5, -2.5, 1.5)
 
-                local offset = Vector3.new(-1.5, -2.5, 1.5) -- ponto fixo de origem da linha
+            local function criarLinha(player)
+                if player == LocalPlayer then return end
 
-                local function criarLinha(player)
-                    if player == LocalPlayer then return end
+                local line = Drawing.new("Line")
+                line.Thickness = 1.5
+                line.Color = Color3.new(1, 0, 0)
+                line.Visible = false
+                linhas[player] = line
 
-                    local line = Drawing.new("Line")
-                    line.Thickness = 1.5
-                    line.Color = Color3.new(1, 0, 0)
-                    line.Visible = false
-                    linhas[player] = line
+                conexoes[player] = RunService.RenderStepped:Connect(function()
+                    local char = player.Character
+                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                    local hum = char and char:FindFirstChildOfClass("Humanoid")
 
-                    conexoes[player] = RunService.RenderStepped:Connect(function()
-                        local char = player.Character
-                        local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                        local hum = char and char:FindFirstChildOfClass("Humanoid")
+                    if hrp and hum and hum.Health > 0 then
+                        local p1, v1 = Camera:WorldToViewportPoint(hrp.Position + offset)
+                        local p2, v2 = Camera:WorldToViewportPoint(hrp.Position)
 
-                        if hrp and hum and hum.Health > 0 then
-                            local ponto1_3D = hrp.Position + offset
-                            local ponto2_3D = hrp.Position
-
-                            local p1, vis1 = Camera:WorldToViewportPoint(ponto1_3D)
-                            local p2, vis2 = Camera:WorldToViewportPoint(ponto2_3D)
-
-                            if vis1 and vis2 then
-                                line.From = Vector2.new(p1.X, p1.Y)
-                                line.To = Vector2.new(p2.X, p2.Y)
-                                line.Visible = true
-                            else
-                                line.Visible = false
-                            end
+                        if v1 and v2 then
+                            line.From = Vector2.new(p1.X, p1.Y)
+                            line.To = Vector2.new(p2.X, p2.Y)
+                            line.Visible = true
                         else
                             line.Visible = false
                         end
-                    end)
-                end
-
-                for _, p in pairs(Players:GetPlayers()) do
-                    criarLinha(p)
-                end
-
-                table.insert(conexoes, Players.PlayerAdded:Connect(function(p)
-                    criarLinha(p)
-                end))
-
-                table.insert(conexoes, Players.PlayerRemoving:Connect(function(p)
-                    if conexoes[p] then
-                        conexoes[p]:Disconnect()
-                        conexoes[p] = nil
+                    else
+                        line.Visible = false
                     end
-                    if linhas[p] then
-                        linhas[p]:Remove()
-                        linhas[p] = nil
-                    end
-                end))
-
-            else
-                ativo = false
-
-                for _, conn in pairs(conexoes) do
-                    if typeof(conn) == "RBXScriptConnection" then
-                        conn:Disconnect()
-                    end
-                end
-                conexoes = {}
-
-                for _, line in pairs(linhas) do
-                    if line then
-                        line:Remove()
-                    end
-                end
-                linhas = {}
+                end)
             end
+
+            for _, p in pairs(Players:GetPlayers()) do criarLinha(p) end
+
+            table.insert(conexoes, Players.PlayerAdded:Connect(criarLinha))
+
+            table.insert(conexoes, Players.PlayerRemoving:Connect(function(p)
+                if conexoes[p] then conexoes[p]:Disconnect() end
+                if linhas[p] then linhas[p]:Remove() end
+                conexoes[p], linhas[p] = nil, nil
+            end))
+
+        else
+            ativo = false
+            for _, c in pairs(conexoes) do if typeof(c) == "RBXScriptConnection" then c:Disconnect() end end
+            for _, l in pairs(linhas) do if l then l:Remove() end end
+            conexoes, linhas = {}, {}
         end
-    end)()
-}
+    end
+end)()}
     
   {name = "ESP Box",  func = (function()
         local espAtivo = false
