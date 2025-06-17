@@ -178,6 +178,32 @@ local function criarParticulaChuva()
         part:Destroy()
     end)
 end
+local function criarParticulaMatrix()
+    local part = Instance.new("TextLabel")
+    part.Size = UDim2.new(0, 12, 0, 18)
+    part.Position = UDim2.new(math.random(), 0, -0.05, 0)
+    part.AnchorPoint = Vector2.new(0.5, 0)
+    part.BackgroundTransparency = 1
+    part.BorderSizePixel = 0
+    part.ZIndex = 2
+    part.Text = tostring(math.random(0, 9))
+    part.TextColor3 = Color3.fromRGB(0, 255, 0)
+    part.TextSize = 14
+    part.Font = Enum.Font.Code
+    part.Parent = ParticleFolder
+
+    local info = TweenInfo.new(1.2, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
+    local goal = {
+        Position = part.Position + UDim2.new(0, 0, 1.2, 0),
+        TextTransparency = 1
+    }
+
+    local tween = TweenService:Create(part, info, goal)
+    tween:Play()
+    tween.Completed:Connect(function()
+        part:Destroy()
+    end)
+end
 
 -- Loop de partículas  
 RunService.RenderStepped:Connect(function()
@@ -188,6 +214,8 @@ RunService.RenderStepped:Connect(function()
             criarParticulaNeon()
         elseif tipoAtual == 3 then
             criarParticulaChuva() -- Novo estilo
+        elseif tipoAtual == 3 then
+            criarParticulaMatrix()
         end
     end
 end)
