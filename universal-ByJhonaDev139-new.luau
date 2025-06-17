@@ -354,7 +354,7 @@ leftPanel.Parent = mainFrame
 local leftLayout = Instance.new("UIListLayout")
 leftLayout.Parent = leftPanel
 leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
-leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
+leftLayout.Padding = UDim.new(1, 5)  -- espaçamento de 5 pixels
 
 -- Painel Direito para Ações
 local rightPanel = Instance.new("ScrollingFrame")
@@ -362,7 +362,7 @@ rightPanel.Name = "rightPanel"
 rightPanel.Size = UDim2.new(1, -100, 1, -30)
 rightPanel.Position = UDim2.new(0, 100, 0, 30)
 rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-rightPanel.CanvasSize = UDim2.new(0, 0, 0, 1000) -- Altura virtual
+rightPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Altura virtual
 rightPanel.ScrollBarThickness = 6
 rightPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
 rightPanel.Parent = mainFrame
