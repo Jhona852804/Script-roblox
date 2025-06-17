@@ -795,6 +795,11 @@ end},
 
 -- Depois disso você pode usar normalmente dentro de qualquer botão:
 {name = "ESP Line", func = (function()
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local Camera = workspace.CurrentCamera
+    local LocalPlayer = Players.LocalPlayer
+
     local ativo = false
     local linhas = {}
     local conexoes = {}
