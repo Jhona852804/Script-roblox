@@ -219,7 +219,7 @@ RunService.RenderStepped:Connect(function()
             criarParticulaNeon() -- Novo estilo
         elseif tipoAtual == 4 then
             criarParticulaChuva()
-        elseif tipoAtual == 5
+        elseif tipoAtual == 5 then
 criarParticulaMatrix()
         end
     end
