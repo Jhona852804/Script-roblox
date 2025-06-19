@@ -52,6 +52,16 @@ mainFrame.Draggable = true
 mainFrame.Parent = screenGui
 aplicarEstilo(mainFrame, Color3.fromRGB(60, 60, 60), 10)
 
+local ParticleCanvas = Instance.new("Frame")
+ParticleCanvas.Name = "ParticleCanvas"
+ParticleCanvas.BackgroundTransparency = 1
+ParticleCanvas.BorderSizePixel = 0
+ParticleCanvas.Size = UDim2.new(1, 0, 1, 0)
+ParticleCanvas.Position = UDim2.new(0, 0, 0, 0)
+ParticleCanvas.ZIndex = 1
+ParticleCanvas.ClipsDescendants = true
+ParticleCanvas.Parent = mainFrame
+
 
 -- Cria a barra de título
 local titleLabel = Instance.new("TextLabel")
@@ -72,7 +82,7 @@ local tipoAtual = 1
 
 local ParticleFolder = Instance.new("Folder")  
 ParticleFolder.Name = "ParticulasVisual"  
-ParticleFolder.Parent = mainFrame
+ParticleFolder.Parent = ParticleCanvas
 
 local function semParticula()
 print('escape')
@@ -87,7 +97,7 @@ part.BackgroundColor3 = Color3.fromRGB(math.random(220,255), math.random(100,150
 part.BackgroundTransparency = 0
 part.BorderSizePixel = 0
 part.ZIndex = 2
-part.Parent = ParticleFolder
+part.Parent = ParticleCanvas
 
 local info = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 local goal = {
@@ -111,7 +121,7 @@ part.BackgroundColor3 = Color3.fromRGB(math.random(100,255), 0, 255)
 part.BackgroundTransparency = 0.2
 part.BorderSizePixel = 0
 part.ZIndex = 2
-part.Parent = ParticleFolder
+part.Parent = ParticleCanvas
 
 local info = TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 local goal = {
@@ -135,7 +145,7 @@ part.BackgroundColor3 = Color3.fromRGB(150, 200, 255)
 part.BackgroundTransparency = 0.3
 part.BorderSizePixel = 0
 part.ZIndex = 2
-part.Parent = ParticleFolder
+part.Parent = ParticleCanvas
 
 local info = TweenInfo.new(1.2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 local goal = {
@@ -161,7 +171,7 @@ part.Text = tostring(math.random(0, 9))
 part.TextColor3 = Color3.fromRGB(0, 255, 0)
 part.TextSize = 14
 part.Font = Enum.Font.Code
-part.Parent = ParticleFolder
+part.Parent = ParticleCanvas
 
 local info = TweenInfo.new(1.2, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
 local goal = {
