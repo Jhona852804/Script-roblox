@@ -281,7 +281,7 @@ do
     toggle.Parent = frame
     aplicarEstilo(toggle, Color3.fromRGB(60, 60, 60), 6)
     toggle.Active = true
-    toggle.Draggable = true
+    
 
     -- Área com rolagem
     local scroll = Instance.new("ScrollingFrame")
@@ -1965,15 +1965,6 @@ end)
 
 
 -- Função para limpar os botões de ação existentes no painel direito
-local function clearRightPanel()
-    for _, child in ipairs(rightPanel:GetChildren()) do
-        if not child:IsA("UIListLayout") then
-            child:Destroy()
-        end
-    end
-end
-
--- Função para carregar as ações de uma categoria no painel direito
 local function clearRightPanel()
     for _, child in ipairs(rightPanel:GetChildren()) do
         if not child:IsA("UIListLayout") then
