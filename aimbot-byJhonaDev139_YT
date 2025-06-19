@@ -71,6 +71,7 @@ local function createFOV()
 	fovCircle.Thickness = 2
 	fovCircle.Transparency = 1
 	fovCircle.Color = Color3.fromRGB(255, 0, 0)
+	fovCircle.Filled = false -- <<< esta linha aqui
 end
 
 local function removeFOV()
