@@ -1,7 +1,7 @@
 -- Aimbot com FOV centralizado, cantos arredondados, título e prioridade por distância real
 
 local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "AimbotUI"
+gui.Name = "ohcyicyi"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 200, 0, 180)
@@ -18,7 +18,7 @@ corner.CornerRadius = UDim.new(0, 12)
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 20)
 title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "Aimbot"
+title.Text = "Aimbot - byJhonaDev139 - V0.1"
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.SourceSansBold
@@ -84,7 +84,7 @@ end
 -- Aqui você pode ajustar a posição do círculo manualmente, caso queira:
 local function updateFOVPos()
 	if fovCircle then
-		fovCircle.Position = Vector2.new(camera.ViewportSize.X / 1.89, camera.ViewportSize.Y / 2)
+		fovCircle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 	end
 end
 
@@ -121,7 +121,7 @@ local function enableAimbot()
 		if target then
 			local currentLook = camera.CFrame.LookVector
 local direction = (target.Position - camera.CFrame.Position).Unit
-local smoothness = 0.4 -- AQUI você controla a "força": quanto menor, mais suave
+local smoothness = 0.7 -- AQUI você controla a "força": quanto menor, mais suave
 
 local newLook = currentLook:Lerp(direction, smoothness)
 camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + newLook)
