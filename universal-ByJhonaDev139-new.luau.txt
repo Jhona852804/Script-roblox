@@ -64,43 +64,7 @@ titleLabel.TextSize = 14
 titleLabel.Parent = mainFrame
 aplicarEstilo(titleLabel, Color3.fromRGB(60, 60, 60), 10)
 
--- Substitua:
-local leftPanel = Instance.new("ScrollingFrame")
-leftPanel.Name = "leftPanel"
-leftPanel.Size = UDim2.new(0, 100, 1, -30)
-leftPanel.Position = UDim2.new(0, 0, 0, 30)
-leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-leftPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Ajuste a altura conforme necessário
-leftPanel.ScrollBarThickness = 6
-leftPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
-leftPanel.Parent = mainFrame
-
--- Layout para organizar os botões de categorias com espaçamento
-local leftLayout = Instance.new("UIListLayout")
-leftLayout.Parent = leftPanel
-leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
-leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
-
--- Painel Direito para Ações
-local rightPanel = Instance.new("ScrollingFrame")
-rightPanel.Name = "rightPanel"
-rightPanel.Size = UDim2.new(1, -100, 1, -30)
-rightPanel.Position = UDim2.new(0, 100, 0, 30)
-rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-rightPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Altura virtual
-rightPanel.ScrollBarThickness = 6
-rightPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
-rightPanel.Parent = mainFrame
-
--- Layout para organizar os botões de ações com espaçamento
-local rightLayout = Instance.new("UIListLayout")
-rightLayout.Parent = rightPanel
-rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
-rightLayout.Padding = UDim.new(0, 5)
-
-
----------------------
--- ANIMAÇÕES
+----------------------------- INICIO
 
 -- Tipos de partículas
 local tipoAtual = 1
@@ -331,8 +295,44 @@ end
 
 end
 
--- ANIMAÇÕES - FIM
---------------------------------
+--
+--------------------FIM
+
+
+-- Substitua:
+local leftPanel = Instance.new("ScrollingFrame")
+leftPanel.Name = "leftPanel"
+leftPanel.Size = UDim2.new(0, 100, 1, -30)
+leftPanel.Position = UDim2.new(0, 0, 0, 30)
+leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+leftPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Ajuste a altura conforme necessário
+leftPanel.ScrollBarThickness = 6
+leftPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
+leftPanel.Parent = mainFrame
+
+-- Layout para organizar os botões de categorias com espaçamento
+local leftLayout = Instance.new("UIListLayout")
+leftLayout.Parent = leftPanel
+leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
+leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
+
+-- Painel Direito para Ações
+local rightPanel = Instance.new("ScrollingFrame")
+rightPanel.Name = "rightPanel"
+rightPanel.Size = UDim2.new(1, -100, 1, -30)
+rightPanel.Position = UDim2.new(0, 100, 0, 30)
+rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+rightPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Altura virtual
+rightPanel.ScrollBarThickness = 6
+rightPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
+rightPanel.Parent = mainFrame
+
+-- Layout para organizar os botões de ações com espaçamento
+local rightLayout = Instance.new("UIListLayout")
+rightLayout.Parent = rightPanel
+rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
+rightLayout.Padding = UDim.new(0, 5)
+
 
 local function createButton(parent, text, onClick)
 local button = Instance.new("TextButton")
@@ -1960,3 +1960,4 @@ for categoryName, _ in pairs(categories) do
     loadActions(categoryName)
     break
 end
+print('test')
