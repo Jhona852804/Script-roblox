@@ -84,7 +84,7 @@ end
 -- Aqui você pode ajustar a posição do círculo manualmente, caso queira:
 local function updateFOVPos()
 	if fovCircle then
-		fovCircle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+		fovCircle.Position = Vector2.new(camera.ViewportSize.X / 2 -1, camera.ViewportSize.Y / 2)
 	end
 end
 
