@@ -98,10 +98,7 @@ rightLayout.Parent = rightPanel
 rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
 rightLayout.Padding = UDim.new(0, 5)
 
--- após a criação do mainFrame, leftPanel e rightPanel
 
--- cria os botões das categorias
-loadCategories()
 
 
 local function createButton(parent, buttonName, actionFunction)
@@ -1728,7 +1725,12 @@ local function loadCategories()
 end
 
 -- Inicializa os botões de categorias e carrega uma categoria padrão (a primeira encontrada)
+-- após a criação do mainFrame, leftPanel e rightPanel
+
+-- cria os botões das categorias
+
 loadCategories()
+
 for categoryName, _ in pairs(categories) do
     loadActions(categoryName)
     break
