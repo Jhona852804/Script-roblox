@@ -32,55 +32,12 @@ local function aplicarEstilo(ui, cor, raio)
 	stroke.Parent = ui
 end
 
+
+
 -- Cria a ScreenGui e define como pai  
 local screenGui = Instance.new("ScreenGui")  
 screenGui.Name = "kdndiekdnfjjd"  
 screenGui.Parent = game.CoreGui
-
--- Janela separada para carregar ou encerrar o script
-local miniFrame = Instance.new("Frame")
-miniFrame.Size = UDim2.new(0, 200, 0, 100)
-miniFrame.Position = UDim2.new(0, 20, 0, 400)
-miniFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-miniFrame.Active = true
-miniFrame.Draggable = true
-miniFrame.Parent = screenGui -- Garante que 'screenGui' já esteja definido
-
-local miniCorner = Instance.new("UICorner")
-miniCorner.CornerRadius = UDim.new(0, 8)
-miniCorner.Parent = miniFrame
-
--- Botão para carregar o script remoto
-local btnCarregar = Instance.new("TextButton")
-btnCarregar.Size = UDim2.new(1, -20, 0, 40)
-btnCarregar.Position = UDim2.new(0, 10, 0, 10)
-btnCarregar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-btnCarregar.Text = "Reset Script"
-btnCarregar.TextColor3 = Color3.new(1,1,1)
-btnCarregar.Font = Enum.Font.GothamBold
-btnCarregar.TextSize = 14
-btnCarregar.Parent = miniFrame
-
-btnCarregar.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/universal-ByJhonaDev139-new.luau'))()
-    screenGui:Destroy() -- Remove toda a interface
-end)
-
--- Botão para encerrar tudo
-local btnFechar = Instance.new("TextButton")
-btnFechar.Size = UDim2.new(1, -20, 0, 30)
-btnFechar.Position = UDim2.new(0, 10, 0, 55)
-btnFechar.BackgroundColor3 = Color3.fromRGB(90, 30, 30)
-btnFechar.Text = "Encerrar"
-btnFechar.TextColor3 = Color3.new(1,1,1)
-btnFechar.Font = Enum.Font.GothamBold
-btnFechar.TextSize = 14
-btnFechar.Parent = miniFrame
-
-btnFechar.MouseButton1Click:Connect(function()
-    screenGui:Destroy() -- Remove toda a interface
-end)
-
 
 -- Cria a janela principal (MainFrame)
 local mainFrame = Instance.new("Frame")
@@ -122,7 +79,7 @@ leftPanel.Parent = mainFrame
 local leftLayout = Instance.new("UIListLayout")
 leftLayout.Parent = leftPanel
 leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
-leftLayout.Padding = UDim.new(1, 5)  -- espaçamento de 5 pixels
+leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
 
 -- Painel Direito para Ações
 local rightPanel = Instance.new("ScrollingFrame")
@@ -140,6 +97,12 @@ local rightLayout = Instance.new("UIListLayout")
 rightLayout.Parent = rightPanel
 rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
 rightLayout.Padding = UDim.new(0, 5)
+
+-- após a criação do mainFrame, leftPanel e rightPanel
+
+-- cria os botões das categorias
+loadCategories()
+
 
 local function createButton(parent, buttonName, actionFunction)
     local btn = Instance.new("TextButton")
