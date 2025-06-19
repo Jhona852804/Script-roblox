@@ -1717,6 +1717,14 @@ end
 
 loadCategories()
 
+print("Categorias detectadas:")
+for name, actions in pairs(categories) do
+    print("Categoria:", name)
+    for _, action in ipairs(actions) do
+        print(" - Ação:", action.name)
+    end
+end
+
 for categoryName, _ in pairs(categories) do
     loadActions(categoryName)
     break
