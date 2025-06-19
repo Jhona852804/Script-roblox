@@ -51,6 +51,9 @@ mainFrame.Active = true
 mainFrame.Draggable = true
 mainFrame.Parent = screenGui
 aplicarEstilo(mainFrame, Color3.fromRGB(60, 60, 60), 10)
+local ParticleFolder = Instance.new("Folder")
+ParticleFolder.Name = "ParticulasVisual"
+ParticleFolder.Parent = frame
 
 -- Cria a barra de título
 local titleLabel = Instance.new("TextLabel")
