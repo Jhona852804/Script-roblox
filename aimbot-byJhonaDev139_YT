@@ -121,7 +121,7 @@ local function enableAimbot()
 		if target then
 			local currentLook = camera.CFrame.LookVector
 local direction = (target.Position - camera.CFrame.Position).Unit
-local smoothness = 0.7 -- AQUI você controla a "força": quanto menor, mais suave
+local smoothness = 0.4 -- AQUI você controla a "força": quanto menor, mais suave
 
 local newLook = currentLook:Lerp(direction, smoothness)
 camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + newLook)
