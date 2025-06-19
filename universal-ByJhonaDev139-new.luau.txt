@@ -101,7 +101,6 @@ rightLayout.Padding = UDim.new(0, 5)
 
 ---------------------
 -- ANIMAÇÕES
-Chat, como eu faço para deixar essa parte "separada" do script principal? porque não quero que isso interfira no script principal, a única coisa que ele vai fazer no script principal é adicionar esses efeitos.
 
 -- Tipos de partículas
 local tipoAtual = 1
