@@ -21,16 +21,7 @@ local hrp = character:FindFirstChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 local LocalPlayer = Players.LocalPlayer
      
-local function aplicarEstilo(ui, cor, raio)
-	local uiCorner = Instance.new("UICorner")
-	uiCorner.CornerRadius = UDim.new(0, raio or 6)
-	uiCorner.Parent = ui
 
-	local stroke = Instance.new("UIStroke")
-	stroke.Thickness = 1.2
-	stroke.Color = cor or Color3.fromRGB(70, 70, 70)
-	stroke.Parent = ui
-end
 
 -- Cria a ScreenGui e define como pai  
 local screenGui = Instance.new("ScreenGui")  
@@ -354,7 +345,7 @@ leftPanel.Parent = mainFrame
 local leftLayout = Instance.new("UIListLayout")
 leftLayout.Parent = leftPanel
 leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
-leftLayout.Padding = UDim.new(1, 5)  -- espaçamento de 5 pixels
+leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
 
 -- Painel Direito para Ações
 local rightPanel = Instance.new("ScrollingFrame")
@@ -391,20 +382,7 @@ corner.Parent = button
     end
  end
 local function createButton(parent, text, onClick)
-    local button = Instance.new("TextButton")
-    button.Text = text
-    button.Size = UDim2.new(1, -10, 0, 30)
-    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.SourceSans
-    button.TextSize = 14
-    button.Parent = parent
-	local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = button
-    button.MouseButton1Click:Connect(onClick)
-    return button
-end
+
 
 local function createHoldButton(parent, text, onHoldStart, onHoldStop)
     local button = Instance.new("TextButton")
