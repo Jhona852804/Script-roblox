@@ -349,47 +349,7 @@ rightLayout.Parent = rightPanel
 rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
 rightLayout.Padding = UDim.new(0, 5)
 
-
-local function createButton(parent, text, onClick)
-local button = Instance.new("TextButton")
-button.Text = text
-button.Size = UDim2.new(1, -10, 0, 30)
-button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.Font = Enum.Font.SourceSans
-button.TextSize = 14
-button.Parent = parent
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = button
-button.MouseButton1Click:Connect(onClick)
-return button
-end
-
-
-local function createHoldButton(parent, text, onHoldStart, onHoldStop)
-    local button = Instance.new("TextButton")
-    button.Text = text
-    button.Size = UDim2.new(1, -10, 0, 30)
-    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.SourceSans
-    button.TextSize = 14
-	local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = button
-    button.Parent = parent
-
-    button.MouseButton1Down:Connect(onHoldStart)
-    button.MouseButton1Up:Connect(onHoldStop)
-
-    return button
-end
-
-
-
----------------------------------
--- TESTE DE SLIDERS
+-----------------------
 -- 1. Cria o ScrollingFrame invisível à direita do MainFrame
 local scrollFrame = Instance.new("ScrollingFrame", MainFrame)
 scrollFrame.Name = "SlidersContainer"
@@ -510,11 +470,44 @@ function toggleSliderPanel(key, titleText, configs)
 	panels[key] = panel
 	refreshLayout()
 end
-
--- FIM DOS SLIDERS
 ------------------------------------
 
 
+local function createButton(parent, text, onClick)
+local button = Instance.new("TextButton")
+button.Text = text
+button.Size = UDim2.new(1, -10, 0, 30)
+button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.Font = Enum.Font.SourceSans
+button.TextSize = 14
+button.Parent = parent
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
+button.MouseButton1Click:Connect(onClick)
+return button
+end
+
+
+local function createHoldButton(parent, text, onHoldStart, onHoldStop)
+    local button = Instance.new("TextButton")
+    button.Text = text
+    button.Size = UDim2.new(1, -10, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+	local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
+    button.Parent = parent
+
+    button.MouseButton1Down:Connect(onHoldStart)
+    button.MouseButton1Up:Connect(onHoldStop)
+
+    return button
+end
 
 
 local isJumpIncreased = false -- Variável para controlar o estado do pulo
