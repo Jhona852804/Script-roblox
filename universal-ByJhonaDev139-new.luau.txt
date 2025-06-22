@@ -516,9 +516,7 @@ end
 
 
 
-local speedToggle = false       -- false: velocidade normal; true: velocidade aumentada
-local normalSpeed = 16          -- Velocidade padrão do Roblox
-local boostedSpeed = 100        -- Velocidade "autá" (aumentada)
+
 local isJumpIncreased = false -- Variável para controlar o estado do pulo
 
 -- permite que o jogador pule no ar
@@ -547,23 +545,22 @@ local categories = {
 	
     ["Player"] = {
     	
-        {name = "Speed", func = function()
-            local character = player.Character or player.CharacterAdded:Wait()
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                if not speedToggle then
-                    humanoid.WalkSpeed = boostedSpeed
-                    speedToggle = true
-                    print("Velocidade aumentada para " .. boostedSpeed)
-                else
-                    humanoid.WalkSpeed = normalSpeed
-                    speedToggle = false
-                    print("Velocidade normal restaurada (" .. normalSpeed .. ")")
+{name = "Speed", func = function()
+    toggleSliderPanel("PainelVelocidade", "Velocidade do Jogador", {
+        {
+            nome = "Velocidade",
+            min = 5,
+            max = 100,
+            aoAlterar = function(v)
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.WalkSpeed = v
                 end
-            else
-                warn("Humanoid não encontrado!")
             end
-        end},
+        }
+    })
+end},
 
         {name = "Inf jump", func = function()
             allowAirJump = not allowAirJump -- Alterna o estado
