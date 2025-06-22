@@ -455,17 +455,12 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
     local dragging = false
     local uis = game:GetService("UserInputService")
 
-    valueButton.MouseButton1Down:Connect(function()
-        dragging = true
-    end)
+local connection
 
-    uis.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
+valueButton.MouseButton1Down:Connect(function()
+    dragging = true
 
-    game:GetService("RunService").RenderStepped:Connect(function()
+    connection = game:GetService("RunService").RenderStepped:Connect(function()
         if dragging then
             local mouseX = uis:GetMouseLocation().X
             local barAbsPos = sliderBar.AbsolutePosition.X
@@ -483,6 +478,19 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
             end
         end
     end)
+end)
+
+valueButton.MouseButton1Up:Connect(function()
+    dragging = false
+    if connection then connection:Disconnect() end
+end)
+
+uis.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+        if connection then connection:Disconnect() end
+    end
+end)
 end
 
 
