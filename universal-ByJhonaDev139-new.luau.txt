@@ -542,14 +542,14 @@ local categories = {
     ["Player"] = {
     	
 {name = "Speed", func = function()
-    toggleSliderPanel("PainelVelocidade", "Velocidade do Jogador", {
+    criarPainelComSliders("speed_slider", "Velocidade do Jogador", {
         {
-            nome = "Velocidade",
-            min = 5,
+            nome = "WalkSpeed",
+            min = 10,
             max = 100,
             aoAlterar = function(v)
-                local character = player.Character or player.CharacterAdded:Wait()
-                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                local char = player.Character or player.CharacterAdded:Wait()
+                local humanoid = char and char:FindFirstChildWhichIsA("Humanoid")
                 if humanoid then
                     humanoid.WalkSpeed = v
                 end
