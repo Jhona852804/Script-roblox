@@ -406,106 +406,83 @@ corner.Parent = button
 end
 
 ---------------------------&
-
-local slidersAbertos = {}
-
-function criarPainelComSliders(id, titulo, sliders)
-    -- Remove painel antigo com o mesmo ID
-    if slidersAbertos[id] then
-        slidersAbertos[id]:Destroy()
-        slidersAbertos[id] = nil
+local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
+    -- Remover outros sliders se já houver
+    for _, child in pairs(extraPanel:GetChildren()) do
+        if child:IsA("Frame") then
+            child:Destroy()
+        end
     end
 
-    -- Cria novo painel
-    local painel = Instance.new("Frame")
-    painel.Size = UDim2.new(1, -10, 0, 40 + #sliders * 40)
-    painel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    painel.BorderSizePixel = 0
-    painel.Parent = extraPanel
+    -- Torna o painel visível
+    extraPanel.Visible = true
+    extraPanel.BackgroundTransparency = 0
+
+    -- Criação do painel
+    local window = Instance.new("Frame", extraPanel)
+    window.Size = UDim2.new(1, -20, 0, 100)
+    window.Position = UDim2.new(0, 10, 0, 10)
+    window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    window.BorderSizePixel = 0
 
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = painel
+    corner.Parent = window
 
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, -20, 0, 30)
-    title.Position = UDim2.new(0, 10, 0, 5)
+    local title = Instance.new("TextLabel", window)
+    title.Size = UDim2.new(1, 0, 0, 25)
+    title.Position = UDim2.new(0, 0, 0, 0)
     title.Text = titulo
     title.TextColor3 = Color3.new(1, 1, 1)
     title.BackgroundTransparency = 1
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 14
-    title.Parent = painel
+    title.Font = Enum.Font.SourceSansBold
+    title.TextSize = 18
 
-    -- Criação dos sliders
-    for i, info in ipairs(sliders) do
-        local y = 30 + (i - 1) * 40
+    local sliderBar = Instance.new("Frame", window)
+    sliderBar.Size = UDim2.new(1, -40, 0, 4)
+    sliderBar.Position = UDim2.new(0, 20, 0, 50)
+    sliderBar.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 
-        local barra = Instance.new("Frame")
-        barra.Position = UDim2.new(0, 10, 0, y + 24)
-        barra.Size = UDim2.new(1, -20, 0, 4)
-        barra.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-        barra.BorderSizePixel = 0
-        barra.Parent = painel
+    local valueButton = Instance.new("TextButton", window)
+    valueButton.Size = UDim2.new(0, 60, 0, 20)
+    valueButton.Position = UDim2.new(0, 20, 0, 40)
+    valueButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    valueButton.TextColor3 = Color3.new(1, 1, 1)
+    valueButton.Font = Enum.Font.SourceSansBold
+    valueButton.TextSize = 14
+    valueButton.Text = tostring(min)
 
-        local btn = Instance.new("TextButton")
-        btn.Position = UDim2.new(0, 10, 0, y + 10)
-        btn.Size = UDim2.new(0, 100, 0, 20)
-        btn.BackgroundColor3 = Color3.fromRGB(255, 100, 0)
-        btn.TextColor3 = Color3.new(1, 1, 1)
-        btn.Font = Enum.Font.Gotham
-        btn.TextSize = 13
-        btn.Text = string.format("%s: %d", info.nome, info.min)
-        btn.Parent = painel
+    local dragging = false
+    local uis = game:GetService("UserInputService")
 
-        local dragging = false
-        local uis = game:GetService("UserInputService")
+    valueButton.MouseButton1Down:Connect(function()
+        dragging = true
+    end)
 
-        btn.MouseButton1Down:Connect(function()
-            dragging = true
-        end)
+    uis.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
 
-        uis.InputEnded:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragging = false
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if dragging then
+            local mouseX = uis:GetMouseLocation().X
+            local barAbsPos = sliderBar.AbsolutePosition.X
+            local barWidth = sliderBar.AbsoluteSize.X
+            local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
+
+            valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
+
+            local percent = relX / barWidth
+            local value = math.floor(min + (max - min) * percent)
+            valueButton.Text = tostring(value)
+
+            if aoAlterar then
+                aoAlterar(value)
             end
-        end)
-
-        game:GetService("RunService").RenderStepped:Connect(function()
-            if dragging then
-                local mouseX = uis:GetMouseLocation().X
-                local barPos = barra.AbsolutePosition.X
-                local barSize = barra.AbsoluteSize.X
-
-                local relX = math.clamp(mouseX - barPos, 0, barSize)
-                local percent = relX / barSize
-                local value = info.min + (info.max - info.min) * percent
-
-                if info.max - info.min > 1 then
-                    value = math.floor(value)
-                else
-                    value = math.floor(value * 100) / 100
-                end
-
-                btn.Text = string.format("%s: %s", info.nome, value)
-                btn.Position = UDim2.new(0, relX + 10 - btn.AbsoluteSize.X / 2, 0, y + 10)
-
-                if info.aoAlterar then
-                    info.aoAlterar(value)
-                end
-            end
-        end)
-    end
-
-    slidersAbertos[id] = painel
-
-    -- Exibir o painel se ao menos um slider estiver ativo
-    local algoAberto = next(slidersAbertos) ~= nil
-    extraPanel.Visible = algoAberto
-    extraPanel.BackgroundTransparency = algoAberto and 0 or 1
-
-    task.wait()
-    extraPanel.CanvasSize = UDim2.new(0, 0, 0, extraLayout.AbsoluteContentSize.Y + 20)
+        end
+    end)
 end
 
 
@@ -542,20 +519,13 @@ local categories = {
     ["Player"] = {
     	
 {name = "Speed", func = function()
-    criarPainelComSliders("speed_slider", "Velocidade do Jogador", {
-        {
-            nome = "WalkSpeed",
-            min = 10,
-            max = 100,
-            aoAlterar = function(v)
-                local char = player.Character or player.CharacterAdded:Wait()
-                local humanoid = char and char:FindFirstChildWhichIsA("Humanoid")
-                if humanoid then
-                    humanoid.WalkSpeed = v
-                end
-            end
-        }
-    })
+    criarSliderNoExtraPanel("speed", "Velocidade do Jogador", 5, 100, function(v)
+        local char = player.Character or player.CharacterAdded:Wait()
+        local humanoid = char and char:FindFirstChildWhichIsA("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = v
+        end
+    end)
 end},
 
         {name = "Inf jump", func = function()
