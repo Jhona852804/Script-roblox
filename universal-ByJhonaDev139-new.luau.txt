@@ -350,17 +350,17 @@ rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
 rightLayout.Padding = UDim.new(0, 5)
 
 -- Painel Extra à Direita
--- Painel Extra à Direita (desligado por padrão)
+-- Painel Extra à Direita (invisível inicialmente)
 local extraPanel = Instance.new("ScrollingFrame")
 extraPanel.Name = "extraPanel"
 extraPanel.Size = UDim2.new(0, 260, 1, 0)
 extraPanel.Position = UDim2.new(1, 10, 0, 0)
-extraPanel.BackgroundTransparency = 1
+extraPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+extraPanel.BackgroundTransparency = 1 -- <- total transparência até ser ativado
 extraPanel.BorderSizePixel = 0
 extraPanel.CanvasSize = UDim2.new(0, 0, 0, 0)
 extraPanel.ScrollBarThickness = 6
-extraPanel.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
-extraPanel.Visible = false
+extraPanel.Visible = false -- <- IMPORTANTE: começa oculto
 extraPanel.Parent = mainFrame
 
 local extraLayout = Instance.new("UIListLayout")
@@ -405,22 +405,21 @@ corner.Parent = button
     return button
 end
 
-
+---------------------------&
 
 local slidersAbertos = {}
 
 function criarPainelComSliders(id, titulo, sliders)
-    -- Se já existir, remover
+    -- Remove painel antigo com o mesmo ID
     if slidersAbertos[id] then
         slidersAbertos[id]:Destroy()
         slidersAbertos[id] = nil
     end
 
-    -- Cria novo frame com título
+    -- Cria novo painel
     local painel = Instance.new("Frame")
     painel.Size = UDim2.new(1, -10, 0, 40 + #sliders * 40)
     painel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    painel.BackgroundTransparency = 0
     painel.BorderSizePixel = 0
     painel.Parent = extraPanel
 
@@ -431,18 +430,17 @@ function criarPainelComSliders(id, titulo, sliders)
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, -20, 0, 30)
     title.Position = UDim2.new(0, 10, 0, 5)
-    title.BackgroundTransparency = 1
     title.Text = titulo
     title.TextColor3 = Color3.new(1, 1, 1)
+    title.BackgroundTransparency = 1
     title.Font = Enum.Font.GothamBold
     title.TextSize = 14
     title.Parent = painel
 
-    -- Criação de sliders
+    -- Criação dos sliders
     for i, info in ipairs(sliders) do
         local y = 30 + (i - 1) * 40
 
-        -- barra
         local barra = Instance.new("Frame")
         barra.Position = UDim2.new(0, 10, 0, y + 24)
         barra.Size = UDim2.new(1, -20, 0, 4)
@@ -450,7 +448,6 @@ function criarPainelComSliders(id, titulo, sliders)
         barra.BorderSizePixel = 0
         barra.Parent = painel
 
-        -- botão do valor
         local btn = Instance.new("TextButton")
         btn.Position = UDim2.new(0, 10, 0, y + 10)
         btn.Size = UDim2.new(0, 100, 0, 20)
@@ -477,25 +474,24 @@ function criarPainelComSliders(id, titulo, sliders)
         game:GetService("RunService").RenderStepped:Connect(function()
             if dragging then
                 local mouseX = uis:GetMouseLocation().X
-                local absPos = barra.AbsolutePosition.X
-                local absSize = barra.AbsoluteSize.X
+                local barPos = barra.AbsolutePosition.X
+                local barSize = barra.AbsoluteSize.X
 
-                local relX = math.clamp(mouseX - absPos, 0, absSize)
-                local pct = relX / absSize
-                local valor = info.min + (info.max - info.min) * pct
+                local relX = math.clamp(mouseX - barPos, 0, barSize)
+                local percent = relX / barSize
+                local value = info.min + (info.max - info.min) * percent
 
-                -- arredondar
                 if info.max - info.min > 1 then
-                    valor = math.floor(valor)
+                    value = math.floor(value)
                 else
-                    valor = math.floor(valor * 100) / 100
+                    value = math.floor(value * 100) / 100
                 end
 
-                btn.Text = string.format("%s: %s", info.nome, valor)
-                btn.Position = UDim2.new(0, relX + 10 - btn.AbsoluteSize.X/2, 0, y + 10)
+                btn.Text = string.format("%s: %s", info.nome, value)
+                btn.Position = UDim2.new(0, relX + 10 - btn.AbsoluteSize.X / 2, 0, y + 10)
 
                 if info.aoAlterar then
-                    info.aoAlterar(valor)
+                    info.aoAlterar(value)
                 end
             end
         end)
@@ -503,12 +499,11 @@ function criarPainelComSliders(id, titulo, sliders)
 
     slidersAbertos[id] = painel
 
-    -- Mostrar painel se tiver sliders
-    local visivel = next(slidersAbertos) ~= nil
-    extraPanel.Visible = visivel
-    extraPanel.BackgroundTransparency = visivel and 0 or 1
+    -- Exibir o painel se ao menos um slider estiver ativo
+    local algoAberto = next(slidersAbertos) ~= nil
+    extraPanel.Visible = algoAberto
+    extraPanel.BackgroundTransparency = algoAberto and 0 or 1
 
-    -- Atualiza CanvasSize
     task.wait()
     extraPanel.CanvasSize = UDim2.new(0, 0, 0, extraLayout.AbsoluteContentSize.Y + 20)
 end
