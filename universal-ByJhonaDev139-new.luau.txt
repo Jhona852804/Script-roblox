@@ -363,6 +363,10 @@ extraPanel.ScrollBarThickness = 6
 extraPanel.Visible = false -- <- IMPORTANTE: começa oculto
 extraPanel.Parent = mainFrame
 
+local cornerExtra = Instance.new("UICorner")
+cornerExtra.CornerRadius = UDim.new(0, 10)
+cornerExtra.Parent = extraPanel
+
 local extraLayout = Instance.new("UIListLayout")
 extraLayout.SortOrder = Enum.SortOrder.LayoutOrder
 extraLayout.Padding = UDim.new(0, 8)
@@ -454,6 +458,10 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
 
     local dragging = false
     local uis = game:GetService("UserInputService")
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 6)
+btnCorner.Parent = valueButton
 
 local connection
 
