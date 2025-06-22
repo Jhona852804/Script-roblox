@@ -459,34 +459,36 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
 local dragging = false
 local connection
 
--- Quando o botão for clicado
-valueButton.MouseButton1Down:Connect(function()
-	dragging = true
+-- Detecta início do toque ou clique
+valueButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
 
-	-- Conecta o movimento do slider
-	connection = RunService.RenderStepped:Connect(function()
-		if dragging then
-			local mouseX = uis:GetMouseLocation().X
-			local barAbsPos = sliderBar.AbsolutePosition.X
-			local barWidth = sliderBar.AbsoluteSize.X
+		-- Cria conexão com RenderStepped
+		connection = RunService.RenderStepped:Connect(function()
+			if dragging then
+				local mouseX = uis:GetMouseLocation().X
+				local barAbsPos = sliderBar.AbsolutePosition.X
+				local barWidth = sliderBar.AbsoluteSize.X
 
-			local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
-			valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
+				local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
+				valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
 
-			local percent = relX / barWidth
-			local value = math.floor(min + (max - min) * percent)
-			valueButton.Text = tostring(value)
+				local percent = relX / barWidth
+				local value = math.floor(min + (max - min) * percent)
+				valueButton.Text = tostring(value)
 
-			if aoAlterar then
-				aoAlterar(value)
+				if aoAlterar then
+					aoAlterar(value)
+				end
 			end
-		end
-	end)
+		end)
+	end
 end)
 
--- Quando soltar o mouse, para de arrastar
+-- Detecta fim do toque ou clique
 uis.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		dragging = false
 		if connection then
 			connection:Disconnect()
