@@ -349,7 +349,30 @@ rightLayout.Parent = rightPanel
 rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
 rightLayout.Padding = UDim.new(0, 5)
 
+-- Painel Extra à Direita (por fora do MainFrame visualmente)
+local extraPanel = Instance.new("ScrollingFrame")
+extraPanel.Name = "extraPanel"
+extraPanel.Size = UDim2.new(0, 280, 1, 0)
+extraPanel.Position = UDim2.new(1, 10, 0, 0) -- Totalmente à direita do MainFrame
+extraPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+extraPanel.CanvasSize = UDim2.new(0, 0, 0, 500)
+extraPanel.ScrollBarThickness = 6
+extraPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
+extraPanel.BorderSizePixel = 0
+extraPanel.BackgroundTransparency = 0.1
+extraPanel.Parent = mainFrame -- Ainda é filho do MainFrame
 
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = extraPanel
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(60, 60, 60)
+stroke.Thickness = 1.2
+stroke.Parent = extraPanel
+
+-----------------
+-- CRIAÇÃO DOS BOTÕES
 local function createButton(parent, text, onClick)
 local button = Instance.new("TextButton")
 button.Text = text
