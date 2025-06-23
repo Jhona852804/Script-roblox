@@ -957,20 +957,46 @@ end},
         end
 
     else
-        for _, p in pairs(game.Players:GetPlayers()) do
-            local char = p.Character
-            if char then
-                local h = char:FindFirstChild("ChamsEffect")
-                if h then h:Destroy() end
+        else
+    -- Desativar Chams
+    for _, p in pairs(game.Players:GetPlayers()) do
+        local char = p.Character
+        if char then
+            local h = char:FindFirstChild("ChamsEffect")
+            if h then h:Destroy() end
+        end
+    end
+
+    -- Desconecta eventos
+    for _, c in pairs(connections) do
+        c:Disconnect()
+    end
+    connections = {}
+
+    -- Verifica se só há sliders do chams no extraPanel
+    local chamsFrames = 0
+    local totalFrames = 0
+
+    for _, child in ipairs(extraPanel:GetChildren()) do
+        if child:IsA("Frame") then
+            totalFrames += 1
+            if child.Name == "Chams" then
+                chamsFrames += 1
             end
         end
-        for _, c in pairs(connections) do
-            c:Disconnect()
-        end
-        connections = {}
-        extraPanel.Visible = false
-        slidersCriados = false -- Permite criar de novo depois
     end
+
+    if totalFrames == chamsFrames then
+        extraPanel.Visible = false
+        slidersCriados = false
+        -- Remove os sliders do Chams
+        for _, child in ipairs(extraPanel:GetChildren()) do
+            if child:IsA("Frame") and child.Name == "Chams" then
+                child:Destroy()
+            end
+        end
+    end
+end
 end},
 
         {name = "Tergeting Line", func = function() 
