@@ -1036,7 +1036,7 @@ else
 end
 
 end},
-{name = "Chams", func = function()
+{name = "Chams2", func = function()
 chamsEnabled = not chamsEnabled
 
 local function aplicarChams(character)  
@@ -1077,9 +1077,9 @@ if chamsEnabled then
     -- Evita múltiplos sliders repetidos  
     if not slidersCriados then  
         for _, cor in ipairs({  
-            {nome = "Vermelho", valor = function(v) chamsR = v end},  
-            {nome = "Verde",    valor = function(v) chamsG = v end},  
-            {nome = "Azul",     valor = function(v) chamsB = v end}  
+            {nome = "Vermelho2", valor = function(v) chamsR = v end},  
+            {nome = "Verde2",    valor = function(v) chamsG = v end},  
+            {nome = "Azul2",     valor = function(v) chamsB = v end}  
         }) do  
             local slider = criarNovoSlider("Chams - " .. cor.nome, 0, 255, function(v)  
                 cor.valor(v)  
@@ -1135,7 +1135,7 @@ end
 
 end
 end},
-{name = "Chams", func = function()
+{name = "Chams3", func = function()
     chamsEnabled = not chamsEnabled
 
     local function aplicarChams(character)
@@ -1176,9 +1176,9 @@ end},
         -- Evita múltiplos sliders repetidos
         if not slidersCriados then
             for _, cor in ipairs({
-                {nome = "Vermelho", valor = function(v) chamsR = v end},
-                {nome = "Verde",    valor = function(v) chamsG = v end},
-                {nome = "Azul",     valor = function(v) chamsB = v end}
+                {nome = "Vermelho3", valor = function(v) chamsR = v end},
+                {nome = "Verde3",    valor = function(v) chamsG = v end},
+                {nome = "Azul3",     valor = function(v) chamsB = v end}
             }) do
                 local slider = criarNovoSlider("Chams - " .. cor.nome, 0, 255, function(v)
                     cor.valor(v)
