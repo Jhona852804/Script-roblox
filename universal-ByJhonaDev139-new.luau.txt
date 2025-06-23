@@ -481,6 +481,15 @@ local uis = game:GetService("UserInputService")
 local rs = game:GetService("RunService")
 
 local function criarNovoSlider(titulo, min, max, aoAlterar)
+    -- Verifica se já existe um slider com este título
+for _, frame in pairs(extraPanel:GetChildren()) do
+    if frame:IsA("Frame") then
+        local label = frame:FindFirstChildOfClass("TextLabel")
+        if label and label.Text == titulo then
+            return -- Já existe, então não cria novamente
+        end
+    end
+end
     local sliderFrame = Instance.new("Frame")
     sliderFrame.Size = UDim2.new(1, -10, 0, 60)
     sliderFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
