@@ -1021,8 +1021,7 @@ end},
         end
         connections = {}
 
-        -- Oculta o painel (você pode decidir se limpa sliders aqui)
-        extraPanel.Visible = false
+        extraPanel:FindFirstChild("ChamsPanel")?.:Destroy()
     end
 end},
 
