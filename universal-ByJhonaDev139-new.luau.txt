@@ -412,65 +412,63 @@ end
 ---------------------------&
 -- Tabela para rastrear os painéis criados por ID
 local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
-    -- Verifica se já existe um painel com o mesmo ID
-    local painelExistente = extraPanel:FindFirstChild(id)
-    if painelExistente then
-        painelExistente:Destroy()
-        return -- Remove se já existir e encerra
+    -- Remove qualquer slider anterior com mesmo ID
+    for _, child in ipairs(extraPanel:GetChildren()) do
+        if child:IsA("TextLabel") and child.Name == id .. "_Title" then
+            child:Destroy()
+        elseif child:IsA("TextButton") and child.Name == id .. "_Slider" then
+            child:Destroy()
+        elseif child:IsA("Frame") and child.Name == id .. "_Bar" then
+            child:Destroy()
+        end
     end
 
-    -- Torna visível o painel
+    -- Ativa o painel
     extraPanel.Visible = true
     extraPanel.BackgroundTransparency = 0
 
-    -- Cria o frame para esse conjunto de sliders
-    local window = Instance.new("Frame")
-    window.Name = id
-    window.Size = UDim2.new(1, -20, 0, 100)
-    window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    window.BorderSizePixel = 0
-    window.Parent = extraPanel
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = window
-
-    local title = Instance.new("TextLabel", window)
-    title.Size = UDim2.new(1, 0, 0, 25)
-    title.Position = UDim2.new(0, 0, 0, 0)
+    -- Cria título direto no extraPanel
+    local title = Instance.new("TextLabel")
+    title.Name = id .. "_Title"
+    title.Size = UDim2.new(1, -20, 0, 25)
     title.Text = titulo
     title.TextColor3 = Color3.new(1, 1, 1)
     title.BackgroundTransparency = 1
     title.Font = Enum.Font.SourceSansBold
     title.TextSize = 18
+    title.Parent = extraPanel
 
-    -- SliderBar
-    local sliderBar = Instance.new("Frame", window)
+    -- Cria barra do slider
+    local sliderBar = Instance.new("Frame")
+    sliderBar.Name = id .. "_Bar"
     sliderBar.Size = UDim2.new(1, -40, 0, 4)
-    sliderBar.Position = UDim2.new(0, 20, 0, 50)
     sliderBar.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    sliderBar.BorderSizePixel = 0
+    sliderBar.Parent = extraPanel
 
-    -- Botão com valor
-    local valueButton = Instance.new("TextButton", window)
+    -- Cria botão do slider
+    local valueButton = Instance.new("TextButton")
+    valueButton.Name = id .. "_Slider"
     valueButton.Size = UDim2.new(0, 60, 0, 20)
-    valueButton.Position = UDim2.new(0, 20, 0, 40)
     valueButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     valueButton.TextColor3 = Color3.new(1, 1, 1)
     valueButton.Font = Enum.Font.SourceSansBold
     valueButton.TextSize = 14
     valueButton.Text = tostring(min)
+    valueButton.Parent = extraPanel
 
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = valueButton
 
-    -- Arrastar valor do slider
+    -- Slider funcional
     local dragging = false
     local uis = game:GetService("UserInputService")
     local connection
 
     valueButton.MouseButton1Down:Connect(function()
         dragging = true
+
         connection = game:GetService("RunService").RenderStepped:Connect(function()
             if dragging then
                 local mouseX = uis:GetMouseLocation().X
@@ -478,7 +476,7 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
                 local barWidth = sliderBar.AbsoluteSize.X
                 local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
 
-                valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
+                valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 0)
 
                 local percent = relX / barWidth
                 local value = math.floor(min + (max - min) * percent)
@@ -491,7 +489,6 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
         end)
     end)
 
-    -- Finalizar arraste
     valueButton.MouseButton1Up:Connect(function()
         dragging = false
         if connection then connection:Disconnect() end
@@ -504,11 +501,11 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
         end
     end)
 
-    -- Atualizar CanvasSize do extraPanel automaticamente
+    -- Atualiza canvas
     task.wait()
     local layout = extraPanel:FindFirstChildOfClass("UIListLayout")
     if layout then
-        extraPanel.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
+        extraPanel.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
     end
 end
 
@@ -546,14 +543,14 @@ local categories = {
     ["Player"] = {
     	
 {name = "Speed", func = function()
-    criarSliderNoExtraPanel("speedSlider", "Player speed", 5, 100, function(v)
+    criarSliderNoExtraPanel("speed", "Velocidade do Jogador", 5, 100, function(v)
         local char = player.Character or player.CharacterAdded:Wait()
-        local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+        local humanoid = char and char:FindFirstChildWhichIsA("Humanoid")
         if humanoid then
             humanoid.WalkSpeed = v
         end
     end)
-end},
+end}
 
         {name = "Inf jump", func = function()
             allowAirJump = not allowAirJump -- Alterna o estado
