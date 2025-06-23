@@ -527,7 +527,7 @@ local categories = {
             humanoid.WalkSpeed = v
         end
     end)
-end}
+end},
 
         {name = "Inf jump", func = function()
             allowAirJump = not allowAirJump -- Alterna o estado
