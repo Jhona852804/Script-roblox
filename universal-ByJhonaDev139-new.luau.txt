@@ -889,6 +889,8 @@ end},
         end
     end)
 end},
+
+
 {name = "Chams", func = function()
     chamsEnabled = not chamsEnabled
 
@@ -996,7 +998,6 @@ end},
             end
         end
     end
-end
 end},
 
         {name = "Tergeting Line", func = function() 
