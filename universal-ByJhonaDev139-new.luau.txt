@@ -426,16 +426,25 @@ function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
     end
 
     -- Criação do painel
-    local window = Instance.new("Frame")
-    window.Name = id
-    window.Size = UDim2.new(1, -20, 0, 100)
-    window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    window.BorderSizePixel = 0
-    window.Parent = extraPanel
+    local window = Instance.new("ScrollingFrame")
+window.Name = id
+window.Size = UDim2.new(1, -20, 0, 100)
+window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+window.BorderSizePixel = 0
+window.CanvasSize = UDim2.new(0, 0, 0, 0)
+window.ScrollBarThickness = 4
+window.ScrollBarImageColor3 = Color3.fromRGB(200, 200, 200)
+window.AutomaticCanvasSize = Enum.AutomaticSize.Y
+window.Parent = extraPanel
 
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = window
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = window
+
+local layout = Instance.new("UIListLayout")
+layout.Padding = UDim.new(0, 8)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Parent = window
 
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, 0, 0, 25)
