@@ -955,7 +955,7 @@ end},
                     end
                 end
             end)
-sliderR.Name = "Chams"
+
             local sliderG = criarNovoSlider("Chams - G", 0, 255, function(v)
                 chamsG = v
                 for _, plr in ipairs(game.Players:GetPlayers()) do
@@ -966,7 +966,7 @@ sliderR.Name = "Chams"
                     end
                 end
             end)
-sliderG.Name = "Chams"
+
 
             local sliderB = criarNovoSlider("Chams - B", 0, 255, function(v)
                 chamsB = v
@@ -977,7 +977,7 @@ sliderG.Name = "Chams"
                     end
                 end
             end)
-            sliderB.Name = "Chams"
+            
             slidersCriados = true
         end
 
