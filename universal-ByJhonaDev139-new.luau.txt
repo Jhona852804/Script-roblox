@@ -1027,9 +1027,13 @@ sliderG.Name = "Chams"
         end
         connections = {}
 
-        local chamsPanel = extraPanel:FindFirstChild("ChamsPanel")
-if chamsPanel then
-    chamsPanel:Destroy()
+        local nomesSliders = {"Chams - R", "Chams - G", "Chams - B"}
+
+for _, nome in ipairs(nomesSliders) do
+    local antigoSlider = extraPanel:FindFirstChild(nome)
+    if antigoSlider then
+        antigoSlider:Destroy()
+    end
 end
     end
 end},
