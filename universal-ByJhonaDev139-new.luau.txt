@@ -890,7 +890,6 @@ end},
     end)
 end},
 
-
 {name = "Chams", func = function()
     chamsEnabled = not chamsEnabled
 
@@ -925,30 +924,26 @@ end},
         end)
         table.insert(connections, joinConn)
 
-        -- ⚠️ Criação dos sliders RGB:
+        -- ⚠️ Criação dos sliders RGB
         extraPanel.Visible = true
         extraPanel.BackgroundTransparency = 0
 
+        -- Evita múltiplos sliders repetidos
         if not slidersCriados then
-            local function criarSliderChams(nome, corIndex)
-                local slider = criarNovoSlider(nome, 0, 255, function(v)
-                    if corIndex == "R" then chamsR = v
-                    elseif corIndex == "G" then chamsG = v
-                    elseif corIndex == "B" then chamsB = v end
-
+            for _, cor in ipairs({
+                {nome = "Vermelho", valor = function(v) chamsR = v end},
+                {nome = "Verde",    valor = function(v) chamsG = v end},
+                {nome = "Azul",     valor = function(v) chamsB = v end}
+            }) do
+                local slider = criarNovoSlider("Chams - " .. cor.nome, 0, 255, function(v)
+                    cor.valor(v)
                     for _, p in pairs(game.Players:GetPlayers()) do
                         local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
-                        if h then
-                            h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB)
-                        end
+                        if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
                     end
                 end)
-                slider.Name = "Chams"  -- Importante para controle de remoção
+                slider.Name = "Chams"
             end
-
-            criarSliderChams("Chams - Vermelho", "R")
-            criarSliderChams("Chams - Verde", "G")
-            criarSliderChams("Chams - Azul", "B")
 
             slidersCriados = true
         end
@@ -968,7 +963,7 @@ end},
         end
         connections = {}
 
-        -- Verifica se só há sliders do chams
+        -- Verifica se só há sliders do chams no extraPanel
         local chamsFrames = 0
         local totalFrames = 0
 
@@ -992,7 +987,6 @@ end},
         end
     end
 end},
-
         {name = "Tergeting Line", func = function() 
         if line then  
         line:Remove()  -- Remove a linha existente  
