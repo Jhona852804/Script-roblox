@@ -450,7 +450,7 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
     local valueButton = Instance.new("TextButton", window)
     valueButton.Size = UDim2.new(0, 60, 0, 20)
     valueButton.Position = UDim2.new(0, 20, 0, 40)
-    valueButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    valueButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     valueButton.TextColor3 = Color3.new(1, 1, 1)
     valueButton.Font = Enum.Font.SourceSansBold
     valueButton.TextSize = 14
