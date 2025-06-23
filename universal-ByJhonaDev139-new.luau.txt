@@ -1010,24 +1010,27 @@ end},
         table.insert(connections, joinConn)
 
     else
-        chamsEnabled = false
-        slidersCriados = false
+        local chamsFrames = 0  
+    local totalFrames = 0  
 
-        -- Remove highlights
-        for _, plr in ipairs(game.Players:GetPlayers()) do
-            if plr.Character then
-                local cham = plr.Character:FindFirstChild("ChamsEffect")
-                if cham then cham:Destroy() end
-            end
-        end
+    for _, child in ipairs(extraPanel:GetChildren()) do  
+        if child:IsA("Frame") then  
+            totalFrames += 1  
+            if child.Name == "Chams" then  
+                chamsFrames += 1  
+            end  
+        end  
+    end  
 
-        -- Desconecta eventos
-        for _, conn in pairs(connections) do
-            conn:Disconnect()
-        end
-        connections = {}
-
-        
+    if totalFrames == chamsFrames then  
+        extraPanel.Visible = false  
+        slidersCriados = false  
+        for _, child in ipairs(extraPanel:GetChildren()) do  
+            if child:IsA("Frame") and child.Name == "Chams" then  
+                child:Destroy()  
+            end  
+        end  
+    end  
         
     end
 end},
