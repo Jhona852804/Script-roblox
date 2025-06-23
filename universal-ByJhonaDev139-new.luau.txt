@@ -988,8 +988,7 @@ end},
     end
 end
 end},
-        {name = "Tergeting Line", func = function() 
-        if line then  
+
 {name = "Chams", func = function()  
     chamsEnabled = not chamsEnabled  
   
