@@ -518,6 +518,8 @@ local fogEnabled = true  -- Estado do fog
 local fogStart = 0
 local fogEnd = 1000
 local fogStartConnection, fogEndConnection  -- Conexões para congelar valores
+local connection = {}
+local chamsR, chamsG, chamsB = 255, 0, 0 -- Valores iniciais do Chams (vermelho)
 
 local teleportEnabled = 0  -- Controla o estado do botão (0 = apenas desenhar, 1 = teleportar e seguir, 2 = parar de seguir)
 local line = nil  -- Armazena a linha globalmente  -- Armazena a conexão globalmente
@@ -656,7 +658,7 @@ end},
 
 
 
-{name = "Colision", func = function()
+{name = "NoClip", func = function()
     local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 
     if not running then
@@ -820,51 +822,78 @@ end},
     end)
 end},
 {name = "Chams", func = function()
-    chamsEnabled = not chamsEnabled  -- Alternar entre ligado/desligado
+    chamsEnabled = not chamsEnabled  -- Alterna entre ligado/desligado
+
+    local function aplicarChams(character)
+        if not character then return end
+        local highlight = character:FindFirstChild("ChamsEffect")
+        if not highlight then
+            highlight = Instance.new("Highlight")
+            highlight.Name = "ChamsEffect"
+            highlight.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB)
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            highlight.Parent = character
+        end
+    end
 
     if chamsEnabled then
-        -- Ativar Chams
-        for _, player in pairs(game.Players:GetChildren()) do
-            if player.Character then
-                local highlight = Instance.new("Highlight")
-                highlight.Name = "ChamsEffect"
-                highlight.Parent = player.Character
-                highlight.FillColor = Color3.fromRGB(255, 0, 0)  -- Vermelho
-                highlight.OutlineColor = Color3.fromRGB(255, 255, 255)  -- Branco
-            end
-        end
-        
-        -- Adiciona Chams para novos jogadores que entrarem
-        local connection = game.Players.PlayerAdded:Connect(function(player)
-            player.CharacterAdded:Connect(function(character)
-                if chamsEnabled then
-                    local highlight = Instance.new("Highlight")
-                    highlight.Name = "ChamsEffect"
-                    highlight.Parent = character
-                    highlight.FillColor = Color3.fromRGB(255, 0, 0)
-                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-                end
+        -- Aplicar Chams aos jogadores atuais
+        for _, player in pairs(game.Players:GetPlayers()) do
+            aplicarChams(player.Character)
+            -- Detecta respawn
+            local charConn = player.CharacterAdded:Connect(function(char)
+                aplicarChams(char)
             end)
+            table.insert(connections, charConn)
+        end
+
+        -- Detecta novos jogadores
+        local joinConn = game.Players.PlayerAdded:Connect(function(player)
+            local charConn = player.CharacterAdded:Connect(function(char)
+                aplicarChams(char)
+            end)
+            table.insert(connections, charConn)
         end)
-        
-        table.insert(connections, connection) -- Salva a conexão para remover depois
-    else
-        -- Desativar Chams (removendo os Highlights)
-        for _, player in pairs(game.Players:GetChildren()) do
-            if player.Character then
-                for _, v in pairs(player.Character:GetChildren()) do
-                    if v:IsA("Highlight") and v.Name == "ChamsEffect" then
-                        v:Destroy()
-                    end
+        table.insert(connections, joinConn)
+
+        -- Cria sliders RGB
+        criarSliderNoExtraPanel("chamsRGB", "Cor do Chams", nil, nil, nil, {
+            {nome = "R", min = 0, max = 255, aoAlterar = function(v)
+                chamsR = v
+                for _, plr in pairs(game.Players:GetPlayers()) do
+                    local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
+                    if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
                 end
+            end},
+            {nome = "G", min = 0, max = 255, aoAlterar = function(v)
+                chamsG = v
+                for _, plr in pairs(game.Players:GetPlayers()) do
+                    local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
+                    if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end},
+            {nome = "B", min = 0, max = 255, aoAlterar = function(v)
+                chamsB = v
+                for _, plr in pairs(game.Players:GetPlayers()) do
+                    local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
+                    if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end},
+        })
+
+    else
+        -- Desativa Chams
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            if plr.Character then
+                local ch = plr.Character:FindFirstChild("ChamsEffect")
+                if ch then ch:Destroy() end
             end
         end
-        
-        -- Remove os eventos armazenados
-        for _, connection in pairs(connections) do
-            connection:Disconnect()
+        for _, c in pairs(connections) do
+            c:Disconnect()
         end
-        connections = {}  -- Limpa a tabela
+        connections = {}
+        extraPanel.Visible = false
     end
 end},
 
