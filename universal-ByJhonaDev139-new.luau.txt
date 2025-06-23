@@ -775,7 +775,7 @@ end},
 		{name = "Aimbot", func = function()
 				loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/aimbot-byJhonaDev139_YT'))()
 			end},
-		-- Fora do botão para manter o estado
+
 
 
 {name = "Shift Lock", func = function()
@@ -877,7 +877,7 @@ end},
     end)
 end},
 {name = "Chams", func = function()
-    chamsEnabled = not chamsEnabled  -- Alterna entre ligado/desligado
+    chamsEnabled = not chamsEnabled -- Alternar estado
 
     local function aplicarChams(character)
         if not character then return end
@@ -892,62 +892,66 @@ end},
     end
 
     if chamsEnabled then
-        -- Aplicar Chams aos jogadores atuais
-        for _, player in pairs(game.Players:GetPlayers()) do
-            aplicarChams(player.Character)
-            -- Detecta respawn
-            local charConn = player.CharacterAdded:Connect(function(char)
+        -- Aplica Chams nos jogadores existentes
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            aplicarChams(plr.Character)
+            local charConn = plr.CharacterAdded:Connect(function(char)
                 aplicarChams(char)
             end)
             table.insert(connections, charConn)
         end
 
-        -- Detecta novos jogadores
-        local joinConn = game.Players.PlayerAdded:Connect(function(player)
-            local charConn = player.CharacterAdded:Connect(function(char)
+        -- Aplica Chams nos novos jogadores
+        local joinConn = game.Players.PlayerAdded:Connect(function(plr)
+            local charConn = plr.CharacterAdded:Connect(function(char)
                 aplicarChams(char)
             end)
             table.insert(connections, charConn)
         end)
         table.insert(connections, joinConn)
 
-        -- Cria sliders RGB
-        criarSliderNoExtraPanel("chamsRGB", "Cor do Chams", nil, nil, nil, {
-            {nome = "R", min = 0, max = 255, aoAlterar = function(v)
-                chamsR = v
-                for _, plr in pairs(game.Players:GetPlayers()) do
-                    local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
-                    if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
-                end
-            end},
-            {nome = "G", min = 0, max = 255, aoAlterar = function(v)
-                chamsG = v
-                for _, plr in pairs(game.Players:GetPlayers()) do
-                    local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
-                    if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
-                end
-            end},
-            {nome = "B", min = 0, max = 255, aoAlterar = function(v)
-                chamsB = v
-                for _, plr in pairs(game.Players:GetPlayers()) do
-                    local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
-                    if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
-                end
-            end},
-        })
+        -- Ativa painel e cria os sliders RGB
+        extraPanel.Visible = true
+        extraPanel.BackgroundTransparency = 0
+
+        criarSliderSimples("Chams R", 0, 255, function(v)
+            chamsR = v
+            for _, p in pairs(game.Players:GetPlayers()) do
+                local cham = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+            end
+        end)
+
+        criarSliderSimples("Chams G", 0, 255, function(v)
+            chamsG = v
+            for _, p in pairs(game.Players:GetPlayers()) do
+                local cham = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+            end
+        end)
+
+        criarSliderSimples("Chams B", 0, 255, function(v)
+            chamsB = v
+            for _, p in pairs(game.Players:GetPlayers()) do
+                local cham = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+            end
+        end)
 
     else
-        -- Desativa Chams
-        for _, plr in pairs(game.Players:GetPlayers()) do
-            if plr.Character then
-                local ch = plr.Character:FindFirstChild("ChamsEffect")
-                if ch then ch:Destroy() end
-            end
+        -- Remove os Highlights
+        for _, p in pairs(game.Players:GetPlayers()) do
+            local ch = p.Character and p.Character:FindFirstChild("ChamsEffect")
+            if ch then ch:Destroy() end
         end
+
+        -- Desconecta eventos
         for _, c in pairs(connections) do
             c:Disconnect()
         end
         connections = {}
+
+        -- Oculta painel
         extraPanel.Visible = false
     end
 end},
