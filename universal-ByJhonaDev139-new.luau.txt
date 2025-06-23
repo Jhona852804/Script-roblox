@@ -455,6 +455,9 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
     valueButton.Font = Enum.Font.SourceSansBold
     valueButton.TextSize = 14
     valueButton.Text = tostring(min)
+valueButton.AutoButtonColor = false
+valueButton.BackgroundTransparency = 0
+valueButton.Active = true
 
 local dragging = false
 local connection
