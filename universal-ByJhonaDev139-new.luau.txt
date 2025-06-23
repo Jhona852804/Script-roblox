@@ -411,108 +411,80 @@ end
 
 ---------------------------&
 -- Tabela para rastrear os painéis criados por ID
-local function atualizarAlturaExtraPanel()
-    local totalAltura = 0
-    for _, child in ipairs(extraPanel:GetChildren()) do
-        if child:IsA("Frame") then
-            totalAltura += child.Size.Y.Offset + 8
-        end
-    end
-    extraPanel.CanvasSize = UDim2.new(0, 0, 0, totalAltura + 10)
-end
-
-local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
-    -- Verifica se já existe um painel com esse ID
-    local existente = extraPanel:FindFirstChild(id)
-    if existente then
-        existente:Destroy()
-    end
-
-    -- Torna o painel visível
-    extraPanel.Visible = true
-    extraPanel.BackgroundTransparency = 0
-
-    -- Criação do painel
-    local window = Instance.new("Frame")
-    window.Name = id
-    window.Size = UDim2.new(1, -20, 0, 100)
-    window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    window.BorderSizePixel = 0
-    window.Parent = extraPanel
+local function criarSliderSimples(titulo, min, max, aoAlterar)
+    local sliderFrame = Instance.new("Frame")
+    sliderFrame.Size = UDim2.new(1, -10, 0, 60)
+    sliderFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    sliderFrame.BorderSizePixel = 0
+    sliderFrame.Parent = extraPanel
 
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = window
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = sliderFrame
 
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 25)
-    title.Position = UDim2.new(0, 0, 0, 0)
+    -- Título
+    local title = Instance.new("TextLabel", sliderFrame)
+    title.Size = UDim2.new(1, -10, 0, 20)
+    title.Position = UDim2.new(0, 5, 0, 0)
     title.Text = titulo
     title.TextColor3 = Color3.new(1, 1, 1)
     title.BackgroundTransparency = 1
     title.Font = Enum.Font.SourceSansBold
-    title.TextSize = 18
-    title.Parent = window
+    title.TextSize = 14
+    title.TextXAlignment = Enum.TextXAlignment.Left
 
-    local sliderBar = Instance.new("Frame")
+    -- Barra
+    local sliderBar = Instance.new("Frame", sliderFrame)
     sliderBar.Size = UDim2.new(1, -40, 0, 4)
-    sliderBar.Position = UDim2.new(0, 20, 0, 50)
+    sliderBar.Position = UDim2.new(0, 20, 0, 35)
     sliderBar.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    sliderBar.Parent = window
 
-    local valueButton = Instance.new("TextButton")
+    -- Botão de valor
+    local valueButton = Instance.new("TextButton", sliderFrame)
     valueButton.Size = UDim2.new(0, 60, 0, 20)
-    valueButton.Position = UDim2.new(0, 20, 0, 40)
+    valueButton.Position = UDim2.new(0, 20, 0, 25)
     valueButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     valueButton.TextColor3 = Color3.new(1, 1, 1)
     valueButton.Font = Enum.Font.SourceSansBold
     valueButton.TextSize = 14
     valueButton.Text = tostring(min)
-    valueButton.Parent = window
 
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = valueButton
 
+    -- Controle do slider
     local dragging = false
     local uis = game:GetService("UserInputService")
-    local connection
 
-    valueButton.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            connection = game:GetService("RunService").RenderStepped:Connect(function()
-                if dragging then
-                    local mouseX = uis:GetMouseLocation().X
-                    local barAbsPos = sliderBar.AbsolutePosition.X
-                    local barWidth = sliderBar.AbsoluteSize.X
-                    local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
-
-                    valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
-
-                    local percent = relX / barWidth
-                    local value = math.floor(min + (max - min) * percent)
-                    valueButton.Text = tostring(value)
-
-                    if aoAlterar then
-                        aoAlterar(value)
-                    end
-                end
-            end)
-        end
+    valueButton.MouseButton1Down:Connect(function()
+        dragging = true
     end)
 
     uis.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
-            if connection then
-                connection:Disconnect()
-                connection = nil
-            end
         end
     end)
 
-    atualizarAlturaExtraPanel()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if dragging then
+            local mouseX = uis:GetMouseLocation().X
+            local barAbsPos = sliderBar.AbsolutePosition.X
+            local barWidth = sliderBar.AbsoluteSize.X
+            local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
+
+            valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 25)
+
+            local percent = relX / barWidth
+            local value = math.floor(min + (max - min) * percent)
+            valueButton.Text = tostring(value)
+
+            if aoAlterar then
+                aoAlterar(value)
+            end
+        end
+    end)
 end
 
 
