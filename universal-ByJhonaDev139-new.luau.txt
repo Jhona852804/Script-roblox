@@ -945,7 +945,7 @@ end},
 
         -- Evita criar sliders duplicados
         if not slidersCriados then
-            criarNovoSlider("Chams - R", 0, 255, function(v)
+            local sliderR = criarNovoSlider("Chams - R", 0, 255, function(v)
                 chamsR = v
                 for _, plr in ipairs(game.Players:GetPlayers()) do
                     local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
@@ -956,7 +956,7 @@ end},
                 end
             end)
 sliderR.Name = "Chams"
-            criarNovoSlider("Chams - G", 0, 255, function(v)
+            local sliderG = criarNovoSlider("Chams - G", 0, 255, function(v)
                 chamsG = v
                 for _, plr in ipairs(game.Players:GetPlayers()) do
                     local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
@@ -968,7 +968,7 @@ sliderR.Name = "Chams"
             end)
 sliderG.Name = "Chams"
 
-            criarNovoSlider("Chams - B", 0, 255, function(v)
+            local sliderB = criarNovoSlider("Chams - B", 0, 255, function(v)
                 chamsB = v
                 for _, plr in ipairs(game.Players:GetPlayers()) do
                     local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
@@ -1027,14 +1027,10 @@ sliderG.Name = "Chams"
         end
         connections = {}
 
-        local nomesSliders = {"Chams - R", "Chams - G", "Chams - B"}
-
-for _, nome in ipairs(nomesSliders) do
-    local antigoSlider = extraPanel:FindFirstChild(nome)
-    if antigoSlider then
-        antigoSlider:Destroy()
-    end
-end
+        sliderR:Destroy()
+        sliderG:Destroy()
+        sliderB:Destroy()
+        
     end
 end},
 
