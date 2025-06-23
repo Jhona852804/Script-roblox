@@ -951,18 +951,23 @@ end},
                     local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
                     if cham then
                         cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB)
+
                     end
                 end
             end)
+sliderR.Name = "Chams"
             criarNovoSlider("Chams - G", 0, 255, function(v)
                 chamsG = v
                 for _, plr in ipairs(game.Players:GetPlayers()) do
                     local cham = plr.Character and plr.Character:FindFirstChild("ChamsEffect")
                     if cham then
                         cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB)
+
                     end
                 end
             end)
+sliderG.Name = "Chams"
+
             criarNovoSlider("Chams - B", 0, 255, function(v)
                 chamsB = v
                 for _, plr in ipairs(game.Players:GetPlayers()) do
@@ -972,6 +977,7 @@ end},
                     end
                 end
             end)
+            sliderB.Name = "Chams"
             slidersCriados = true
         end
 
@@ -1021,7 +1027,10 @@ end},
         end
         connections = {}
 
-        extraPanel:FindFirstChild("ChamsPanel")?.:Destroy()
+        local chamsPanel = extraPanel:FindFirstChild("ChamsPanel")
+if chamsPanel then
+    chamsPanel:Destroy()
+end
     end
 end},
 
