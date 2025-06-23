@@ -547,17 +547,24 @@ end},
             print("Pulo no ar " .. (allowAirJump and "ativado" or "desativado"))
         end},
 
-        {name = "Super jump", func = function()
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
+{name = "Super Jump", func = function()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+
+    superJumpAtivo = not superJumpAtivo
+
+    if superJumpAtivo then
+        criarSliderNoExtraPanel("superjump", "Força do Pulo", 1, 1000, function(v)
             if humanoid then
-                if isJumpIncreased then
-                    humanoid.JumpPower = 50 -- Valor padrão do Roblox
-                else
-                    humanoid.JumpPower = 150 -- Super pulo
-                end
-                isJumpIncreased = not isJumpIncreased -- Alterna o estado
+                humanoid.JumpPower = v
             end
-        end},
+        end)
+    else
+        humanoid.JumpPower = 50 -- valor padrão
+        extraPanel.Visible = false
+    end
+end},
         
 
 
