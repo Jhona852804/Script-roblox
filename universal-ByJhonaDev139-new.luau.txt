@@ -593,7 +593,6 @@ local fogEnd = 1000
 local fogStartConnection, fogEndConnection  -- Conexões para congelar valores
 local connection = {}
 local chamsR, chamsG, chamsB = 255, 0, 0 -- Valores 
-local chamsR, chamsG, chamsB = 255, 0, 0
 local chamsEnabled = false
 local slidersCriados = false
 
@@ -602,7 +601,6 @@ local line = nil  -- Armazena a linha globalmente  -- Armazena a conexão global
 local followConnection = nil  -- Conexão de seguimento para atualizar a posição
 local followPlayer = nil  -- Armazena o jogador que está sendo seguido
 local freezeOffset = Vector3.new(0,  3, 0)  -- Define o "congelamento" da posição com uma distância fixa do jogador
-local chamsEnabled = false  -- Variável de controle
 local lagProtectionEnabled = false -- Variável de controle
 local teleportEnabled = false  -- Controla o estado do botão
 
