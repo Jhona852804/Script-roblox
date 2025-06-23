@@ -455,6 +455,9 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
     valueButton.Font = Enum.Font.SourceSansBold
     valueButton.TextSize = 14
     valueButton.Text = tostring(min)
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 6)
+btnCorner.Parent = valueButton
 
     local dragging = false
     local uis = game:GetService("UserInputService")
