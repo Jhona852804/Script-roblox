@@ -595,7 +595,6 @@ local connection = {}
 local chamsR, chamsG, chamsB = 255, 0, 0 -- Valores 
 local chamsR, chamsG, chamsB = 255, 0, 0
 local chamsEnabled = false
-local connections = {}
 local slidersCriados = false
 
 local teleportEnabled = 0  -- Controla o estado do botão (0 = apenas desenhar, 1 = teleportar e seguir, 2 = parar de seguir)
