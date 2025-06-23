@@ -889,7 +889,53 @@ end},
         end
     end)
 end},
+        {name = "Tergeting Line", func = function() 
+        if line then  
+        line:Remove()  -- Remove a linha existente  
+        line = nil  
 
+        if connection then  
+            connection:Disconnect()  -- Para de atualizar a linha  
+            connection = nil  
+        end  
+        return  -- Sai da função para evitar recriar a linha imediatamente  
+    end  
+
+    line = Drawing.new("Line")  
+    line.Thickness = 2  
+    line.Color = Color3.fromRGB(255, 0, 0)  
+
+    connection = RunService.RenderStepped:Connect(function()  
+        local closestPlayer = nil  
+        local closestDist = math.huge  
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do  
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then  
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)  
+                
+                if onScreen then  
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)  
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)  
+                    local dist = (screenCenter - targetScreenPos).Magnitude  
+
+                    if dist < closestDist then  
+                        closestDist = dist  
+                        closestPlayer = otherPlayer  
+                    end  
+                end  
+            end  
+        end  
+
+        if closestPlayer then  
+            local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)  
+            line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)  
+            line.To = Vector2.new(targetPos.X, targetPos.Y)  
+            line.Visible = true  
+        else  
+            line.Visible = false  
+        end  
+    end)  
+end},
 {name = "Chams", func = function()
     chamsEnabled = not chamsEnabled
 
