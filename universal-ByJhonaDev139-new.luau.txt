@@ -458,39 +458,40 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
 
 local connection
 
-valueButton.MouseButton1Down:Connect(function()
-    dragging = true
+-- Detecta início do toque/click
+valueButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
 
-    connection = game:GetService("RunService").RenderStepped:Connect(function()
-        if dragging then
-            local mouseX = uis:GetMouseLocation().X
-            local barAbsPos = sliderBar.AbsolutePosition.X
-            local barWidth = sliderBar.AbsoluteSize.X
-            local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
+		connection = RunService.RenderStepped:Connect(function()
+			if dragging then
+				local mouseX = uis:GetMouseLocation().X
+				local barAbsPos = sliderBar.AbsolutePosition.X
+				local barWidth = sliderBar.AbsoluteSize.X
 
-            valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
+				local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
 
-            local percent = relX / barWidth
-            local value = math.floor(min + (max - min) * percent)
-            valueButton.Text = tostring(value)
+				valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
 
-            if aoAlterar then
-                aoAlterar(value)
-            end
-        end
-    end)
+				local percent = relX / barWidth
+				local value = math.floor(min + (max - min) * percent)
+
+				valueButton.Text = tostring(value)
+				if aoAlterar then aoAlterar(value) end
+			end
+		end)
+	end
 end)
 
-valueButton.MouseButton1Up:Connect(function()
-    dragging = false
-    if connection then connection:Disconnect() end
-end)
-
-uis.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-        if connection then connection:Disconnect() end
-    end
+-- Detecta fim do toque/click
+valueButton.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+		if connection then
+			connection:Disconnect()
+			connection = nil
+		end
+	end
 end)
 end
 
