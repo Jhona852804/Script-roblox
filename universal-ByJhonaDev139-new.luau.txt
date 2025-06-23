@@ -456,45 +456,38 @@ local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
     valueButton.TextSize = 14
     valueButton.Text = tostring(min)
 
-local connection
+    local dragging = false
+    local uis = game:GetService("UserInputService")
 
--- Detecta início do toque/click
-valueButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
+    valueButton.MouseButton1Down:Connect(function()
+        dragging = true
+    end)
 
-		connection = RunService.RenderStepped:Connect(function()
-			if dragging then
-				local mouseX = uis:GetMouseLocation().X
-				local barAbsPos = sliderBar.AbsolutePosition.X
-				local barWidth = sliderBar.AbsoluteSize.X
+    uis.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
 
-				local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if dragging then
+            local mouseX = uis:GetMouseLocation().X
+            local barAbsPos = sliderBar.AbsolutePosition.X
+            local barWidth = sliderBar.AbsoluteSize.X
+            local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
 
-				valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
+            valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 40)
 
-				local percent = relX / barWidth
-				local value = math.floor(min + (max - min) * percent)
+            local percent = relX / barWidth
+            local value = math.floor(min + (max - min) * percent)
+            valueButton.Text = tostring(value)
 
-				valueButton.Text = tostring(value)
-				if aoAlterar then aoAlterar(value) end
-			end
-		end)
-	end
-end)
-
--- Detecta fim do toque/click
-valueButton.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-		if connection then
-			connection:Disconnect()
-			connection = nil
-		end
-	end
-end)
+            if aoAlterar then
+                aoAlterar(value)
+            end
+        end
+    end)
 end
-
 
 
 
