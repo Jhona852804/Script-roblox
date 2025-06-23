@@ -2116,4 +2116,3 @@ for categoryName, _ in pairs(categories) do
     loadActions(categoryName)
     break
 end
-print('test')
