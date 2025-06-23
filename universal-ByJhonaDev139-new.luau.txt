@@ -959,7 +959,7 @@ end},
         end
 
     else
-        else
+        
     -- Desativar Chams
     for _, p in pairs(game.Players:GetPlayers()) do
         local char = p.Character
