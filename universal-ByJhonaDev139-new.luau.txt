@@ -890,7 +890,7 @@ end},
     end)
 end},
 {name = "Chams", func = function()
-    chamsEnabled = not chamsEnabled -- Alternar estado
+    chamsEnabled = not chamsEnabled
 
     local function aplicarChams(character)
         if not character then return end
@@ -905,67 +905,71 @@ end},
     end
 
     if chamsEnabled then
-        -- Aplica Chams nos jogadores existentes
-        for _, plr in pairs(game.Players:GetPlayers()) do
-            aplicarChams(plr.Character)
-            local charConn = plr.CharacterAdded:Connect(function(char)
+        -- Aplica aos jogadores atuais
+        for _, player in pairs(game.Players:GetPlayers()) do
+            aplicarChams(player.Character)
+            local charConn = player.CharacterAdded:Connect(function(char)
                 aplicarChams(char)
             end)
             table.insert(connections, charConn)
         end
 
-        -- Aplica Chams nos novos jogadores
-        local joinConn = game.Players.PlayerAdded:Connect(function(plr)
-            local charConn = plr.CharacterAdded:Connect(function(char)
+        -- Detecta novos jogadores
+        local joinConn = game.Players.PlayerAdded:Connect(function(player)
+            local charConn = player.CharacterAdded:Connect(function(char)
                 aplicarChams(char)
             end)
             table.insert(connections, charConn)
         end)
         table.insert(connections, joinConn)
 
-        -- Ativa painel e cria os sliders RGB
+        -- ⚠️ Criação dos sliders RGB:
         extraPanel.Visible = true
         extraPanel.BackgroundTransparency = 0
 
-        criarSliderSimples("Chams R", 0, 255, function(v)
-            chamsR = v
-            for _, p in pairs(game.Players:GetPlayers()) do
-                local cham = p.Character and p.Character:FindFirstChild("ChamsEffect")
-                if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
-            end
-        end)
+        -- Evita múltiplos sliders repetidos
+        if not slidersCriados then
+            criarNovoSlider("Chams - Vermelho", 0, 255, function(v)
+                chamsR = v
+                for _, p in pairs(game.Players:GetPlayers()) do
+                    local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                    if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end)
 
-        criarSliderSimples("Chams G", 0, 255, function(v)
-            chamsG = v
-            for _, p in pairs(game.Players:GetPlayers()) do
-                local cham = p.Character and p.Character:FindFirstChild("ChamsEffect")
-                if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
-            end
-        end)
+            criarNovoSlider("Chams - Verde", 0, 255, function(v)
+                chamsG = v
+                for _, p in pairs(game.Players:GetPlayers()) do
+                    local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                    if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end)
 
-        criarSliderSimples("Chams B", 0, 255, function(v)
-            chamsB = v
-            for _, p in pairs(game.Players:GetPlayers()) do
-                local cham = p.Character and p.Character:FindFirstChild("ChamsEffect")
-                if cham then cham.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
-            end
-        end)
+            criarNovoSlider("Chams - Azul", 0, 255, function(v)
+                chamsB = v
+                for _, p in pairs(game.Players:GetPlayers()) do
+                    local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                    if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end)
 
-    else
-        -- Remove os Highlights
-        for _, p in pairs(game.Players:GetPlayers()) do
-            local ch = p.Character and p.Character:FindFirstChild("ChamsEffect")
-            if ch then ch:Destroy() end
+            slidersCriados = true -- Marca que já foram criados
         end
 
-        -- Desconecta eventos
+    else
+        for _, p in pairs(game.Players:GetPlayers()) do
+            local char = p.Character
+            if char then
+                local h = char:FindFirstChild("ChamsEffect")
+                if h then h:Destroy() end
+            end
+        end
         for _, c in pairs(connections) do
             c:Disconnect()
         end
         connections = {}
-
-        -- Oculta painel
         extraPanel.Visible = false
+        slidersCriados = false -- Permite criar de novo depois
     end
 end},
 
