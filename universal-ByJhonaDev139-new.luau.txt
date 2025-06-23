@@ -585,14 +585,18 @@ local jumped = false -- Variável para detectar o pulo
 local allowAirJump = false -- Controla se o jogador pode pular no ar
 
 local antAFKEnabled = false
-local connection = nil  
+
 
 local fogEnabled = true  -- Estado do fog
 local fogStart = 0
 local fogEnd = 1000
 local fogStartConnection, fogEndConnection  -- Conexões para congelar valores
 local connection = {}
-local chamsR, chamsG, chamsB = 255, 0, 0 -- Valores iniciais do Chams (vermelho)
+local chamsR, chamsG, chamsB = 255, 0, 0 -- Valores 
+local chamsR, chamsG, chamsB = 255, 0, 0
+local chamsEnabled = false
+local connections = {}
+local slidersCriados = false
 
 local teleportEnabled = 0  -- Controla o estado do botão (0 = apenas desenhar, 1 = teleportar e seguir, 2 = parar de seguir)
 local line = nil  -- Armazena a linha globalmente  -- Armazena a conexão globalmente
