@@ -558,35 +558,24 @@ end}
         end},
 
 {name = "Super Jump", func = function()
-    local char = player.Character or player.CharacterAdded:Wait()
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if not humanoid then return end
-
     superJumpAtivo = not superJumpAtivo
 
     if superJumpAtivo then
         criarSliderNoExtraPanel("superjump", "Força do Pulo", 1, 1000, function(v)
-            -- Garante que o humanoid continue existindo e esteja ativo
-            local currentChar = player.Character
-            local currentHumanoid = currentChar and currentChar:FindFirstChildWhichIsA("Humanoid")
-            if currentHumanoid and superJumpAtivo then
-                currentHumanoid.JumpPower = v
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.JumpPower = v
             end
         end)
     else
-        humanoid.JumpPower = 50 -- valor padrão
-        -- Remove apenas o painel do Super Jump
-        for _, frame in ipairs(extraPanel:GetChildren()) do
-            if frame:IsA("Frame") and frame.Name == "superjump" then
-                frame:Destroy()
-            end
+        local char = player.Character or player.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.JumpPower = 50 -- valor padrão
         end
-
-        -- Oculta extraPanel se não houver mais sliders visíveis
-        if #extraPanel:GetChildren() == 1 then -- só o UIListLayout
-            extraPanel.Visible = false
-            extraPanel.BackgroundTransparency = 1
-        end
+        extraPanel.Visible = false
+        extraPanel.BackgroundTransparency = 1
     end
 end},
         
