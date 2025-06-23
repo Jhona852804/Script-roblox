@@ -187,12 +187,75 @@ end)
 
 end
 
+local nanopoints = {}
+
+local function criarParticulaNano()
+    local ponto = Instance.new("Frame")
+    ponto.Size = UDim2.new(0, 3, 0, 3)
+    ponto.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    ponto.AnchorPoint = Vector2.new(0.5, 0.5)
+    ponto.BackgroundColor3 = Color3.fromRGB(100, 255, 255)
+    ponto.BackgroundTransparency = 0.2
+    ponto.BorderSizePixel = 0
+    ponto.ZIndex = 2
+    ponto.Parent = ParticleCanvas  -- onde as partículas são renderizadas
+
+    table.insert(nanopoints, ponto)
+
+    -- Movimento sutil e desaparecimento
+    local destino = ponto.Position + UDim2.new(math.random(-5,5)/300, 0, math.random(-5,5)/300, 0)
+    local tween = TweenService:Create(ponto, TweenInfo.new(1.5, Enum.EasingStyle.Linear), {
+        Position = destino,
+        BackgroundTransparency = 1
+    })
+
+    tween:Play()
+    tween.Completed:Connect(function()
+        for i, p in ipairs(nanopoints) do
+            if p == ponto then
+                table.remove(nanopoints, i)
+                break
+            end
+        end
+        ponto:Destroy()
+    end)
+
+    -- Conexões visuais entre partículas próximas
+    for _, outro in ipairs(nanopoints) do
+        if outro ~= ponto and (ponto.Position - outro.Position).Magnitude < 0.05 then
+            local linha = Instance.new("Frame")
+            linha.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+            linha.BorderSizePixel = 0
+            linha.AnchorPoint = Vector2.new(0.5, 0.5)
+            linha.ZIndex = 1
+            linha.BackgroundTransparency = 0.7
+            linha.Parent = ParticleCanvas
+
+            -- calcular tamanho e rotação da linha
+            local p1 = ponto.AbsolutePosition
+            local p2 = outro.AbsolutePosition
+            local distancia = (p1 - p2).Magnitude
+            linha.Size = UDim2.new(0, distancia, 0, 1)
+            linha.Position = UDim2.new(0, (p1.X + p2.X) / 2, 0, (p1.Y + p2.Y) / 2)
+
+            local angulo = math.atan2(p2.Y - p1.Y, p2.X - p1.X)
+            linha.Rotation = math.deg(angulo)
+
+            TweenService:Create(linha, TweenInfo.new(1.5), {BackgroundTransparency = 1}):Play()
+            task.delay(1.5, function()
+                linha:Destroy()
+            end)
+        end
+    end
+end
+
 -- Loop de partículas
 local funcoesParticulas = {
 criarParticulaFogo = criarParticulaFogo,
 criarParticulaNeon = criarParticulaNeon,
 criarParticulaChuva = criarParticulaChuva,
-criarParticulaMatrix = criarParticulaMatrix
+criarParticulaMatrix = criarParticulaMatrix,
+criarParticulaNano = criarParticulaNano
 }
 
 RunService.RenderStepped:Connect(function()
@@ -206,11 +269,12 @@ end)
 -- Interface de Seleção de Partículas (independente do script principal)
 do
 local efeitos = {
-["Sem Partícula"] = function() tipoAtual = "none" end,
+["Chuva"] = function() tipoAtual = "criarParticulaChuva" end,
 ["Fogo"] = function() tipoAtual = "criarParticulaFogo" end,
 ["Neon"] = function() tipoAtual = "criarParticulaNeon" end,
-["Chuva"] = function() tipoAtual = "criarParticulaChuva" end,
+["Sem Partícula"] = function() tipoAtual = "none" end,
 ["Matrix"] = function() tipoAtual = "criarParticulaMatrix" end,
+["Nanopartículas"] = function() tipoAtual = "criarParticulaNano" end,
 }
 
 -- Criar o GUI se não existir
