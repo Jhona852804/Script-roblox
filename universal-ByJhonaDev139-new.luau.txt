@@ -411,57 +411,47 @@ end
 
 ---------------------------&
 -- Tabela para rastrear os painéis criados por ID
-local sliderPanels = {}
+local function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
+    -- Verifica se já existe um painel com o mesmo ID
+    local painelExistente = extraPanel:FindFirstChild(id)
+    if painelExistente then
+        painelExistente:Destroy()
+        return -- Remove se já existir e encerra
+    end
 
-function criarSliderNoExtraPanel(id, titulo, min, max, aoAlterar)
-    -- Torna o painel visível
+    -- Torna visível o painel
     extraPanel.Visible = true
     extraPanel.BackgroundTransparency = 0
 
-    -- Se já existe um painel com esse ID, remove
-    if sliderPanels[id] then
-        sliderPanels[id]:Destroy()
-        sliderPanels[id] = nil
-        return -- Oculta se quiser que o clique desative
-    end
+    -- Cria o frame para esse conjunto de sliders
+    local window = Instance.new("Frame")
+    window.Name = id
+    window.Size = UDim2.new(1, -20, 0, 100)
+    window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    window.BorderSizePixel = 0
+    window.Parent = extraPanel
 
-    -- Criação do painel
-    local window = Instance.new("ScrollingFrame")
-window.Name = id
-window.Size = UDim2.new(1, -20, 0, 100)
-window.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-window.BorderSizePixel = 0
-window.CanvasSize = UDim2.new(0, 0, 0, 0)
-window.ScrollBarThickness = 4
-window.ScrollBarImageColor3 = Color3.fromRGB(200, 200, 200)
-window.AutomaticCanvasSize = Enum.AutomaticSize.Y
-window.Parent = extraPanel
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = window
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = window
-
-local layout = Instance.new("UIListLayout")
-layout.Padding = UDim.new(0, 8)
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.Parent = window
-
-    local title = Instance.new("TextLabel")
+    local title = Instance.new("TextLabel", window)
     title.Size = UDim2.new(1, 0, 0, 25)
+    title.Position = UDim2.new(0, 0, 0, 0)
     title.Text = titulo
     title.TextColor3 = Color3.new(1, 1, 1)
     title.BackgroundTransparency = 1
     title.Font = Enum.Font.SourceSansBold
     title.TextSize = 18
-    title.Parent = window
 
-    local sliderBar = Instance.new("Frame")
+    -- SliderBar
+    local sliderBar = Instance.new("Frame", window)
     sliderBar.Size = UDim2.new(1, -40, 0, 4)
     sliderBar.Position = UDim2.new(0, 20, 0, 50)
     sliderBar.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    sliderBar.Parent = window
 
-    local valueButton = Instance.new("TextButton")
+    -- Botão com valor
+    local valueButton = Instance.new("TextButton", window)
     valueButton.Size = UDim2.new(0, 60, 0, 20)
     valueButton.Position = UDim2.new(0, 20, 0, 40)
     valueButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -469,22 +459,19 @@ layout.Parent = window
     valueButton.Font = Enum.Font.SourceSansBold
     valueButton.TextSize = 14
     valueButton.Text = tostring(min)
-    valueButton.Parent = window
 
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(0, 6)
     btnCorner.Parent = valueButton
 
-    -- Slider funcional
+    -- Arrastar valor do slider
     local dragging = false
     local uis = game:GetService("UserInputService")
-    local runService = game:GetService("RunService")
     local connection
 
     valueButton.MouseButton1Down:Connect(function()
         dragging = true
-
-        connection = runService.RenderStepped:Connect(function()
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
             if dragging then
                 local mouseX = uis:GetMouseLocation().X
                 local barAbsPos = sliderBar.AbsolutePosition.X
@@ -504,6 +491,12 @@ layout.Parent = window
         end)
     end)
 
+    -- Finalizar arraste
+    valueButton.MouseButton1Up:Connect(function()
+        dragging = false
+        if connection then connection:Disconnect() end
+    end)
+
     uis.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
@@ -511,10 +504,13 @@ layout.Parent = window
         end
     end)
 
-    -- Salva painel para controle posterior
-    sliderPanels[id] = window
+    -- Atualizar CanvasSize do extraPanel automaticamente
+    task.wait()
+    local layout = extraPanel:FindFirstChildOfClass("UIListLayout")
+    if layout then
+        extraPanel.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
+    end
 end
-
 
 
 
