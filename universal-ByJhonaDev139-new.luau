@@ -1009,12 +1009,24 @@ end},
         end)
         table.insert(connections, joinConn)
 
-    else
-        local chamsFrames = 0  
+    else  
+    -- Desativar Chams  
+    for _, p in pairs(game.Players:GetPlayers()) do  
+        local char = p.Character  
+        if char then  
+            local h = char:FindFirstChild("ChamsEffect")  
+            if h then h:Destroy() end  
+        end  
+    end  
+
+    for _, c in pairs(connections) do  
+        c:Disconnect()  
+    end  
+    connections = {}  
+
+    -- Verifica se só há sliders do chams no extraPanel  
+    local chamsFrames = 0  
     local totalFrames = 0  
-local chamsEnabled = false
-local connections = {}
-local slidersCriados = false
 
     for _, child in ipairs(extraPanel:GetChildren()) do  
         if child:IsA("Frame") then  
@@ -1034,9 +1046,7 @@ local slidersCriados = false
             end  
         end  
     end  
-
-        
-    end --else
+end
 end},
 
 
