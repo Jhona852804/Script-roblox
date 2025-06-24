@@ -1051,8 +1051,15 @@ end},
 			textLabel.Size = UDim2.new(1, 0, 1, 0)
 			textLabel.BackgroundTransparency = 1
 			textLabel.TextScaled = true
-			textLabel.Text = character.Parent.Name
 			textLabel.TextColor3 = Color3.fromRGB(espR, espG, espB)
+
+			-- ✅ Correção do nome: agora pega o nome real do jogador
+			local playerFromChar = game.Players:GetPlayerFromCharacter(character)
+			if playerFromChar then
+				textLabel.Text = playerFromChar.Name
+			else
+				textLabel.Text = "Player"
+			end
 		else
 			local text = gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
 			if text then
@@ -1065,6 +1072,8 @@ end},
 		for _, player in pairs(game.Players:GetPlayers()) do
 			if player ~= game.Players.LocalPlayer then
 				aplicarESP(player.Character)
+
+				-- ✅ Adicionado: aplicar ESP em respawn dos jogadores atuais
 				local c = player.CharacterAdded:Connect(function(char)
 					aplicarESP(char)
 				end)
@@ -1072,6 +1081,7 @@ end},
 			end
 		end
 
+		-- ✅ Já existia, mantido para novos jogadores
 		local joinConn = game.Players.PlayerAdded:Connect(function(p)
 			local charConn = p.CharacterAdded:Connect(function(char)
 				aplicarESP(char)
@@ -1080,6 +1090,7 @@ end},
 		end)
 		table.insert(connections, joinConn)
 
+		-- ⚠️ Criação dos sliders RGB:
 		extraPanel.Visible = true
 		extraPanel.BackgroundTransparency = 0
 
@@ -1134,16 +1145,16 @@ end},
 		end
 		connections = {}
 
-		-- Remove somente os sliders do ESP Name
+		-- ✅ Substituição: remove qualquer slider com "ESPName" no nome
 		for _, child in ipairs(extraPanel:GetChildren()) do
-			if child:IsA("TextButton") and child.Name:find("ESPName") then
+			if child.Name:find("ESPName") then
 				child:Destroy()
 			end
 		end
 
 		espSlidersCriados = false
 
-		-- Oculta painel se não houver sliders restantes
+		-- ✅ Oculta o extraPanel se não houver sliders restantes
 		local slidersRestantes = false
 		for _, child in ipairs(extraPanel:GetChildren()) do
 			if child:IsA("TextButton") then
