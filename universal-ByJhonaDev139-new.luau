@@ -1065,26 +1065,34 @@ end},
     end
 
     if espEnabled then
-        -- aplica aos jogadores já no servidor e conecta respawn
-        for _, player in ipairs(game.Players:GetPlayers()) do
-            if player ~= game.Players.LocalPlayer then
-                if player.Character then
-                    aplicarESP(player.Character)
-                end
-                local c1 = player.CharacterAdded:Connect(aplicarESP)
-                table.insert(connections, c1)
-            end
-        end
+	for _, player in pairs(game.Players:GetPlayers()) do
+		if player ~= game.Players.LocalPlayer then
+			if player.Character then
+				aplicarESP(player.Character)
+			end
 
-        -- aplica a novos jogadores
-        local joinConn = game.Players.PlayerAdded:Connect(function(p)
-            if p.Character then
-                aplicarESP(p.Character)
-            end
-            local c2 = p.CharacterAdded:Connect(aplicarESP)
-            table.insert(connections, c2)
-        end)
-        table.insert(connections, joinConn)
+			local charConn = player.CharacterAdded:Connect(function(char)
+				aplicarESP(char)
+			end)
+			table.insert(connections, charConn)
+		end
+	end
+
+	local joinConn = game.Players.PlayerAdded:Connect(function(p)
+		local function onChar(char)
+			aplicarESP(char)
+		end
+
+		if p ~= game.Players.LocalPlayer then
+			if p.Character then
+				aplicarESP(p.Character)
+			end
+
+			local addedConn = p.CharacterAdded:Connect(onChar)
+			table.insert(connections, addedConn)
+		end
+	end)
+	table.insert(connections, joinConn)
 
         extraPanel.Visible = true
         extraPanel.BackgroundTransparency = 0
