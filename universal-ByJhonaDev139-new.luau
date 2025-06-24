@@ -1026,146 +1026,128 @@ end},
 
 
 
+
 {name = "ESP name", func = function()
-	espEnabled = not espEnabled
+    espEnabled = not espEnabled
 
-	local function aplicarESP(character)
-		local hrp = character:FindFirstChild("HumanoidRootPart")
-		if not hrp then return end
+    local function aplicarESP(character)
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
 
-		local gui = hrp:FindFirstChild("ESPLabel")
-		if not gui then
-			gui = Instance.new("BillboardGui")
-			gui.Name = "ESPLabel"
-			gui.Size = UDim2.new(0, 70, 0, 10)
-			gui.Adornee = hrp
-			gui.AlwaysOnTop = true
-			gui.Parent = hrp
+        local gui = hrp:FindFirstChild("ESPLabel")
+        if not gui then
+            gui = Instance.new("BillboardGui", hrp)
+            gui.Name = "ESPLabel"
+            gui.Size = UDim2.new(0, 70, 0, 10)
+            gui.Adornee = hrp
+            gui.AlwaysOnTop = true
 
-			local frame = Instance.new("Frame", gui)
-			frame.Size = UDim2.new(1, 0, 1, 0)
-			frame.BackgroundTransparency = 1
+            local frame = Instance.new("Frame", gui)
+            frame.Size = UDim2.new(1, 0, 1, 0)
+            frame.BackgroundTransparency = 1
 
-			local textLabel = Instance.new("TextLabel", frame)
-			textLabel.Name = "ESPText"
-			textLabel.Size = UDim2.new(1, 0, 1, 0)
-			textLabel.BackgroundTransparency = 1
-			textLabel.TextScaled = true
-			textLabel.TextColor3 = Color3.fromRGB(espR, espG, espB)
+            local textLabel = Instance.new("TextLabel", frame)
+            textLabel.Name = "ESPText"
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.TextScaled = true
+            textLabel.TextColor3 = Color3.fromRGB(espR, espG, espB)
 
-			-- ✅ Correção do nome: agora pega o nome real do jogador
-			local playerFromChar = game.Players:GetPlayerFromCharacter(character)
-			if playerFromChar then
-				textLabel.Text = playerFromChar.Name
-			else
-				textLabel.Text = "Player"
-			end
-		else
-			local text = gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
-			if text then
-				text.TextColor3 = Color3.fromRGB(espR, espG, espB)
-			end
-		end
-	end
+            -- pega o nome real do jogador
+            local pl = game.Players:GetPlayerFromCharacter(character)
+            textLabel.Text = pl and pl.Name or "Player"
+        else
+            local text = gui.Frame:FindFirstChild("ESPText")
+            if text then
+                text.TextColor3 = Color3.fromRGB(espR, espG, espB)
+            end
+        end
+    end
 
-	if espEnabled then
-		for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer then
-				aplicarESP(player.Character)
+    if espEnabled then
+        -- aplica aos jogadores já no servidor e conecta respawn
+        for _, player in ipairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer then
+                if player.Character then
+                    aplicarESP(player.Character)
+                end
+                local c1 = player.CharacterAdded:Connect(aplicarESP)
+                table.insert(connections, c1)
+            end
+        end
 
-				-- ✅ Adicionado: aplicar ESP em respawn dos jogadores atuais
-				local c = player.CharacterAdded:Connect(function(char)
-					aplicarESP(char)
-				end)
-				table.insert(connections, c)
-			end
-		end
+        -- aplica a novos jogadores
+        local joinConn = game.Players.PlayerAdded:Connect(function(p)
+            if p.Character then
+                aplicarESP(p.Character)
+            end
+            local c2 = p.CharacterAdded:Connect(aplicarESP)
+            table.insert(connections, c2)
+        end)
+        table.insert(connections, joinConn)
 
-		-- ✅ Já existia, mantido para novos jogadores
-		local joinConn = game.Players.PlayerAdded:Connect(function(p)
-			local charConn = p.CharacterAdded:Connect(function(char)
-				aplicarESP(char)
-			end)
-			table.insert(connections, charConn)
-		end)
-		table.insert(connections, joinConn)
+        extraPanel.Visible = true
+        extraPanel.BackgroundTransparency = 0
 
-		-- ⚠️ Criação dos sliders RGB:
-		extraPanel.Visible = true
-		extraPanel.BackgroundTransparency = 0
+        if not espSlidersCriados then
+            criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
+                espR = v
+                for _, p in ipairs(game.Players:GetPlayers()) do
+                    local lbl = p.Character and p.Character:FindFirstChild("ESPLabel")
+                    if lbl and lbl.Frame:FindFirstChild("ESPText") then
+                        lbl.Frame.ESPText.TextColor3 = Color3.fromRGB(espR, espG, espB)
+                    end
+                end
+            end)
+            criarNovoSlider("ESPName - Verde", 0, 255, function(v)
+                espG = v
+                for _, p in ipairs(game.Players:GetPlayers()) do
+                    local lbl = p.Character and p.Character:FindFirstChild("ESPLabel")
+                    if lbl and lbl.Frame:FindFirstChild("ESPText") then
+                        lbl.Frame.ESPText.TextColor3 = Color3.fromRGB(espR, espG, espB)
+                    end
+                end
+            end)
+            criarNovoSlider("ESPName - Azul",   0, 255, function(v)
+                espB = v
+                for _, p in ipairs(game.Players:GetPlayers()) do
+                    local lbl = p.Character and p.Character:FindFirstChild("ESPLabel")
+                    if lbl and lbl.Frame:FindFirstChild("ESPText") then
+                        lbl.Frame.ESPText.TextColor3 = Color3.fromRGB(espR, espG, espB)
+                    end
+                end
+            end)
+            espSlidersCriados = true
+        end
 
-		if not espSlidersCriados then
-			criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
-				espR = v
-				for _, p in pairs(game.Players:GetPlayers()) do
-					local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-					local gui = h and h:FindFirstChild("ESPLabel")
-					local text = gui and gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
-					if text then text.TextColor3 = Color3.fromRGB(espR, espG, espB) end
-				end
-			end)
+    else
+        -- remove ESP
+        for _, p in ipairs(game.Players:GetPlayers()) do
+            local hrp = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local gui = hrp:FindFirstChild("ESPLabel")
+                if gui then gui:Destroy() end
+            end
+        end
+        -- desconecta eventos
+        for _, c in ipairs(connections) do
+            c:Disconnect()
+        end
+        connections = {}
 
-			criarNovoSlider("ESPName - Verde", 0, 255, function(v)
-				espG = v
-				for _, p in pairs(game.Players:GetPlayers()) do
-					local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-					local gui = h and h:FindFirstChild("ESPLabel")
-					local text = gui and gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
-					if text then text.TextColor3 = Color3.fromRGB(espR, espG, espB) end
-				end
-			end)
+        -- destrói apenas os sliders do ESP name
+        for _, child in ipairs(extraPanel:GetChildren()) do
+            if child.Name:match("^ESPName") then
+                child:Destroy()
+            end
+        end
+        espSlidersCriados = false
 
-			criarNovoSlider("ESPName - Azul", 0, 255, function(v)
-				espB = v
-				for _, p in pairs(game.Players:GetPlayers()) do
-					local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-					local gui = h and h:FindFirstChild("ESPLabel")
-					local text = gui and gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
-					if text then text.TextColor3 = Color3.fromRGB(espR, espG, espB) end
-				end
-			end)
-
-			espSlidersCriados = true
-		end
-
-	else
-		for _, p in pairs(game.Players:GetPlayers()) do
-			local char = p.Character
-			if char then
-				local h = char:FindFirstChild("HumanoidRootPart")
-				if h then
-					local gui = h:FindFirstChild("ESPLabel")
-					if gui then gui:Destroy() end
-				end
-			end
-		end
-
-		for _, c in pairs(connections) do
-			c:Disconnect()
-		end
-		connections = {}
-
-		-- ✅ Substituição: remove qualquer slider com "ESPName" no nome
-		for _, child in ipairs(extraPanel:GetChildren()) do
-			if child.Name:find("ESPName") then
-				child:Destroy()
-			end
-		end
-
-		espSlidersCriados = false
-
-		-- ✅ Oculta o extraPanel se não houver sliders restantes
-		local slidersRestantes = false
-		for _, child in ipairs(extraPanel:GetChildren()) do
-			if child:IsA("TextButton") then
-				slidersRestantes = true
-				break
-			end
-		end
-		if not slidersRestantes then
-			extraPanel.Visible = false
-		end
-	end
+        -- oculta painel se não houver mais sliders
+        if #extraPanel:GetChildren() == 0 then
+            extraPanel.Visible = false
+        end
+    end
 end},
     
   {name = "ESP Box",  func = (function()
