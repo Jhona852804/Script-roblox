@@ -1027,6 +1027,7 @@ end},
 
 
 {name = "ESP name", func = function()
+    local espNameColor = Color3.new(1, 1, 1) -- Cor padrão branca
 
    
     local espPanel = extraPanel:FindFirstChild("ESPNamePanel")
