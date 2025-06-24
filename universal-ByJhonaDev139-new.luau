@@ -1012,6 +1012,9 @@ end},
     else
         local chamsFrames = 0  
     local totalFrames = 0  
+local chamsEnabled = false
+local connections = {}
+local slidersCriados = false
 
     for _, child in ipairs(extraPanel:GetChildren()) do  
         if child:IsA("Frame") then  
@@ -1031,7 +1034,7 @@ end},
             end  
         end  
     end  
-connection = {}
+
         
     end --else
 end},
