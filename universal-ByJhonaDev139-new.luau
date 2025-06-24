@@ -1027,304 +1027,135 @@ end},
 
 
 {name = "ESP name", func = function()
-    local espNameColor = Color3.new(1, 1, 1) -- Cor padrão branca
+	espEnabled = not espEnabled
 
-   
-    local espPanel = extraPanel:FindFirstChild("ESPNamePanel")
-    local slidersAtivos = espPanel ~= nil
-    local connections = {}
+	local function aplicarESP(character)
+		local hrp = character:FindFirstChild("HumanoidRootPart")
+		if not hrp then return end
 
-    -- Função para atualizar a cor de todos os ESPs ativos
-    local function atualizarCorESP()
-        for _, target in pairs(Players:GetPlayers()) do
-            if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                local hrp = target.Character.HumanoidRootPart
-                local label = hrp:FindFirstChild("ESPLabel")
-                if label and label:FindFirstChild("Frame") and label.Frame:FindFirstChild("ESPText") then
-                    label.Frame.ESPText.TextColor3 = espNameColor
-                end
-            end
-        end
-    end
+		local gui = hrp:FindFirstChild("ESPLabel")
+		if not gui then
+			gui = Instance.new("BillboardGui")
+			gui.Name = "ESPLabel"
+			gui.Size = UDim2.new(0, 70, 0, 10)
+			gui.Adornee = hrp
+			gui.AlwaysOnTop = true
+			gui.Parent = hrp
 
-    -- Criação dos sliders RGB
-    local function criarSlidersRGB()
-        extraPanel.Visible = true
+			local frame = Instance.new("Frame", gui)
+			frame.Size = UDim2.new(1, 0, 1, 0)
+			frame.BackgroundTransparency = 1
 
-        local panel = Instance.new("Frame", extraPanel)
-        panel.Name = "ESPNamePanel"
-        panel.Size = UDim2.new(1, -10, 0, 150)
-        panel.Position = UDim2.new(0, 5, 0, 5 + #extraPanel:GetChildren() * 160)
-        panel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+			local textLabel = Instance.new("TextLabel", frame)
+			textLabel.Name = "ESPText"
+			textLabel.Size = UDim2.new(1, 0, 1, 0)
+			textLabel.BackgroundTransparency = 1
+			textLabel.TextScaled = true
+			textLabel.Text = character.Parent.Name
+			textLabel.TextColor3 = Color3.fromRGB(espR, espG, espB)
+		else
+			local text = gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
+			if text then
+				text.TextColor3 = Color3.fromRGB(espR, espG, espB)
+			end
+		end
+	end
 
-        local title = Instance.new("TextLabel", panel)
-        title.Size = UDim2.new(1, 0, 0, 25)
-        title.Text = "ESP Name RGB"
-        title.TextColor3 = Color3.new(1, 1, 1)
-        title.BackgroundTransparency = 1
-        title.Font = Enum.Font.SourceSansBold
-        title.TextSize = 16
+	if espEnabled then
+		for _, player in pairs(game.Players:GetPlayers()) do
+			if player ~= game.Players.LocalPlayer then
+				aplicarESP(player.Character)
+				local c = player.CharacterAdded:Connect(function(char)
+					aplicarESP(char)
+				end)
+				table.insert(connections, c)
+			end
+		end
 
-        local function criarSlider(cor, yOffset)
-            local barra = Instance.new("Frame", panel)
-            barra.Size = UDim2.new(1, -40, 0, 4)
-            barra.Position = UDim2.new(0, 20, 0, yOffset + 15)
-            barra.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		local joinConn = game.Players.PlayerAdded:Connect(function(p)
+			local charConn = p.CharacterAdded:Connect(function(char)
+				aplicarESP(char)
+			end)
+			table.insert(connections, charConn)
+		end)
+		table.insert(connections, joinConn)
 
-            local botao = Instance.new("TextButton", panel)
-            botao.Size = UDim2.new(0, 60, 0, 20)
-            botao.Position = UDim2.new(0, 20, 0, yOffset + 5)
-            botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-            botao.TextColor3 = Color3.new(1, 1, 1)
-            botao.Font = Enum.Font.SourceSansBold
-            botao.TextSize = 14
-            botao.Text = cor .. ": 255"
-            botao.Name = "ESPNameSlider"
+		extraPanel.Visible = true
+		extraPanel.BackgroundTransparency = 0
 
-            local dragging = false
-            local userInput = game:GetService("UserInputService")
+		if not espSlidersCriados then
+			criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
+				espR = v
+				for _, p in pairs(game.Players:GetPlayers()) do
+					local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+					local gui = h and h:FindFirstChild("ESPLabel")
+					local text = gui and gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
+					if text then text.TextColor3 = Color3.fromRGB(espR, espG, espB) end
+				end
+			end)
 
-            botao.MouseButton1Down:Connect(function()
-                dragging = true
-            end)
+			criarNovoSlider("ESPName - Verde", 0, 255, function(v)
+				espG = v
+				for _, p in pairs(game.Players:GetPlayers()) do
+					local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+					local gui = h and h:FindFirstChild("ESPLabel")
+					local text = gui and gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
+					if text then text.TextColor3 = Color3.fromRGB(espR, espG, espB) end
+				end
+			end)
 
-            local up = userInput.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    dragging = false
-                end
-            end)
+			criarNovoSlider("ESPName - Azul", 0, 255, function(v)
+				espB = v
+				for _, p in pairs(game.Players:GetPlayers()) do
+					local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+					local gui = h and h:FindFirstChild("ESPLabel")
+					local text = gui and gui:FindFirstChild("Frame") and gui.Frame:FindFirstChild("ESPText")
+					if text then text.TextColor3 = Color3.fromRGB(espR, espG, espB) end
+				end
+			end)
 
-            local step = game:GetService("RunService").RenderStepped:Connect(function()
-                if dragging then
-                    local mouseX = userInput:GetMouseLocation().X
-                    local barPos = barra.AbsolutePosition.X
-                    local barW = barra.AbsoluteSize.X
-                    local relX = math.clamp(mouseX - barPos, 0, barW)
-                    botao.Position = UDim2.new(0, barra.Position.X.Offset + relX - botao.AbsoluteSize.X / 2, 0, yOffset + 5)
+			espSlidersCriados = true
+		end
 
-                    local valor = math.floor((relX / barW) * 255)
-                    botao.Text = cor .. ": " .. valor
+	else
+		for _, p in pairs(game.Players:GetPlayers()) do
+			local char = p.Character
+			if char then
+				local h = char:FindFirstChild("HumanoidRootPart")
+				if h then
+					local gui = h:FindFirstChild("ESPLabel")
+					if gui then gui:Destroy() end
+				end
+			end
+		end
 
-                    if cor == "R" then
-                        espNameColor = Color3.fromRGB(valor, espNameColor.G * 255, espNameColor.B * 255)
-                    elseif cor == "G" then
-                        espNameColor = Color3.fromRGB(espNameColor.R * 255, valor, espNameColor.B * 255)
-                    elseif cor == "B" then
-                        espNameColor = Color3.fromRGB(espNameColor.R * 255, espNameColor.G * 255, valor)
-                    end
+		for _, c in pairs(connections) do
+			c:Disconnect()
+		end
+		connections = {}
 
-                    atualizarCorESP()
-                end
-            end)
+		-- Remove somente os sliders do ESP Name
+		for _, child in ipairs(extraPanel:GetChildren()) do
+			if child:IsA("TextButton") and child.Name:find("ESPName") then
+				child:Destroy()
+			end
+		end
 
-            table.insert(connections, step)
-            table.insert(connections, up)
-        end
+		espSlidersCriados = false
 
-        criarSlider("R", 30)
-        criarSlider("G", 70)
-        criarSlider("B", 110)
-    end
-
-    -- Função para criar/atualizar o ESP Name
-    local function updateESPName(target)
-        if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-            local hrp = target.Character.HumanoidRootPart
-            local label = hrp:FindFirstChild("ESPLabel")
-
-            if not label then
-                label = Instance.new("BillboardGui", hrp)
-                label.Size = UDim2.new(0, 70, 0, 10)
-                label.Adornee = hrp
-                label.AlwaysOnTop = true
-                label.Name = "ESPLabel"
-
-                local frame = Instance.new("Frame", label)
-                frame.Size = UDim2.new(1, 0, 1, 0)
-                frame.BackgroundTransparency = 1
-
-                local textLabel = Instance.new("TextLabel", frame)
-                textLabel.Size = UDim2.new(1, 0, 1, 0)
-                textLabel.Text = target.Name
-                textLabel.TextColor3 = espNameColor
-                textLabel.BackgroundTransparency = 1
-                textLabel.TextScaled = true
-                textLabel.Name = "ESPText"
-            end
-        end
-    end
-
-    -- Remove todos os ESPs
-    local function removeESPNames()
-        for _, target in pairs(Players:GetPlayers()) do
-            if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                local hrp = target.Character.HumanoidRootPart
-                local label = hrp:FindFirstChild("ESPLabel")
-                if label then
-                    label:Destroy()
-                end
-            end
-        end
-    end
-
-    -- Evento para novos jogadores ou respawn
-    if not espNameConnection then
-        espNameConnection = Players.PlayerAdded:Connect(function(plr)
-            plr.CharacterAdded:Connect(function()
-                if espEnabled then
-                    updateESPName(plr)
-                end
-            end)
-        end)
-    end
-
-    -- Clique no botão
-    if espEnabled and slidersAtivos then
-        -- Desativa ESP e remove painel
-        removeESPNames()
-        espEnabled = false
-        for _, conn in pairs(connections) do conn:Disconnect() end
-        connections = {}
-        espPanel:Destroy()
-
-        -- Se não houver mais sliders, ocultar o extraPanel
-        if #extraPanel:GetChildren() == 0 then
-            extraPanel.Visible = false
-        end
-
-        print("ESP Name Desativado")
-    else
-        -- Ativa ESP e cria sliders se ainda não tiver
-        for _, target in pairs(Players:GetPlayers()) do
-            if target ~= player then
-                updateESPName(target)
-            end
-        end
-        espEnabled = true
-        if not slidersAtivos then
-            criarSlidersRGB()
-        end
-        print("ESP Name Ativado")
-    end
+		-- Oculta painel se não houver sliders restantes
+		local slidersRestantes = false
+		for _, child in ipairs(extraPanel:GetChildren()) do
+			if child:IsA("TextButton") then
+				slidersRestantes = true
+				break
+			end
+		end
+		if not slidersRestantes then
+			extraPanel.Visible = false
+		end
+	end
 end},
---TESTE F
-
-{name = "ESP Line", func = (function()
-    local ativo = false
-    local linhas = {}
-    local conexoes = {}
-
-    return function()
-        if not ativo then
-            ativo = true
-
-            local gui = Instance.new("ScreenGui")
-            gui.Name = "ESPLineGui"
-            gui.ResetOnSpawn = false
-            gui.IgnoreGuiInset = true
-            gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-            gui.DisplayOrder = 100
-            gui.Parent = player:FindFirstChildOfClass("PlayerGui") or player.PlayerGui
-
-            local function criarLinha(alvo)
-                if alvo == player then return end
-
-                local frame = Instance.new("Frame")
-                frame.BackgroundTransparency = 1
-                frame.BorderSizePixel = 0
-                frame.AnchorPoint = Vector2.new(0.5, 0.5)
-                frame.Size = UDim2.new(0, 0, 0, 0)
-                frame.ZIndex = 1
-                frame.Visible = false
-                frame.Name = alvo.Name .. "_ESPPoint"
-                frame.Parent = gui
-
-                local line = Instance.new("Frame")
-                line.AnchorPoint = Vector2.new(0.5, 0.5)
-                line.BackgroundColor3 = espColor
-                line.BorderSizePixel = 0
-                line.ZIndex = 1
-                line.Parent = gui
-                line.Visible = false
-
-                linhas[alvo] = {frame = frame, line = line}
-
-                conexoes[alvo] = RunService.RenderStepped:Connect(function()
-                    local char = alvo.Character
-                    local root = char and char:FindFirstChild("HumanoidRootPart")
-                    local hum = char and char:FindFirstChildOfClass("Humanoid")
-
-                    if root and hum and hum.Health > 0 then
-                        local pontos3D = {
-                            Vector3.new(-1.5, 2.5, -1.5),
-                            Vector3.new(1.5, 2.5, -1.5),
-                            Vector3.new(1.5, -2.5, 1.5),
-                            Vector3.new(-1.5, -2.5, 1.5),
-                        }
-
-                        local minX, minY = math.huge, math.huge
-                        local maxX, maxY = -math.huge, -math.huge
-                        local visible = false
-
-                        for _, offset in ipairs(pontos3D) do
-                            local world = root.Position + offset
-                            local screenPos, onScreen = Camera:WorldToScreenPoint(world)
-                            if onScreen then
-                                minX = math.min(minX, screenPos.X)
-                                minY = math.min(minY, screenPos.Y)
-                                maxX = math.max(maxX, screenPos.X)
-                                maxY = math.max(maxY, screenPos.Y)
-                                visible = true
-                            end
-                        end
-
-                        if visible then
-                            local cx = (minX + maxX) / 2
-                            local cy = (minY + maxY) / 2
-
-                            frame.Position = UDim2.new(0, cx, 0, cy)
-                            frame.Visible = false
-
-                            local screenBottom = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
-                            local delta = Vector2.new(cx, cy) - screenBottom
-                            local distance = delta.Magnitude
-
-                            line.Position = UDim2.new(0, (cx + screenBottom.X) / 2, 0, (cy + screenBottom.Y) / 2)
-                            line.Size = UDim2.new(0, 2, 0, distance)
-                            line.Rotation = math.deg(math.atan2(delta.Y, delta.X)) + 90
-                            line.Visible = true
-                        else
-                            line.Visible = false
-                        end
-                    else
-                        line.Visible = false
-                    end
-                end)
-            end
-
-            for _, p in pairs(Players:GetPlayers()) do criarLinha(p) end
-
-            table.insert(conexoes, Players.PlayerAdded:Connect(criarLinha))
-            table.insert(conexoes, Players.PlayerRemoving:Connect(function(p)
-                if conexoes[p] then conexoes[p]:Disconnect() end
-                if linhas[p] then
-                    if linhas[p].frame then linhas[p].frame:Destroy() end
-                    if linhas[p].line then linhas[p].line:Destroy() end
-                end
-                conexoes[p], linhas[p] = nil, nil
-            end))
-
-        else
-            ativo = false
-            for _, c in pairs(conexoes) do if typeof(c) == "RBXScriptConnection" then c:Disconnect() end end
-            for _, esp in pairs(linhas) do
-                if esp.frame then esp.frame:Destroy() end
-                if esp.line then esp.line:Destroy() end
-            end
-            conexoes, linhas = {}, {}
-        end
-    end
-end)()},
     
   {name = "ESP Box",  func = (function()
         local espAtivo = false
