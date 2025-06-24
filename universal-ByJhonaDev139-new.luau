@@ -24,6 +24,8 @@ local chamsR, chamsG, chamsB = 255, 0, 0
 local chamsEnabled = false
 local connections = {}
 local slidersCriados = false
+local loopConn
+
 -- Variáveis iniciais (no início do seu script)
 local espSlidersCriados = false
      
@@ -1026,126 +1028,90 @@ end},
 
 
 
+
+
+
 {name = "ESP name", func = function()
     espEnabled = not espEnabled
 
-    -- Função que aplica ou atualiza o ESP name em um character
-    local function aplicarESP(character)
-        local hrp = character:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
-
-        local gui = hrp:FindFirstChild("ESPLabel")
-        if not gui then
-            gui = Instance.new("BillboardGui", hrp)
-            gui.Name = "ESPLabel"
-            gui.Size = UDim2.new(0, 70, 0, 10)
-            gui.Adornee = hrp
-            gui.AlwaysOnTop = true
-
-            local frame = Instance.new("Frame", gui)
-            frame.Size = UDim2.new(1, 0, 1, 0)
-            frame.BackgroundTransparency = 1
-
-            local textLabel = Instance.new("TextLabel", frame)
-            textLabel.Name = "ESPText"
-            textLabel.Size = UDim2.new(1, 0, 1, 0)
-            textLabel.BackgroundTransparency = 1
-            textLabel.TextScaled = true
-            textLabel.TextColor3 = espColor
-
-            -- Pega o nome real do jogador
-            local pl = game.Players:GetPlayerFromCharacter(character)
-            textLabel.Text = pl and pl.Name or "Player"
-        else
-            local text = gui.Frame:FindFirstChild("ESPText")
-            if text then
-                text.TextColor3 = espColor
-            end
-        end
-    end
-
     if espEnabled then
-        -- Aplica a quem já está no jogo e conecta respawns
-        for _, player in ipairs(game.Players:GetPlayers()) do
-            if player ~= game.Players.LocalPlayer then
-                if player.Character then
-                    aplicarESP(player.Character)
-                end
-                local c = player.CharacterAdded:Connect(aplicarESP)
-                table.insert(connections, c)
-            end
-        end
-
-        -- Conecta novos jogadores
-        local joinConn = game.Players.PlayerAdded:Connect(function(p)
-            if p.Character then
-                aplicarESP(p.Character)
-            end
-            local c = p.CharacterAdded:Connect(aplicarESP)
-            table.insert(connections, c)
-        end)
-        table.insert(connections, joinConn)
-
-        -- Cria sliders RGB
+        -- 1) Criar sliders RGB no extraPanel
         extraPanel.Visible = true
         extraPanel.BackgroundTransparency = 0
 
-        if not espSlidersCriados then
-            criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
-                espColor = Color3.fromRGB(v, espColor.G * 255, espColor.B * 255)
-                for _, p in ipairs(game.Players:GetPlayers()) do
-                    local lbl = p.Character and p.Character:FindFirstChild("ESPLabel")
-                    local txt = lbl and lbl.Frame:FindFirstChild("ESPText")
-                    if txt then txt.TextColor3 = espColor end
-                end
-            end)
+        criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
+            espColor = Color3.fromRGB(v, espColor.G * 255, espColor.B * 255)
+        end)
+        criarNovoSlider("ESPName - Verde",    0, 255, function(v)
+            espColor = Color3.fromRGB(espColor.R * 255, v, espColor.B * 255)
+        end)
+        criarNovoSlider("ESPName - Azul",     0, 255, function(v)
+            espColor = Color3.fromRGB(espColor.R * 255, espColor.G * 255, v)
+        end)
 
-            criarNovoSlider("ESPName - Verde", 0, 255, function(v)
-                espColor = Color3.fromRGB(espColor.R * 255, v, espColor.B * 255)
-                for _, p in ipairs(game.Players:GetPlayers()) do
-                    local lbl = p.Character and p.Character:FindFirstChild("ESPLabel")
-                    local txt = lbl and lbl.Frame:FindFirstChild("ESPText")
-                    if txt then txt.TextColor3 = espColor end
-                end
-            end)
+        -- 2) Loop contínuo para aplicar ESP name em todos (novos, respawns e já existentes)
+        loopConn = RunService.Heartbeat:Connect(function()
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= Players.LocalPlayer then
+                    local char = player.Character
+                    if char and char:FindFirstChild("HumanoidRootPart") then
+                        local hrp = char.HumanoidRootPart
+                        local gui = hrp:FindFirstChild("ESPLabel")
+                        if not gui then
+                            gui = Instance.new("BillboardGui", hrp)
+                            gui.Name = "ESPLabel"
+                            gui.Size = UDim2.new(0, 70, 0, 10)
+                            gui.Adornee = hrp
+                            gui.AlwaysOnTop = true
 
-            criarNovoSlider("ESPName - Azul", 0, 255, function(v)
-                espColor = Color3.fromRGB(espColor.R * 255, espColor.G * 255, v)
-                for _, p in ipairs(game.Players:GetPlayers()) do
-                    local lbl = p.Character and p.Character:FindFirstChild("ESPLabel")
-                    local txt = lbl and lbl.Frame:FindFirstChild("ESPText")
-                    if txt then txt.TextColor3 = espColor end
-                end
-            end)
+                            local frame = Instance.new("Frame", gui)
+                            frame.Size = UDim2.new(1, 0, 1, 0)
+                            frame.BackgroundTransparency = 1
 
-            espSlidersCriados = true
-        end
+                            local textLabel = Instance.new("TextLabel", frame)
+                            textLabel.Name = "ESPText"
+                            textLabel.Size = UDim2.new(1, 0, 1, 0)
+                            textLabel.BackgroundTransparency = 1
+                            textLabel.TextScaled = true
+                            textLabel.Text = player.Name
+                        end
+                        -- atualiza cor em tempo real
+                        local text = gui.Frame:FindFirstChild("ESPText")
+                        if text then
+                            text.TextColor3 = espColor
+                        end
+                    end
+                end
+            end
+        end)
 
     else
-        -- Remove todos os ESP Labels
-        for _, p in ipairs(game.Players:GetPlayers()) do
-            local hrp = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                local gui = hrp:FindFirstChild("ESPLabel")
-                if gui then gui:Destroy() end
+        -- 1) Parar o loop
+        if loopConn then
+            loopConn:Disconnect()
+            loopConn = nil
+        end
+
+        -- 2) Destruir todos os ESPLabels
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player.Character then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local gui = hrp:FindFirstChild("ESPLabel")
+                    if gui then gui:Destroy() end
+                end
             end
         end
 
-        -- Desconecta eventos
-        for _, c in ipairs(connections) do
-            c:Disconnect()
-        end
-        connections = {}
-
-        -- Destroi somente os sliderFrames criados (são Frames em extraPanel)
+        -- 3) Destruir somente os sliderFrames do ESP name
         for _, child in ipairs(extraPanel:GetChildren()) do
-            if child:IsA("Frame") then
+            if child:IsA("Frame") and child:FindFirstChildOfClass("TextLabel")
+               and child:FindFirstChildOfClass("TextLabel").Text:match("^ESPName") then
                 child:Destroy()
             end
         end
-        espSlidersCriados = false
 
-        -- Oculta extraPanel se não houver sliders restantes
+        -- 4) Ocultar extraPanel se vazio
         if #extraPanel:GetChildren() == 0 then
             extraPanel.Visible = false
         end
