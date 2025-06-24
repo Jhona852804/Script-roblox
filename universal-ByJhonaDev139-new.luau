@@ -1040,14 +1040,28 @@ end},
         extraPanel.BackgroundTransparency = 0
 
         criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
-            espColor = Color3.fromRGB(v, espColor.G * 255, espColor.B * 255)
-        end)
-        criarNovoSlider("ESPName - Verde",    0, 255, function(v)
-            espColor = Color3.fromRGB(espColor.R * 255, v, espColor.B * 255)
-        end)
-        criarNovoSlider("ESPName - Azul",     0, 255, function(v)
-            espColor = Color3.fromRGB(espColor.R * 255, espColor.G * 255, v)
-        end)
+    espColor = Color3.fromRGB(
+        v,
+        math.floor(espColor.G * 255),
+        math.floor(espColor.B * 255)
+    )
+end)
+
+criarNovoSlider("ESPName - Verde", 0, 255, function(v)
+    espColor = Color3.fromRGB(
+        math.floor(espColor.R * 255),
+        v,
+        math.floor(espColor.B * 255)
+    )
+end)
+
+criarNovoSlider("ESPName - Azul", 0, 255, function(v)
+    espColor = Color3.fromRGB(
+        math.floor(espColor.R * 255),
+        math.floor(espColor.G * 255),
+        v
+    )
+end)
 
         -- 2) Loop contínuo para aplicar ESP name em todos (novos, respawns e já existentes)
         loopConn = RunService.Heartbeat:Connect(function()
