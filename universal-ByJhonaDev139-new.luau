@@ -1027,13 +1027,105 @@ end},
 
 
 {name = "ESP name", func = function()
-    
-    local espNameColor = Color3.new(1, 1, 1) -- Cor padrão branca
-    local player = game.Players.LocalPlayer
-    local RunService = game:GetService("RunService")
-    local Players = game:GetService("Players")
 
-    -- Função para criar ou atualizar ESP Name
+   
+    local espPanel = extraPanel:FindFirstChild("ESPNamePanel")
+    local slidersAtivos = espPanel ~= nil
+    local connections = {}
+
+    -- Função para atualizar a cor de todos os ESPs ativos
+    local function atualizarCorESP()
+        for _, target in pairs(Players:GetPlayers()) do
+            if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                local hrp = target.Character.HumanoidRootPart
+                local label = hrp:FindFirstChild("ESPLabel")
+                if label and label:FindFirstChild("Frame") and label.Frame:FindFirstChild("ESPText") then
+                    label.Frame.ESPText.TextColor3 = espNameColor
+                end
+            end
+        end
+    end
+
+    -- Criação dos sliders RGB
+    local function criarSlidersRGB()
+        extraPanel.Visible = true
+
+        local panel = Instance.new("Frame", extraPanel)
+        panel.Name = "ESPNamePanel"
+        panel.Size = UDim2.new(1, -10, 0, 150)
+        panel.Position = UDim2.new(0, 5, 0, 5 + #extraPanel:GetChildren() * 160)
+        panel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+
+        local title = Instance.new("TextLabel", panel)
+        title.Size = UDim2.new(1, 0, 0, 25)
+        title.Text = "ESP Name RGB"
+        title.TextColor3 = Color3.new(1, 1, 1)
+        title.BackgroundTransparency = 1
+        title.Font = Enum.Font.SourceSansBold
+        title.TextSize = 16
+
+        local function criarSlider(cor, yOffset)
+            local barra = Instance.new("Frame", panel)
+            barra.Size = UDim2.new(1, -40, 0, 4)
+            barra.Position = UDim2.new(0, 20, 0, yOffset + 15)
+            barra.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+
+            local botao = Instance.new("TextButton", panel)
+            botao.Size = UDim2.new(0, 60, 0, 20)
+            botao.Position = UDim2.new(0, 20, 0, yOffset + 5)
+            botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+            botao.TextColor3 = Color3.new(1, 1, 1)
+            botao.Font = Enum.Font.SourceSansBold
+            botao.TextSize = 14
+            botao.Text = cor .. ": 255"
+            botao.Name = "ESPNameSlider"
+
+            local dragging = false
+            local userInput = game:GetService("UserInputService")
+
+            botao.MouseButton1Down:Connect(function()
+                dragging = true
+            end)
+
+            local up = userInput.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    dragging = false
+                end
+            end)
+
+            local step = game:GetService("RunService").RenderStepped:Connect(function()
+                if dragging then
+                    local mouseX = userInput:GetMouseLocation().X
+                    local barPos = barra.AbsolutePosition.X
+                    local barW = barra.AbsoluteSize.X
+                    local relX = math.clamp(mouseX - barPos, 0, barW)
+                    botao.Position = UDim2.new(0, barra.Position.X.Offset + relX - botao.AbsoluteSize.X / 2, 0, yOffset + 5)
+
+                    local valor = math.floor((relX / barW) * 255)
+                    botao.Text = cor .. ": " .. valor
+
+                    if cor == "R" then
+                        espNameColor = Color3.fromRGB(valor, espNameColor.G * 255, espNameColor.B * 255)
+                    elseif cor == "G" then
+                        espNameColor = Color3.fromRGB(espNameColor.R * 255, valor, espNameColor.B * 255)
+                    elseif cor == "B" then
+                        espNameColor = Color3.fromRGB(espNameColor.R * 255, espNameColor.G * 255, valor)
+                    end
+
+                    atualizarCorESP()
+                end
+            end)
+
+            table.insert(connections, step)
+            table.insert(connections, up)
+        end
+
+        criarSlider("R", 30)
+        criarSlider("G", 70)
+        criarSlider("B", 110)
+    end
+
+    -- Função para criar/atualizar o ESP Name
     local function updateESPName(target)
         if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
             local hrp = target.Character.HumanoidRootPart
@@ -1061,7 +1153,7 @@ end},
         end
     end
 
-    -- Função para remover todos os ESP Names
+    -- Remove todos os ESPs
     local function removeESPNames()
         for _, target in pairs(Players:GetPlayers()) do
             if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
@@ -1074,23 +1166,47 @@ end},
         end
     end
 
-    -- Função principal do botão (ativa/desativa ESP)
-    if espEnabled then
-        -- Se já estiver ativado, desativa
+    -- Evento para novos jogadores ou respawn
+    if not espNameConnection then
+        espNameConnection = Players.PlayerAdded:Connect(function(plr)
+            plr.CharacterAdded:Connect(function()
+                if espEnabled then
+                    updateESPName(plr)
+                end
+            end)
+        end)
+    end
+
+    -- Clique no botão
+    if espEnabled and slidersAtivos then
+        -- Desativa ESP e remove painel
         removeESPNames()
         espEnabled = false
+        for _, conn in pairs(connections) do conn:Disconnect() end
+        connections = {}
+        espPanel:Destroy()
+
+        -- Se não houver mais sliders, ocultar o extraPanel
+        if #extraPanel:GetChildren() == 0 then
+            extraPanel.Visible = false
+        end
+
         print("ESP Name Desativado")
     else
-        -- Se estiver desativado, ativa
+        -- Ativa ESP e cria sliders se ainda não tiver
         for _, target in pairs(Players:GetPlayers()) do
             if target ~= player then
                 updateESPName(target)
             end
         end
         espEnabled = true
+        if not slidersAtivos then
+            criarSlidersRGB()
+        end
         print("ESP Name Ativado")
     end
 end},
+--TESTE F
 
 {name = "ESP Line", func = (function()
     local ativo = false
