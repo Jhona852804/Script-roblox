@@ -43,7 +43,7 @@ local function aplicarEstilo(ui, cor, raio)
 
 	local stroke = Instance.new("UIStroke")
 	stroke.Thickness = 1.2
-	stroke.Color = cor or Color3.fromRGB(30, 30, 30)
+	stroke.Color = cor or Color3.fromRGB(70, 70, 70)
 	stroke.Parent = ui
 end
 
@@ -59,12 +59,13 @@ local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 480, 0, 330)
 mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 mainFrame.BackgroundTransparency = 0
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
 mainFrame.Draggable = true
 mainFrame.Parent = screenGui
-aplicarEstilo(mainFrame, Color3.fromRGB(30, 30, 30), 10)
+aplicarEstilo(mainFrame, Color3.fromRGB(60, 60, 60), 10)
 
 local ParticleCanvas = Instance.new("Frame")
 ParticleCanvas.Name = "ParticleCanvas"
@@ -393,11 +394,11 @@ end
 --------------------FIM
 
 
--- Substitua:
+-- Painel esquerdo 
 local leftPanel = Instance.new("ScrollingFrame")
 leftPanel.Name = "leftPanel"
 leftPanel.Size = UDim2.new(0, 100, 1, -30)
-leftPanel.Position = UDim2.new(0, 0, 0, 30)
+leftPanel.Position = UDim2.new(0, 0, 0, 35)
 leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 leftPanel.BackgroundTransparency = 1
 leftPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Ajuste a altura conforme necessário
@@ -415,7 +416,7 @@ leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
 local rightPanel = Instance.new("ScrollingFrame")
 rightPanel.Name = "rightPanel"
 rightPanel.Size = UDim2.new(1, -100, 1, -30)
-rightPanel.Position = UDim2.new(0, 100, 0, 30)
+rightPanel.Position = UDim2.new(0, 100, 0, 35)
 rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 rightPanel.BackgroundTransparency = 1
 rightPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Altura virtual
@@ -451,11 +452,14 @@ local sliderLayout = Instance.new("UIListLayout")
 sliderLayout.Parent = extraPanel
 sliderLayout.Padding = UDim.new(0, 8)
 sliderLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+
 -----------------
 -- CRIAÇÃO DOS BOTÕES
 local function createButton(parent, text, onClick)
 local button = Instance.new("TextButton")
 button.Text = text
+button.Position = UDim2.new(0, 5, 0, 0) -- << Adicione esta linha
 button.Size = UDim2.new(1, -10, 0, 30)
 button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -473,6 +477,7 @@ end
 local function createHoldButton(parent, text, onHoldStart, onHoldStop)
     local button = Instance.new("TextButton")
     button.Text = text
+    button.Position = UDim2.new(0, 5, 0, 0) -- << Adicione esta linha
     button.Size = UDim2.new(1, -10, 0, 30)
     button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
