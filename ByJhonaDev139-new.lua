@@ -1,0 +1,2143 @@
+-- Serviços e variáveis iniciais 
+local Players = game:GetService("Players") 
+ 
+
+local player = Players.LocalPlayer  
+local ReplicatedStorage = game:GetService("ReplicatedStorage")  
+local character = player.Character or player.CharacterAdded:Wait()  
+local Camera = game.Workspace.CurrentCamera  
+local RunService = game:GetService("RunService")  
+local TweenService = game:GetService("TweenService")
+local hrp = character:FindFirstChild("HumanoidRootPart")  
+local humanoid = character:WaitForChild("Humanoid")
+
+local espEnabled = false  
+local espLines = {}  
+local espColor = Color3.fromRGB(255, 255, 255)  
+local ESP_Window = nil  
+local ESP_Ativo = false  
+
+local originalPosition = nil  
+local isFrozen = false  
+
+
+local LocalPlayer = Players.LocalPlayer
+local chamsR, chamsG, chamsB = 255, 0, 0
+local chamsEnabled = false
+local connections = {}
+local slidersCriados = false
+local loopConn
+
+local orbitEnabled = false
+local orbitSlidersCriados = false
+local orbitConnections = {}
+local orbitLightBlocks = {}
+
+-- Variáveis iniciais (no início do seu script)
+local espSlidersCriados = false
+     
+local function aplicarEstilo(ui, cor, raio)
+	local uiCorner = Instance.new("UICorner")
+	uiCorner.CornerRadius = UDim.new(0, raio or 6)
+	uiCorner.Parent = ui
+
+	local stroke = Instance.new("UIStroke")
+	stroke.Thickness = 1.2
+	stroke.Color = cor or Color3.fromRGB(70, 70, 70)
+	stroke.Parent = ui
+end
+
+
+
+-- Cria a ScreenGui e define como pai  
+local screenGui = Instance.new("ScreenGui")  
+screenGui.Name = "kdndiekdnfjjd"  
+screenGui.Parent = game.CoreGui
+
+-- Cria a janela principal (MainFrame)
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 480, 0, 330)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainFrame.BackgroundTransparency = 0
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+aplicarEstilo(mainFrame, Color3.fromRGB(60, 60, 60), 10)
+
+local ParticleCanvas = Instance.new("Frame")
+ParticleCanvas.Name = "ParticleCanvas"
+ParticleCanvas.BackgroundTransparency = 1
+ParticleCanvas.BorderSizePixel = 0
+ParticleCanvas.Size = UDim2.new(1, 0, 1, 0)
+ParticleCanvas.Position = UDim2.new(0, 0, 0, 0)
+ParticleCanvas.ZIndex = 1
+ParticleCanvas.ClipsDescendants = true
+ParticleCanvas.Parent = mainFrame
+
+
+-- Cria a barra de título
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 35)
+titleLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+titleLabel.Text = "By JhonaDev139"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 14
+titleLabel.Parent = mainFrame
+aplicarEstilo(titleLabel, Color3.fromRGB(60, 60, 60), 10)
+
+----------------------------- INICIO
+
+-- Tipos de partículas
+local tipoAtual = 1
+
+local ParticleFolder = Instance.new("Folder")  
+ParticleFolder.Name = "ParticulasVisual"  
+ParticleFolder.Parent = ParticleCanvas
+
+local function semParticula()
+print('escape')
+end
+
+local function criarParticulaFogo()
+local part = Instance.new("Frame")
+part.Size = UDim2.new(0, math.random(2, 4), 0, math.random(4, 8))
+part.Position = UDim2.new(math.random(), 0, 1, 0)
+part.AnchorPoint = Vector2.new(0.5, 1)
+part.BackgroundColor3 = Color3.fromRGB(math.random(220,255), math.random(100,150), 0)
+part.BackgroundTransparency = 0
+part.BorderSizePixel = 0
+part.ZIndex = 2
+part.Parent = ParticleCanvas
+
+local info = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+local goal = {
+Position = part.Position - UDim2.new(math.random(-3,3)/100, 0, math.random(40,60)/100, 0),
+BackgroundTransparency = 1
+}
+local tween = TweenService:Create(part, info, goal)
+tween:Play()
+tween.Completed:Connect(function()
+part:Destroy()
+end)
+
+end
+
+local function criarParticulaNeon()
+local part = Instance.new("Frame")
+part.Size = UDim2.new(0, 6, 0, 6)
+part.Position = UDim2.new(math.random(), 0, math.random(), 0)
+part.AnchorPoint = Vector2.new(0.5, 0.5)
+part.BackgroundColor3 = Color3.fromRGB(math.random(100,255), 0, 255)
+part.BackgroundTransparency = 0.2
+part.BorderSizePixel = 0
+part.ZIndex = 2
+part.Parent = ParticleCanvas
+
+local info = TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+local goal = {
+Size = UDim2.new(0, 0, 0, 0),
+BackgroundTransparency = 1
+}
+local tween = TweenService:Create(part, info, goal)
+tween:Play()
+tween.Completed:Connect(function()
+part:Destroy()
+end)
+
+end
+
+local function criarParticulaChuva()
+local part = Instance.new("Frame")
+part.Size = UDim2.new(0, 2, 0, 12)
+part.Position = UDim2.new(math.random(), 0, 0, -10)
+part.AnchorPoint = Vector2.new(0.5, 0)
+part.BackgroundColor3 = Color3.fromRGB(150, 200, 255)
+part.BackgroundTransparency = 0.3
+part.BorderSizePixel = 0
+part.ZIndex = 2
+part.Parent = ParticleCanvas
+
+local info = TweenInfo.new(1.2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+local goal = {
+Position = part.Position + UDim2.new(0, 0, 1.1, 0),
+BackgroundTransparency = 1
+}
+local tween = TweenService:Create(part, info, goal)
+tween:Play()
+tween.Completed:Connect(function()
+part:Destroy()
+end)
+
+end
+local function criarParticulaMatrix()
+local part = Instance.new("TextLabel")
+part.Size = UDim2.new(0, 12, 0, 18)
+part.Position = UDim2.new(math.random(), 0, -0.05, 0)
+part.AnchorPoint = Vector2.new(0.5, 0)
+part.BackgroundTransparency = 1
+part.BorderSizePixel = 0
+part.ZIndex = 2
+part.Text = tostring(math.random(0, 9))
+part.TextColor3 = Color3.fromRGB(0, 255, 0)
+part.TextSize = 14
+part.Font = Enum.Font.Code
+part.Parent = ParticleCanvas
+
+local info = TweenInfo.new(1.2, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
+local goal = {
+Position = part.Position + UDim2.new(0, 0, 1.2, 0),
+TextTransparency = 1
+}
+
+local tween = TweenService:Create(part, info, goal)
+tween:Play()
+tween.Completed:Connect(function()
+part:Destroy()
+end)
+
+end
+
+local nanopoints = {}
+
+local function criarParticulaNano()
+    local ponto = Instance.new("Frame")
+    ponto.Size = UDim2.new(0, 3, 0, 3)
+    ponto.Position = UDim2.new(math.random(), 0, math.random(), 0)
+    ponto.AnchorPoint = Vector2.new(0.5, 0.5)
+    ponto.BackgroundColor3 = Color3.fromRGB(100, 255, 255)
+    ponto.BackgroundTransparency = 0.2
+    ponto.BorderSizePixel = 0
+    ponto.ZIndex = 2
+    ponto.Parent = ParticleCanvas  -- onde as partículas são renderizadas
+
+    table.insert(nanopoints, ponto)
+
+    -- Movimento sutil e desaparecimento
+    local destino = ponto.Position + UDim2.new(math.random(-5,5)/300, 0, math.random(-5,5)/300, 0)
+    local tween = TweenService:Create(ponto, TweenInfo.new(1.5, Enum.EasingStyle.Linear), {
+        Position = destino,
+        BackgroundTransparency = 1
+    })
+
+    tween:Play()
+    tween.Completed:Connect(function()
+        for i, p in ipairs(nanopoints) do
+            if p == ponto then
+                table.remove(nanopoints, i)
+                break
+            end
+        end
+        ponto:Destroy()
+    end)
+
+    -- Conexões visuais entre partículas próximas
+    for _, outro in ipairs(nanopoints) do
+        if outro ~= ponto and (ponto.Position - outro.Position).Magnitude < 0.05 then
+            local linha = Instance.new("Frame")
+            linha.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+            linha.BorderSizePixel = 0
+            linha.AnchorPoint = Vector2.new(0.5, 0.5)
+            linha.ZIndex = 1
+            linha.BackgroundTransparency = 0.7
+            linha.Parent = ParticleCanvas
+
+            -- calcular tamanho e rotação da linha
+            local p1 = ponto.AbsolutePosition
+            local p2 = outro.AbsolutePosition
+            local distancia = (p1 - p2).Magnitude
+            linha.Size = UDim2.new(0, distancia, 0, 1)
+            linha.Position = UDim2.new(0, (p1.X + p2.X) / 2, 0, (p1.Y + p2.Y) / 2)
+
+            local angulo = math.atan2(p2.Y - p1.Y, p2.X - p1.X)
+            linha.Rotation = math.deg(angulo)
+
+            TweenService:Create(linha, TweenInfo.new(1.5), {BackgroundTransparency = 1}):Play()
+            task.delay(1.5, function()
+                linha:Destroy()
+            end)
+        end
+    end
+end
+
+-- Loop de partículas
+local funcoesParticulas = {
+criarParticulaFogo = criarParticulaFogo,
+criarParticulaNeon = criarParticulaNeon,
+criarParticulaChuva = criarParticulaChuva,
+criarParticulaMatrix = criarParticulaMatrix,
+criarParticulaNano = criarParticulaNano
+}
+
+RunService.RenderStepped:Connect(function()
+for i = 1, 3 do
+local func = funcoesParticulas[tipoAtual]
+if func then
+func()
+end
+end
+end)
+-- Interface de Seleção de Partículas (independente do script principal)
+do
+local efeitos = {
+["Chuva"] = function() tipoAtual = "criarParticulaChuva" end,
+["Fogo"] = function() tipoAtual = "criarParticulaFogo" end,
+["Neon"] = function() tipoAtual = "criarParticulaNeon" end,
+["Sem Partícula"] = function() tipoAtual = "none" end,
+["Matrix"] = function() tipoAtual = "criarParticulaMatrix" end,
+["Nanopartículas"] = function() tipoAtual = "criarParticulaNano" end,
+}
+
+-- Criar o GUI se não existir
+local screenGui = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("ParticulaGui")
+or Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+screenGui.Name = "ParticulaGui"
+screenGui.ResetOnSpawn = false
+
+-- Função de estilo
+local function aplicarEstilo(ui, cor, raio)
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, raio or 6)
+uiCorner.Parent = ui
+
+local stroke = Instance.new("UIStroke")    
+stroke.Thickness = 1.2    
+stroke.Color = cor or Color3.fromRGB(70, 70, 70)    
+stroke.Parent = ui
+
+end
+
+-- Janela principal
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 180, 0, 40)
+frame.Position = UDim2.new(0, 100, 0, 120)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = screenGui
+aplicarEstilo(frame)
+
+-- Botão de minimizar
+local toggle = Instance.new("TextButton")
+toggle.Size = UDim2.new(1, 0, 0, 40)
+toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+toggle.Text = "Selecionar Animação ▼"
+toggle.TextColor3 = Color3.new(1, 1, 1)
+toggle.TextSize = 14
+toggle.Font = Enum.Font.GothamBold
+toggle.Parent = frame
+aplicarEstilo(toggle, Color3.fromRGB(60, 60, 60), 6)
+
+-- Área com rolagem
+local scroll = Instance.new("ScrollingFrame")
+scroll.Position = UDim2.new(0, 0, 0, 40)
+scroll.Size = UDim2.new(1, 0, 0, 0)
+scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+scroll.BackgroundTransparency = 1
+scroll.ScrollBarThickness = 4
+scroll.BorderSizePixel = 0
+scroll.Visible = false
+scroll.Parent = frame
+
+-- Layout da lista
+local layout = Instance.new("UIListLayout")
+layout.Padding = UDim.new(0, 4)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Parent = scroll
+
+local aberta = false
+local function atualizarLista()
+aberta = not aberta
+scroll.Visible = aberta
+toggle.Text = aberta and "Selecionar Animação ▲" or "Selecionar Animação ▼"
+
+if aberta then    
+    task.wait() -- Garante que layout.AbsoluteContentSize esteja atualizado    
+    scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)    
+    scroll.Size = UDim2.new(1, 0, 0, math.min(layout.AbsoluteContentSize.Y + 10, 160))    
+    frame.Size = UDim2.new(0, 180, 0, scroll.Size.Y.Offset + 40)    
+else    
+    frame.Size = UDim2.new(0, 180, 0, 40)    
+end
+
+end
+
+toggle.MouseButton1Click:Connect(atualizarLista)
+
+-- Criar os botões com base nos efeitos
+for nome, funcao in pairs(efeitos) do
+local btn = Instance.new("TextButton")
+btn.Size = UDim2.new(1, -10, 0, 30)
+btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+btn.Text = nome
+btn.TextColor3 = Color3.new(1, 1, 1)
+btn.Font = Enum.Font.Gotham
+btn.TextSize = 13
+btn.Parent = scroll
+aplicarEstilo(btn, Color3.fromRGB(80, 80, 80), 4)
+
+btn.MouseButton1Click:Connect(function()    
+    funcao()    
+    atualizarLista()    
+end)
+
+end
+
+end
+
+--
+--------------------FIM
+
+
+-- Substitua:
+local leftPanel = Instance.new("ScrollingFrame")
+leftPanel.Name = "leftPanel"
+leftPanel.Size = UDim2.new(0, 100, 1, -30)
+leftPanel.Position = UDim2.new(0, 0, 0, 30)
+leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+leftPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Ajuste a altura conforme necessário
+leftPanel.ScrollBarThickness = 6
+leftPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
+leftPanel.Parent = mainFrame
+
+-- Layout para organizar os botões de categorias com espaçamento
+local leftLayout = Instance.new("UIListLayout")
+leftLayout.Parent = leftPanel
+leftLayout.SortOrder = Enum.SortOrder.LayoutOrder
+leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
+
+-- Painel Direito para Ações
+local rightPanel = Instance.new("ScrollingFrame")
+rightPanel.Name = "rightPanel"
+rightPanel.Size = UDim2.new(1, -100, 1, -30)
+rightPanel.Position = UDim2.new(0, 100, 0, 30)
+rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+rightPanel.CanvasSize = UDim2.new(0, 0, 0, 500) -- Altura virtual
+rightPanel.ScrollBarThickness = 6
+rightPanel.ScrollBarImageColor3 = Color3.fromRGB(1, 1, 1)
+rightPanel.Parent = mainFrame
+
+-- Layout para organizar os botões de ações com espaçamento
+local rightLayout = Instance.new("UIListLayout")
+rightLayout.Parent = rightPanel
+rightLayout.SortOrder = Enum.SortOrder.LayoutOrder
+rightLayout.Padding = UDim.new(0, 5)
+
+-- Painel Extra à Direita
+-- Painel Extra à Direita (invisível inicialmente)
+local extraPanel = Instance.new("ScrollingFrame")
+extraPanel.Name = "extraPanel"
+extraPanel.Size = UDim2.new(0, 260, 1, 0)
+extraPanel.Position = UDim2.new(1, 10, 0, 0)
+extraPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+extraPanel.BackgroundTransparency = 1 -- <- total transparência até ser ativado
+extraPanel.BorderSizePixel = 0
+extraPanel.CanvasSize = UDim2.new(0, 0, 0, 0)
+extraPanel.ScrollBarThickness = 6
+extraPanel.Visible = false -- <- IMPORTANTE: começa oculto
+extraPanel.Parent = mainFrame
+
+local cornerExtra = Instance.new("UICorner")
+cornerExtra.CornerRadius = UDim.new(0, 10)
+cornerExtra.Parent = extraPanel
+
+local sliderLayout = Instance.new("UIListLayout")
+sliderLayout.Parent = extraPanel
+sliderLayout.Padding = UDim.new(0, 8)
+sliderLayout.SortOrder = Enum.SortOrder.LayoutOrder
+-----------------
+-- CRIAÇÃO DOS BOTÕES
+local function createButton(parent, text, onClick)
+local button = Instance.new("TextButton")
+button.Text = text
+button.Size = UDim2.new(1, -10, 0, 30)
+button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.Font = Enum.Font.SourceSans
+button.TextSize = 14
+button.Parent = parent
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
+button.MouseButton1Click:Connect(onClick)
+return button
+end
+
+
+local function createHoldButton(parent, text, onHoldStart, onHoldStop)
+    local button = Instance.new("TextButton")
+    button.Text = text
+    button.Size = UDim2.new(1, -10, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+	local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = button
+    button.Parent = parent
+
+    button.MouseButton1Down:Connect(onHoldStart)
+    button.MouseButton1Up:Connect(onHoldStop)
+
+    return button
+end
+
+---------------------------&
+-- Certifique-se de já ter isso feito:
+-- extraPanel com UIListLayout
+
+local uis = game:GetService("UserInputService")
+local rs = game:GetService("RunService")
+
+local function criarNovoSlider(titulo, min, max, aoAlterar)
+    -- Verifica se já existe um slider com este título
+for _, frame in pairs(extraPanel:GetChildren()) do
+    if frame:IsA("Frame") then
+        local label = frame:FindFirstChildOfClass("TextLabel")
+        if label and label.Text == titulo then
+            return -- Já existe, então não cria novamente
+        end
+    end
+end
+    local sliderFrame = Instance.new("Frame")
+    sliderFrame.Size = UDim2.new(1, -10, 0, 60)
+    sliderFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    sliderFrame.BorderSizePixel = 0
+    sliderFrame.Parent = extraPanel
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = sliderFrame
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -10, 0, 20)
+    title.Position = UDim2.new(0, 5, 0, 5)
+    title.Text = titulo
+    title.TextColor3 = Color3.new(1, 1, 1)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.SourceSansBold
+    title.TextSize = 14
+    title.Parent = sliderFrame
+
+    local sliderBar = Instance.new("Frame")
+    sliderBar.Size = UDim2.new(1, -40, 0, 4)
+    sliderBar.Position = UDim2.new(0, 20, 0, 35)
+    sliderBar.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    sliderBar.Parent = sliderFrame
+
+    local valueButton = Instance.new("TextButton")
+    valueButton.Size = UDim2.new(0, 60, 0, 20)
+    valueButton.Position = UDim2.new(0, 20, 0, 25)
+    valueButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    valueButton.TextColor3 = Color3.new(1, 1, 1)
+    valueButton.Font = Enum.Font.SourceSansBold
+    valueButton.TextSize = 14
+    valueButton.Text = tostring(min)
+    valueButton.Parent = sliderFrame
+
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 6)
+    btnCorner.Parent = valueButton
+
+    local dragging = false
+    local insideButton = false
+    local connection
+
+    valueButton.MouseEnter:Connect(function()
+        insideButton = true
+    end)
+
+    valueButton.MouseLeave:Connect(function()
+        insideButton = false
+    end)
+
+    valueButton.MouseButton1Down:Connect(function()
+        dragging = true
+        connection = rs.RenderStepped:Connect(function()
+            if dragging and insideButton then
+                local mouseX = uis:GetMouseLocation().X
+                local barAbsPos = sliderBar.AbsolutePosition.X
+                local barWidth = sliderBar.AbsoluteSize.X
+                local relX = math.clamp(mouseX - barAbsPos, 0, barWidth)
+
+                valueButton.Position = UDim2.new(0, sliderBar.Position.X.Offset + relX - valueButton.AbsoluteSize.X / 2, 0, 25)
+
+                local percent = relX / barWidth
+                local value = math.floor(min + (max - min) * percent)
+                valueButton.Text = tostring(value)
+
+                if aoAlterar then
+                    aoAlterar(value)
+                end
+            end
+        end)
+    end)
+
+    uis.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+            if connection then
+                connection:Disconnect()
+                connection = nil
+            end
+        end
+    end)
+end
+
+
+
+local isJumpIncreased = false -- Variável para controlar o estado do pulo
+
+-- permite que o jogador pule no ar
+local jumped = false -- Variável para detectar o pulo
+
+local allowAirJump = false -- Controla se o jogador pode pular no ar
+
+local antAFKEnabled = false
+
+
+local fogEnabled = true  -- Estado do fog
+local fogStart = 0
+local fogEnd = 1000
+local fogStartConnection, fogEndConnection  -- Conexões para congelar valores
+
+
+
+local teleportEnabled = 0  -- Controla o estado do botão (0 = apenas desenhar, 1 = teleportar e seguir, 2 = parar de seguir)
+local line = nil  -- Armazena a linha globalmente  -- Armazena a conexão globalmente
+local followConnection = nil  -- Conexão de seguimento para atualizar a posição
+local followPlayer = nil  -- Armazena o jogador que está sendo seguido
+local freezeOffset = Vector3.new(0,  3, 0)  -- Define o "congelamento" da posição com uma distância fixa do jogador
+local lagProtectionEnabled = false -- Variável de controle
+local teleportEnabled = false  -- Controla o estado do botão
+
+local categories = {
+	
+    ["Player"] = {
+    	
+{name = "Speed", func = function()
+    extraPanel.Visible = true
+    extraPanel.BackgroundTransparency = 0
+
+    criarNovoSlider("Velocidade", 5, 100, function(v)
+        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.WalkSpeed = v end
+    end)
+end},
+
+        {name = "Inf jump", func = function()
+            allowAirJump = not allowAirJump -- Alterna o estado
+            print("Pulo no ar " .. (allowAirJump and "ativado" or "desativado"))
+        end},
+
+{name = "Super Jump", func = function()
+    extraPanel.Visible = true
+    extraPanel.BackgroundTransparency = 0
+
+    criarNovoSlider("Super Pulo", 1, 1000, function(v)
+        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.JumpPower = v end
+    end)
+end},
+        
+
+
+-- Função do botão de voo
+{name = "Fly", func = function()
+    local character = game.Players.LocalPlayer.Character
+    local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+    
+    if not rootPart then 
+        print("HumanoidRootPart não encontrado")
+        return 
+    end
+
+    -- Cria uma ScreenGui exclusiva para os controles de Fly
+    local flyScreenGui = Instance.new("ScreenGui")
+    flyScreenGui.Parent = game.CoreGui
+
+    -- Cria a janela do Fly
+    local flyWindow = Instance.new("Frame", flyScreenGui)
+    flyWindow.Size = UDim2.new(0, 200, 0, 300)
+    flyWindow.Position = UDim2.new(0.8, 0, 0.2, 0)
+    flyWindow.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    flyWindow.Active = true
+    flyWindow.Draggable = true
+
+    -- Título da janela
+    local titleLabel = Instance.new("TextLabel", flyWindow)
+    titleLabel.Text = "Fly Controls"
+    titleLabel.Size = UDim2.new(1, 0, 0, 30)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.TextSize = 18
+
+    -- Container para os botões, posicionado abaixo do título
+    local buttonContainer = Instance.new("Frame", flyWindow)
+    buttonContainer.Size = UDim2.new(1, 0, 1, -30)
+    buttonContainer.Position = UDim2.new(0, 0, 0, 30)
+    buttonContainer.BackgroundTransparency = 1
+
+    local layout = Instance.new("UIListLayout", buttonContainer)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Padding = UDim.new(0, 10)
+
+    local flying = true
+    local flySpeed = 50
+    local movement = {up = 0, forward = 0}
+    local flyConnection
+
+flyConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        if flying then
+            local camera = workspace.CurrentCamera
+            local direction = camera.CFrame.LookVector * movement.forward
+            local vertical = Vector3.new(0, movement.up, 0)
+            rootPart.Velocity = (direction + vertical) * flySpeed
+        end
+    end)
+
+    -- Botões de clique contínuo (hold) para controlar o movimento
+    createHoldButton(buttonContainer, "+Y (go up)", 
+        function() movement.up = 3 end, 
+        function() movement.up = 0 end
+    )
+    createHoldButton(buttonContainer, "-Y (down)", 
+        function() movement.up = -3 end, 
+        function() movement.up = 0 end
+    )
+    createHoldButton(buttonContainer, "Forward", 
+        function() movement.forward = 3 end, 
+        function() movement.forward = 0 end
+    )
+    createHoldButton(buttonContainer, "Backward", 
+        function() movement.forward = -3 end, 
+        function() movement.forward = 0 end
+    )
+
+    -- Botão para parar o Fly e fechar a janela
+    createButton(buttonContainer, "Stop Fly", function()
+        flying = false
+        if flyConnection then 
+            flyConnection:Disconnect() 
+        end
+        flyScreenGui:Destroy()
+        rootPart.Velocity = Vector3.new(0, 0, 0)
+    end)
+end},
+
+-- Variável para controlar o estado do fly
+
+
+
+{name = "NoClip", func = function()
+    local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+
+    if not running then
+        running = true
+        task.spawn(function()
+            while running do
+                for _, part in ipairs(character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+                task.wait(0.1) -- tempo entre cada verificação
+            end
+        end)
+    else
+        running = false
+        -- Restaura colisão
+        for _, part in ipairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+        print("Colisão ativada")
+    end
+end},
+    
+    {name = "Ant-AFK", func = function()
+    
+
+-- Função para mostrar a notificação
+local function showNotification(message)
+    local notification = Instance.new("TextLabel")
+    notification.Size = UDim2.new(0, 300, 0, 50)
+    notification.Position = UDim2.new(0.5, -150, 0.1, 0)  -- Exibido na parte superior centralizada
+    notification.Text = message
+    notification.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    notification.TextColor3 = Color3.fromRGB(255, 255, 255)
+    notification.TextSize = 20
+    notification.TextStrokeTransparency = 0.8
+    notification.Parent = game.CoreGui
+
+    -- Remover a notificação após 3 segundos
+    wait(3)
+    notification:Destroy()
+end
+
+-- Função para manter o jogador ativo e impedir o AFK
+local function preventAFK()
+    while antAFKEnabled do
+        -- Movimenta o jogador para evitar ser kikado
+        player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 0.1) 
+        wait(10)  -- Repite a movimentação a cada 10 segundos
+    end
+end
+end},
+    },-- Fechamento da tabela "Player"
+    
+    ["Visual"] = {
+		{name = "Aimbot", func = function()
+				loadstring(game:HttpGet('https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/aimbot-byJhonaDev139_YT'))()
+			end},
+
+
+
+{name = "Shift Lock", func = function()
+    local settings = UserSettings():GetService("UserGameSettings")
+
+    shiftLockEnabled = not shiftLockEnabled
+
+    if shiftLockEnabled then
+        settings.RotationType = Enum.RotationType.CameraRelative
+        print("Shift Lock ativado")
+    else
+        settings.RotationType = Enum.RotationType.MovementRelative
+        print("Shift Lock desativado")
+    end
+end},
+		{name = "Line vision", func = function()
+    if _G.linhaVisaoAtiva then
+        _G.linhaVisaoAtiva = false
+
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            local char = plr.Character
+            if char then
+                for _, obj in pairs(char:GetDescendants()) do
+                    if obj.Name == "LinhaVisao" then
+                        obj:Destroy()
+                    end
+                end
+            end
+        end
+
+        if _G.loopLinha then
+            _G.loopLinha:Disconnect()
+            _G.loopLinha = nil
+        end
+
+        return
+    end
+
+    _G.linhaVisaoAtiva = true
+
+    local function criarLinha(plr)
+        if plr == game.Players.LocalPlayer then return end
+        local char = plr.Character
+        if not char or not char:FindFirstChild("Head") then return end
+
+        local att0 = Instance.new("Attachment", char.Head)
+        att0.Name = "LinhaVisao"
+
+        local part = Instance.new("Part", char)
+        part.Anchored = true
+        part.CanCollide = false
+        part.Transparency = 1
+        part.Size = Vector3.new(0.1, 0.1, 0.1)
+        part.Name = "LinhaVisao"
+
+        local att1 = Instance.new("Attachment", part)
+        att1.Name = "LinhaVisao"
+
+        local beam = Instance.new("Beam", char)
+        beam.Attachment0 = att0
+        beam.Attachment1 = att1
+        beam.Width0 = 0.05
+        beam.Width1 = 0.05
+        beam.Color = ColorSequence.new(Color3.new(1, 0, 0))
+        beam.FaceCamera = true
+        beam.LightInfluence = 0
+        beam.Name = "LinhaVisao"
+
+        part.Position = char.Head.Position + (char.Head.CFrame.LookVector * 10)
+    end
+
+    local function criarEmTodos()
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            criarLinha(plr)
+        end
+    end
+
+    criarEmTodos()
+
+    game.Players.PlayerAdded:Connect(function(plr)
+        plr.CharacterAdded:Connect(function()
+            wait(1)
+            if _G.linhaVisaoAtiva then
+                criarLinha(plr)
+            end
+        end)
+    end)
+
+    _G.loopLinha = game:GetService("RunService").RenderStepped:Connect(function()
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            if plr ~= game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
+                local head = plr.Character.Head
+                local part = plr.Character:FindFirstChild("LinhaVisao")
+                if part then
+                    part.Position = head.Position + (head.CFrame.LookVector * 10)
+                end
+            end
+        end
+    end)
+end},
+        {name = "Tergeting Line", func = function() 
+        if line then  
+        line:Remove()  -- Remove a linha existente  
+        line = nil  
+
+        if connection then  
+            connection:Disconnect()  -- Para de atualizar a linha  
+            connection = nil  
+        end  
+        return  -- Sai da função para evitar recriar a linha imediatamente  
+    end  
+
+    line = Drawing.new("Line")  
+    line.Thickness = 2  
+    line.Color = Color3.fromRGB(255, 0, 0)  
+
+    connection = RunService.RenderStepped:Connect(function()  
+        local closestPlayer = nil  
+        local closestDist = math.huge  
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do  
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then  
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)  
+                
+                if onScreen then  
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)  
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)  
+                    local dist = (screenCenter - targetScreenPos).Magnitude  
+
+                    if dist < closestDist then  
+                        closestDist = dist  
+                        closestPlayer = otherPlayer  
+                    end  
+                end  
+            end  
+        end  
+
+        if closestPlayer then  
+            local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)  
+            line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)  
+            line.To = Vector2.new(targetPos.X, targetPos.Y)  
+            line.Visible = true  
+        else  
+            line.Visible = false  
+        end  
+    end)  
+end},
+
+---1-1-1-1-1-1-1-1-1-1-1-1-1
+{name = "Chams", func = function()
+    chamsEnabled = not chamsEnabled
+
+    local function aplicarChams(character)
+        if not character then return end
+        local highlight = character:FindFirstChild("ChamsEffect")
+        if not highlight then
+            highlight = Instance.new("Highlight")
+            highlight.Name = "ChamsEffect"
+            highlight.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB)
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            highlight.Parent = character
+        end
+    end
+
+    if chamsEnabled then
+        -- Aplica aos jogadores atuais
+        for _, player in pairs(game.Players:GetPlayers()) do
+            aplicarChams(player.Character)
+            local charConn = player.CharacterAdded:Connect(function(char)
+                aplicarChams(char)
+            end)
+            table.insert(connections, charConn)
+        end
+
+        -- Detecta novos jogadores
+        local joinConn = game.Players.PlayerAdded:Connect(function(player)
+            local charConn = player.CharacterAdded:Connect(function(char)
+                aplicarChams(char)
+            end)
+            table.insert(connections, charConn)
+        end)
+        table.insert(connections, joinConn)
+
+        -- ⚠️ Criação dos sliders RGB:
+        extraPanel.Visible = true
+        extraPanel.BackgroundTransparency = 0
+
+        -- Evita múltiplos sliders repetidos
+        if not slidersCriados then
+            criarNovoSlider("Chams - Vermelho", 0, 255, function(v)
+                chamsR = v
+                for _, p in pairs(game.Players:GetPlayers()) do
+                    local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                    if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end)
+
+            criarNovoSlider("Chams - Verde", 0, 255, function(v)
+                chamsG = v
+                for _, p in pairs(game.Players:GetPlayers()) do
+                    local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                    if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end)
+
+            criarNovoSlider("Chams - Azul", 0, 255, function(v)
+                chamsB = v
+                for _, p in pairs(game.Players:GetPlayers()) do
+                    local h = p.Character and p.Character:FindFirstChild("ChamsEffect")
+                    if h then h.FillColor = Color3.fromRGB(chamsR, chamsG, chamsB) end
+                end
+            end)
+
+            slidersCriados = true -- Marca que já foram criados
+        end
+
+    else
+        for _, p in pairs(game.Players:GetPlayers()) do
+            local char = p.Character
+            if char then
+                local h = char:FindFirstChild("ChamsEffect")
+                if h then h:Destroy() end
+            end
+        end
+        for _, c in pairs(connections) do
+            c:Disconnect()
+        end
+        connections = {}
+        slidersCriados = false -- Permite criar de novo depois
+    end
+end},
+
+
+
+
+
+
+
+
+{name = "ESP name", func = function()
+    espEnabled = not espEnabled
+
+    if espEnabled then
+        -- 1) Criar sliders RGB no extraPanel
+        extraPanel.Visible = true
+        extraPanel.BackgroundTransparency = 0
+
+        criarNovoSlider("ESPName - Vermelho", 0, 255, function(v)
+    espColor = Color3.fromRGB(
+        v,
+        math.floor(espColor.G * 255),
+        math.floor(espColor.B * 255)
+    )
+end)
+
+criarNovoSlider("ESPName - Verde", 0, 255, function(v)
+    espColor = Color3.fromRGB(
+        math.floor(espColor.R * 255),
+        v,
+        math.floor(espColor.B * 255)
+    )
+end)
+
+criarNovoSlider("ESPName - Azul", 0, 255, function(v)
+    espColor = Color3.fromRGB(
+        math.floor(espColor.R * 255),
+        math.floor(espColor.G * 255),
+        v
+    )
+end)
+
+        -- 2) Loop contínuo para aplicar ESP name em todos (novos, respawns e já existentes)
+        loopConn = RunService.Heartbeat:Connect(function()
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= Players.LocalPlayer then
+                    local char = player.Character
+                    if char and char:FindFirstChild("HumanoidRootPart") then
+                        local hrp = char.HumanoidRootPart
+                        local gui = hrp:FindFirstChild("ESPLabel")
+                        if not gui then
+                            gui = Instance.new("BillboardGui", hrp)
+                            gui.Name = "ESPLabel"
+                            gui.Size = UDim2.new(0, 70, 0, 10)
+                            gui.Adornee = hrp
+                            gui.AlwaysOnTop = true
+
+                            local frame = Instance.new("Frame", gui)
+                            frame.Size = UDim2.new(1, 0, 1, 0)
+                            frame.BackgroundTransparency = 1
+
+                            local textLabel = Instance.new("TextLabel", frame)
+                            textLabel.Name = "ESPText"
+                            textLabel.Size = UDim2.new(1, 0, 1, 0)
+                            textLabel.BackgroundTransparency = 1
+                            textLabel.TextScaled = true
+                            textLabel.Text = player.Name
+                        end
+                        -- atualiza cor em tempo real
+                        local text = gui.Frame:FindFirstChild("ESPText")
+                        if text then
+                            text.TextColor3 = espColor
+                        end
+                    end
+                end
+            end
+        end)
+
+    else
+        -- 1) Parar o loop
+        if loopConn then
+            loopConn:Disconnect()
+            loopConn = nil
+        end
+
+        -- 2) Destruir todos os ESPLabels
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player.Character then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local gui = hrp:FindFirstChild("ESPLabel")
+                    if gui then gui:Destroy() end
+                end
+            end
+        end
+
+        -- 3) Destruir somente os sliderFrames do ESP name
+        for _, child in ipairs(extraPanel:GetChildren()) do
+            if child:IsA("Frame") and child:FindFirstChildOfClass("TextLabel")
+               and child:FindFirstChildOfClass("TextLabel").Text:match("^ESPName") then
+                child:Destroy()
+            end
+        end
+
+        -- 4) Ocultar extraPanel se vazio
+        if #extraPanel:GetChildren() == 0 then
+            extraPanel.Visible = false
+        end
+    end
+end},
+
+
+
+
+    
+  {name = "ESP Box",  func = (function()
+        local espAtivo = false
+        local conexoes = {}
+        local espGui = nil
+        local caixas = {}
+
+        return function()
+         
+
+            if not espAtivo then
+                espAtivo = true
+
+                espGui = Instance.new("ScreenGui")
+                espGui.Name = "ksneidndnso"
+                espGui.ResetOnSpawn = false
+                espGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                espGui.IgnoreGuiInset = true
+                espGui.DisplayOrder = 100
+                espGui.Parent = LocalPlayer:FindFirstChildOfClass("PlayerGui") or LocalPlayer.PlayerGui
+
+                local function criarCaixa(player)
+                    if player == LocalPlayer then return end
+                    local caixa = Instance.new("Frame")
+                    caixa.Name = player.Name .. "_ESPBox"
+                    caixa.BackgroundTransparency = 1
+                    caixa.BorderSizePixel = 0
+                    caixa.AnchorPoint = Vector2.new(0.5, 0.5)
+                    caixa.ZIndex = 10
+                    caixa.Visible = false
+                    caixa.Parent = espGui
+
+                    local borda = Instance.new("UIStroke", caixa)
+                    borda.Color = Color3.new(1, 0, 0)
+                    borda.Thickness = 1.5
+                    borda.Transparency = 0
+
+                    caixas[player] = caixa
+
+                    local conn = RunService.RenderStepped:Connect(function()
+                        local char = player.Character
+                        if not char then caixa.Visible = false return end
+
+                        local hrp = char:FindFirstChild("HumanoidRootPart")
+                        local head = char:FindFirstChild("Head")
+                        local humanoid = char:FindFirstChildOfClass("Humanoid")
+                        if not (hrp and head and humanoid and humanoid.Health > 0) then
+                            caixa.Visible = false
+                            return
+                        end
+
+                        local pontos = {}
+                        for _, offset in ipairs({
+                            Vector3.new(-1.5, 2.5, -1.5),
+                            Vector3.new(1.5, 2.5, -1.5),
+                            Vector3.new(1.5, 2.5, 1.5),
+                            Vector3.new(-1.5, 2.5, 1.5),
+                            Vector3.new(-1.5, -2.5, -1.5),
+                            Vector3.new(1.5, -2.5, -1.5),
+                            Vector3.new(1.5, -2.5, 1.5),
+                            Vector3.new(-1.5, -2.5, 1.5),
+                        }) do
+                            table.insert(pontos, hrp.Position + offset)
+                        end
+
+                        local minX, minY = math.huge, math.huge
+                        local maxX, maxY = -math.huge, -math.huge
+                        local visivel = false
+
+                        for _, p in ipairs(pontos) do
+                            local screen, onScreen = Camera:WorldToViewportPoint(p)
+                            if onScreen then
+                                minX = math.min(minX, screen.X)
+                                minY = math.min(minY, screen.Y)
+                                maxX = math.max(maxX, screen.X)
+                                maxY = math.max(maxY, screen.Y)
+                                visivel = true
+                            end
+                        end
+
+                        if visivel then
+                            caixa.Visible = true
+                            caixa.Position = UDim2.new(0, (minX + maxX) / 2, 0, (minY + maxY) / 2)
+                            caixa.Size = UDim2.new(0, maxX - minX, 0, maxY - minY)
+                        else
+                            caixa.Visible = false
+                        end
+                    end)
+
+                    conexoes[player] = conn
+                end
+
+                for _, p in pairs(Players:GetPlayers()) do
+                    criarCaixa(p)
+                end
+
+                table.insert(conexoes, Players.PlayerAdded:Connect(criarCaixa))
+                table.insert(conexoes, Players.PlayerRemoving:Connect(function(p)
+                    if conexoes[p] then
+                        conexoes[p]:Disconnect()
+                        conexoes[p] = nil
+                    end
+                    if caixas[p] then
+                        caixas[p]:Destroy()
+                        caixas[p] = nil
+                    end
+                end))
+
+            else
+                espAtivo = false
+                for _, c in pairs(conexoes) do
+                    if typeof(c) == "RBXScriptConnection" then
+                        c:Disconnect()
+                    end
+                end
+                for _, c in pairs(conexoes) do
+                    if typeof(c) == "function" then
+                        pcall(c)
+                    end
+                end
+                conexoes = {}
+
+                for _, caixa in pairs(caixas) do
+                    if caixa then
+                        caixa:Destroy()
+                    end
+                end
+                caixas = {}
+
+                if espGui then
+                    espGui:Destroy()
+                    espGui = nil
+                end
+            end
+        end
+    end)()
+},
+
+{name = "Esp Line", func = function()
+local function UpdateESP()
+    if espEnabled then
+        for _, player in pairs(Players:GetPlayers()) do
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local rootPart = player.Character.HumanoidRootPart
+                local screenPos, onScreen = Camera:WorldToViewportPoint(rootPart.Position)
+
+                if onScreen then
+                    if not espLines[player] then
+                        espLines[player] = Drawing.new("Line")
+                        espLines[player].Thickness = 2
+                        espLines[player].Color = espColor
+                    end
+                    espLines[player].From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                    espLines[player].To = Vector2.new(screenPos.X, screenPos.Y)
+                    espLines[player].Visible = true
+                else
+                    if espLines[player] then
+                        espLines[player].Visible = false
+                    end
+                end
+            end
+        end
+    else
+        for _, line in pairs(espLines) do
+            line:Remove()
+        end
+        espLines = {}
+    end
+end
+
+RunService.RenderStepped:Connect(UpdateESP)
+
+    espEnabled = not espEnabled
+end},
+
+
+        {name = "Targeting Circle", func = function() 
+            if circle then  
+        circle:Remove()  -- Remove o círculo existente  
+        circle = nil  
+
+        if connection then  
+            connection:Disconnect()  -- Para de atualizar o círculo  
+            connection = nil  
+        end  
+        return  -- Sai da função para evitar recriar o círculo imediatamente  
+    end  
+
+    circle = Drawing.new("Circle")  
+    circle.Thickness = 2  
+    circle.Color = Color3.fromRGB(255, 0, 0)
+    circle.Radius = 10  -- Ajuste o raio conforme necessário
+    circle.Filled = false
+    connection = RunService.RenderStepped:Connect(function()
+        local closestPlayer = nil  
+        local closestDist = math.huge  
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do  
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("Head") then  
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.Head.Position)
+                
+                if onScreen then  
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)  
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)  
+                    local dist = (screenCenter - targetScreenPos).Magnitude  
+
+                    if dist < closestDist then  
+                        closestDist = dist  
+                        closestPlayer = otherPlayer  
+                    end  
+                end  
+            end  
+        end  
+
+        if closestPlayer then  
+            local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.Head.Position)  
+            circle.Position = Vector2.new(targetPos.X, targetPos.Y)  
+            circle.Visible = true  
+        else  
+            circle.Visible = false  
+        end  
+    end)
+end},
+
+{name = "Fog", func = function()
+    
+
+    local function toggleFog()
+        local lighting = game:GetService("Lighting")
+
+        -- Alterna o estado antes de aplicar as mudanças
+        fogEnabled = not fogEnabled  
+
+        if fogEnabled then
+            -- Salva os valores atuais antes de remover o fog
+            fogStart = lighting.FogStart
+            fogEnd = lighting.FogEnd
+            
+            -- Remove o fog
+            lighting.FogStart = 100000
+            lighting.FogEnd = 100000
+            
+            -- Congela os valores para impedir mudanças externas
+            fogStartConnection = lighting:GetPropertyChangedSignal("FogStart"):Connect(function()
+                lighting.FogStart = 100000
+            end)
+            fogEndConnection = lighting:GetPropertyChangedSignal("FogEnd"):Connect(function()
+                lighting.FogEnd = 100000
+            end)
+        else
+            -- Restaura os valores originais
+            lighting.FogStart = fogStart
+            lighting.FogEnd = fogEnd
+            
+            -- Descongela, permitindo que o jogo altere novamente
+            if fogStartConnection then fogStartConnection:Disconnect() end
+            if fogEndConnection then fogEndConnection:Disconnect() end
+        end
+
+        -- Notificação visual correta
+        game:GetService("StarterGui"):SetCore("SendNotification", {  
+            Title = "Fog Toggle",  
+            Text = fogEnabled and "Fog OFF" or "Fog ON",  
+            Icon = fogEnabled and "rbxassetid://7072721443" or "rbxassetid://7072719333",  
+            Duration = 3  
+        })  
+    end
+
+    -- Chama a função para ativar/desativar o efeito
+    toggleFog()
+
+end},
+
+    }, -- FECHAR A CATEGORIA
+    
+        ["TP tool"] = {
+        {name = "TP forward", func = function()
+            local root = character:WaitForChild("HumanoidRootPart")
+    root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
+    end},
+    {name = "TP safe", func = function ()
+    local root = character:WaitForChild("HumanoidRootPart")
+
+    if not isFrozen then
+        -- Salva a posição original antes de teleportar
+        originalPosition = root.Position
+
+        -- Teleporta para a posição segura
+        root.CFrame = CFrame.new(0, -10, 0)
+
+        -- Congela o jogador removendo a gravidade
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.Velocity = Vector3.new(0, 0, 0) -- Mantém ele parado
+        bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000) -- Força máxima para impedir movimento
+        bodyVelocity.Parent = root
+
+        -- Marca como congelado
+        isFrozen = true
+    else
+        -- Volta para a posição original
+        root.CFrame = CFrame.new(originalPosition)
+
+        -- Remove a força que mantinha ele congelado
+        for _, v in pairs(root:GetChildren()) do
+            if v:IsA("BodyVelocity") then
+                v:Destroy()
+            end
+        end
+
+        -- Reseta o estado
+        isFrozen = false
+    end
+    end},
+    
+            	{name = "TP Follow ", func = function()
+   
+
+    if teleportEnabled == 0 then
+        teleportEnabled = 1  -- Passa para o próximo estado (de teleportar e seguir)
+
+        -- Cria a linha se ela ainda não existir
+        if not line then
+            line = Drawing.new("Line")
+            line.Thickness = 2
+            line.Color = Color3.fromRGB(255, 0, 0)
+        end
+
+        -- Atualiza a linha a cada frame
+        connection = RunService.RenderStepped:Connect(function()
+            local closestPlayer = nil
+            local closestDist = math.huge  -- Começa com uma distância muito grande
+
+            for _, otherPlayer in pairs(Players:GetPlayers()) do
+                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                    if onScreen then
+                        -- Calcula a distância do centro da tela
+                        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                        local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                        local dist = (screenCenter - targetScreenPos).Magnitude
+
+                        -- Se for o mais próximo, atualiza o alvo
+                        if dist < closestDist then
+                            closestDist = dist
+                            closestPlayer = otherPlayer
+                        end
+                    end
+                end
+            end
+
+            -- Se encontrou um jogador, desenha a linha
+            if closestPlayer then
+                local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)
+                line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                line.To = Vector2.new(targetPos.X, targetPos.Y)
+                line.Visible = true
+            else
+                line.Visible = false  -- Esconde a linha se ninguém for encontrado
+            end
+        end)
+
+    -- Segundo clique: teleportar e começar a seguir
+    elseif teleportEnabled == 1 then
+        teleportEnabled = 2  -- Passa para o próximo estado (parar de seguir)
+
+        -- Remove a linha imediatamente ao teleportar
+        if line then
+            line:Remove()
+            line = nil
+        end
+
+        -- Desconecta a atualização da linha
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+
+        -- Teleporta o personagem para o jogador alvo
+        local closestPlayer = nil
+        local closestDist = math.huge
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                if onScreen then
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                    local dist = (screenCenter - targetScreenPos).Magnitude
+
+                    if dist < closestDist then
+                        closestDist = dist
+                        closestPlayer = otherPlayer
+                    end
+                end
+            end
+        end
+
+        -- Se encontrou o jogador, teleporta e começa a seguir
+        if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local myCharacter = player.Character
+            if myCharacter and myCharacter:FindFirstChild("HumanoidRootPart") then
+                -- Teleporta o personagem para o jogador
+                myCharacter.HumanoidRootPart.CFrame = closestPlayer.Character.HumanoidRootPart.CFrame
+
+                -- Inicia o seguimento com um offset de posição fixo
+                followPlayer = closestPlayer
+                followConnection = RunService.RenderStepped:Connect(function()
+                    if followPlayer and followPlayer.Character then
+                        -- A posição do personagem é "congelada" em relação ao jogador, com o offset
+                        local targetPos = followPlayer.Character.HumanoidRootPart.Position + freezeOffset
+                        myCharacter.HumanoidRootPart.CFrame = CFrame.new(targetPos)
+                    end
+                end)
+            end
+        end
+
+    -- Terceiro clique: parar de seguir
+elseif teleportEnabled == 2 then
+        teleportEnabled = 0  -- Volta ao estado inicial (apenas desenhar)
+
+        -- Para de seguir
+        if followConnection then
+            followConnection:Disconnect()  -- Desconecta a conexão de seguir
+            followPlayer = nil  -- Reseta o jogador seguido
+        end
+    end
+end},
+    
+        {name = "Targeting TP", func = function()
+        local connections = {}
+    if not teleportEnabled then
+        teleportEnabled = true
+
+        -- Cria a linha se ela ainda não existir
+        if not line then
+            line = Drawing.new("Line")
+            line.Thickness = 2
+            line.Color = Color3.fromRGB(255, 0, 0)
+        end
+
+        -- Atualiza a linha a cada frame
+        connection = RunService.RenderStepped:Connect(function()
+            local closestPlayer = nil
+            local closestDist = math.huge  -- Começa com uma distância muito grande
+
+            for _, otherPlayer in pairs(Players:GetPlayers()) do
+                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                    if onScreen then
+                        -- Calcula a distância do centro da tela
+                        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                        local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                        local dist = (screenCenter - targetScreenPos).Magnitude
+
+                        -- Se for o mais próximo, atualiza o alvo
+                        if dist < closestDist then
+                            closestDist = dist
+                            closestPlayer = otherPlayer
+                        end
+                    end
+                end
+            end
+
+            -- Se encontrou um jogador, desenha a linha
+            if closestPlayer then
+                local targetPos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)
+                line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                line.To = Vector2.new(targetPos.X, targetPos.Y)
+                line.Visible = true
+            else
+                line.Visible = false  -- Esconde a linha se ninguém for encontrado
+            end
+        end)
+
+    else
+        teleportEnabled = false
+
+        -- Remove a linha imediatamente ao teleportar
+        if line then
+            line:Remove()
+            line = nil
+        end
+
+        -- Desconecta a atualização da linha
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+
+        -- Teleporta o personagem para o jogador alvo
+        local closestPlayer = nil
+        local closestDist = math.huge
+
+        for _, otherPlayer in pairs(Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+
+                if onScreen then
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                    local targetScreenPos = Vector2.new(targetPos.X, targetPos.Y)
+                    local dist = (screenCenter - targetScreenPos).Magnitude
+
+                    if dist < closestDist then
+                        closestDist = dist
+                        closestPlayer = otherPlayer
+                    end
+                end
+            end
+        end
+
+        -- Se encontrou o jogador, teleporta
+        if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local myCharacter = player.Character
+            if myCharacter and myCharacter:FindFirstChild("HumanoidRootPart") then
+                myCharacter.HumanoidRootPart.CFrame = closestPlayer.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end
+    end},
+},
+    ["MENU"] = {
+	{name = "GetTools", func = function()
+    local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+
+-- Containers onde as Tools costumam ficar
+local lugares = {
+    game:GetService("Workspace"),
+    game:GetService("ReplicatedStorage"),
+    game:GetService("StarterPack")
+}
+
+for _, lugar in ipairs(lugares) do
+    for _, item in ipairs(lugar:GetDescendants()) do
+        if item:IsA("Tool") and item:FindFirstChild("Handle") then
+            local clone = item:Clone()
+            clone.Parent = backpack
+        end
+    end
+end
+
+print("Todas as tools possíveis foram clonadas pro seu inventário.")
+
+			end},
+			
+			
+    	{name = "ant-lag", func = function()
+    lagProtectionEnabled = not lagProtectionEnabled -- Alterna entre ativado e desativado
+
+    -- Exibe a notificação com ícones diferentes dependendo do estado
+    game:GetService("StarterGui"):SetCore("SendNotification", {  
+        Title = "Anti-Lag",  
+        Text = lagProtectionEnabled and "Ant lag ON" or "Ant lag OFF",  
+        Icon = lagProtectionEnabled and "rbxassetid://6031071063" or "rbxassetid://6031071050",  -- Ícones diferentes para ON e OFF
+        Duration = 3  
+    })
+
+    if lagProtectionEnabled then
+        print("Anti-Lag ativado!") -- Mensagem opcional para depuração
+
+        -- Monitorar e remover spam de objetos
+        antiLagConnection = game:GetService("RunService").Stepped:Connect(function()
+            for _, obj in pairs(workspace:GetChildren()) do
+                if obj:IsA("Part") or obj:IsA("Sound") then
+                    if obj:GetChildren() and #obj:GetChildren() > 50 then
+                        obj:Destroy() -- Remove spam de objetos
+                    end
+                end
+            end
+        end)
+
+        -- Detectar loops de lag e suavizar FPS
+        fpsProtection = game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
+            if deltaTime > 0.1 then
+                warn("Possível lag detectado! Limitando FPS...")
+                game:GetService("RunService").RenderStepped:Wait(0.03)
+            end
+        end)
+
+        -- Monitorar consumo de memória
+        memoryCheck = task.spawn(function()
+            while lagProtectionEnabled do
+                local memoryUsage = collectgarbage("count") / 1024
+                if memoryUsage > 500 then
+                    warn("Memória muito alta! Limpando objetos inúteis...")
+                    collectgarbage()
+                end
+                wait(5)
+            end
+        end)
+
+    else
+        
+
+        -- Desconectar os eventos para parar a proteção
+        if antiLagConnection then antiLagConnection:Disconnect() end
+        if fpsProtection then fpsProtection:Disconnect() end
+        if memoryCheck then task.cancel(memoryCheck) end
+    end
+    
+        if not antAFKEnabled then
+        antAFKEnabled = true
+        showNotification("ant AFK enabled")  -- Exibe a notificação que o ant AFK foi ativado
+        spawn(preventAFK)  -- Começa a prevenir o AFK
+    else
+        antAFKEnabled = false
+        showNotification("ant AFK disable")  -- Exibe a notificação que o ant AFK foi desativado
+    end
+    end},
+    
+    {name = "Item ID", func = function()
+    local function createItemIDWindow()  
+    local itemWindow = createWindow("Item ID", UDim2.new(0.5, 0, 0.3, 0))  
+  
+    local TextBox = Instance.new("TextBox", itemWindow)  
+    TextBox.Size = UDim2.new(1, -10, 0, 30)  
+    TextBox.Position = UDim2.new(0, 5, 0, 40)  
+    TextBox.PlaceholderText = "Digite o ID do item"  
+    TextBox.Text = ""  
+    TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
+    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)  
+    TextBox.Font = Enum.Font.SourceSans  
+    TextBox.TextSize = 18  
+  
+    local OkButton = Instance.new("TextButton", itemWindow)  
+    OkButton.Size = UDim2.new(1, -10, 0, 30)  
+    OkButton.Position = UDim2.new(0, 5, 0, 80)  
+    OkButton.Text = "OK"  
+    OkButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  
+    OkButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
+    OkButton.Font = Enum.Font.SourceSansBold  
+    OkButton.TextSize = 18  
+  
+    OkButton.MouseButton1Click:Connect(function()  
+    local itemID = tonumber(TextBox.Text) -- Converte para número  
+    if itemID then  
+        local remote = game.ReplicatedStorage:FindFirstChild("GiveItem") -- Nome do evento remoto  
+        if remote then  
+            remote:FireServer(itemID)  
+            -- Notificação de sucesso  
+            game:GetService("StarterGui"):SetCore("SendNotification", {  
+                Title = "Sucess!",  
+                Text = "Tentando pegar o item com ID: " .. itemID,  
+                Icon = "rbxassetid://6031068427", -- Substitua por um ícone, ou deixe em branco  
+                Duration = 3  
+            })  
+        else  
+            -- Notificação de erro (evento não encontrado)  
+            game:GetService("StarterGui"):SetCore("SendNotification", {  
+                Title = "Erro",  
+                Text = "Evento remoto 'GiveItem' não encontrado.",  
+                Icon = "rbxassetid://6031280882",  
+                Duration = 3  
+            })  
+        end  
+    else  
+        -- Notificação de erro (ID inválido)  
+        game:GetService("StarterGui"):SetCore("SendNotification", {  
+            Title = "Erro",  
+            Text = "Por favor, digite um número válido.",  
+            Icon = "rbxassetid://6031094678",  
+            Duration = 3  
+        })  
+    end  
+end)  
+end 
+end},
+    
+    
+    
+    },
+        ["3D"] = {
+		{name = "Object Destroy", func = function()
+    lineActive = not lineActive  -- Alterna entre ativado e desativado
+
+    if lineActive then
+        -- Criar a linha
+        local camera = game.Workspace.CurrentCamera
+        local player = game.Players.LocalPlayer
+        local mouse = player:GetMouse()
+
+        line = Instance.new("Part")
+        line.Size = Vector3.new(0.1, 0.1, 500)  -- Comprimento da linha
+        line.Anchored = true
+        line.CanCollide = false
+        line.BrickColor = BrickColor.new("Bright red")
+        line.Material = Enum.Material.Neon
+        line.Parent = game.Workspace
+
+        -- Atualiza a linha e detecta o objeto tocado
+        game:GetService("RunService").RenderStepped:Connect(function()
+            if lineActive and camera then
+                local origin = camera.CFrame.Position
+                local direction = camera.CFrame.LookVector * 500  -- Extensão da linha
+
+                -- Define a posição e rotação da linha
+                line.Position = origin + (direction / 2)
+                line.CFrame = CFrame.lookAt(origin, origin + direction)
+
+                -- Raycast para encontrar o objeto tocado
+                local ray = Ray.new(origin, direction)
+                local hit, position = game.Workspace:FindPartOnRay(ray, player.Character)
+
+                if hit then
+                    targetObject = hit  -- Salva o objeto tocado
+                else
+                    targetObject = nil
+                end
+            end
+        end)
+    else
+        -- Desativa a linha e apaga o objeto se estiver tocando algo
+        if line then
+            line:Destroy()
+            line = nil
+        end
+
+        if targetObject then
+            targetObject:Destroy()  -- Remove o objeto do jogo
+            targetObject = nil
+        end
+    end
+end},
+
+
+
+
+
+
+-- Variáveis no topo do script:
+
+
+{name = "Orbit Light", func = function()
+    orbitEnabled = not orbitEnabled
+
+    if orbitEnabled then
+        -- Parâmetros iniciais
+        local radius = 3 -- continua sendo o raio da órbita
+        local lightRange = 50 -- alcance da luz (slider 1)
+        local intensity = 2.5 -- intensidade da luz (slider 2)
+        local hue = 0
+
+        -- Cria sliders no extraPanel
+        extraPanel.Visible = true
+        extraPanel.BackgroundTransparency = 0
+
+        criarNovoSlider("Orbit - Alcance da Luz", 0, 99999, function(v)
+            lightRange = v
+        end)
+        criarNovoSlider("Orbit - Intensidade", 0, 99999, function(v)
+            intensity = v
+        end)
+        criarNovoSlider("Orbit - Cor", 0, 360, function(v)
+            hue = v
+        end)
+        orbitSlidersCriados = true
+
+        -- Função de HUE→Color3
+        local function hueToColor(h)
+            return Color3.fromHSV(h/360, hue, 1)
+        end
+
+local char = game.Players.LocalPlayer.Character
+if char and char:FindFirstChild("HumanoidRootPart") then
+    local hrp = char.HumanoidRootPart
+
+    -- criar bloco + luz
+    local block = Instance.new("Part", workspace)
+    block.Size = Vector3.new(0.2, 0.2, 0.2)
+    block.Anchored = true
+    block.Material = Enum.Material.Neon
+
+    local light = Instance.new("PointLight", block)
+    light.Brightness = intensity
+    light.Range = radius
+    light.Color = Color3.fromRGB(255, 255, 255)
+
+    table.insert(orbitLightBlocks, {block = block, light = light, hrp = hrp})
+end
+
+
+
+        -- Loop de atualização
+        local angle = 0
+        local conn = game:GetService("RunService").RenderStepped:Connect(function(dt)
+            angle = angle + dt * 2  -- velocidade fixa 2
+            for _, data in ipairs(orbitLightBlocks) do
+                local offX = math.cos(angle) * radius
+                local offZ = math.sin(angle) * radius
+                data.block.Position = data.hrp.Position + Vector3.new(offX, 0, offZ)
+                data.light.Range = lightRange
+                data.light.Brightness = intensity
+                data.light.Color = hueToColor(hue)
+            end
+        end)
+        table.insert(orbitConnections, conn)
+
+    else
+        -- Desliga orbit e limpa tudo
+        for _, c in ipairs(orbitConnections) do
+            c:Disconnect()
+        end
+        orbitConnections = {}
+
+        -- Destroi blocos de luz
+        for _, data in ipairs(orbitLightBlocks) do
+            if data.block then data.block:Destroy() end
+        end
+        orbitLightBlocks = {}
+
+        -- Destroi sliders criados
+        for _, child in ipairs(extraPanel:GetChildren()) do
+            if child:IsA("Frame") and child:FindFirstChildOfClass("TextLabel")
+               and child:FindFirstChildOfClass("TextLabel").Text:match("^Orbit") then
+                child:Destroy()
+            end
+        end
+        orbitSlidersCriados = false
+
+        -- Oculta extraPanel se vazio
+        if #extraPanel:GetChildren() == 0 then
+            extraPanel.Visible = false
+        end
+    end
+end},
+
+
+
+        
+
+
+        {name = "Orbit Light", func = function()
+        
+    
+    if not hrp then return end -- Evita erros caso o HRP não exista
+
+    -- Criar o bloco de luz
+    local lightBlock = Instance.new("Part")
+    lightBlock.Size = Vector3.new(0.2,0.2,0.2) -- Tamanho do bloco
+    lightBlock.Anchored = true -- Precisa estar ancorado para orbitar corretamente
+    lightBlock.Material = Enum.Material.Neon -- Dá um efeito brilhante
+    lightBlock.BrickColor = BrickColor.new("Bright white") -- Cor do bloco
+    lightBlock.Parent = game.Workspace
+
+    -- Criar a luz dentro do bloco
+    local light = Instance.new("PointLight")
+    light.Parent = lightBlock
+    light.Brightness = 2.5 -- Intensidade da luz
+    light.Range = 50 -- Alcance da luz
+    light.Color = Color3.fromRGB(255, 255, 255) -- Cor da luz
+
+    -- Variáveis para órbita
+    local radius = 3 -- Distância do bloco em relação ao personagem
+    local speed = 2 -- Velocidade da órbita
+    local angle = 0
+
+    -- Atualizar a posição do bloco a cada frame
+    local connection
+    connection = game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
+        if hrp.Parent then
+            angle = angle + speed * deltaTime -- Atualiza o ângulo ao longo do tempo
+            local offsetX = math.cos(angle) * radius
+            local offsetZ = math.sin(angle) * radius
+            lightBlock.Position = hrp.Position + Vector3.new(offsetX, 0, offsetZ) -- Mantém o bloco acima do personagem
+        else
+            -- Se o personagem morrer ou desaparecer, remove o bloco e desconecta
+            connection:Disconnect()
+            lightBlock:Destroy()
+        end
+    end)
+end},
+
+        {name = "Light", func = function()
+    local lightBlock = Instance.new("Part")
+    lightBlock.Size = Vector3.new(0.2,0.2,0.2) -- Tamanho do bloco
+    lightBlock.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0) -- Posição inicial
+    lightBlock.Anchored = false -- Habilita física
+    lightBlock.Material = Enum.Material.Neon -- Dá um efeito brilhante
+    lightBlock.BrickColor = BrickColor.new("Bright white") -- Cor do bloco
+    lightBlock.Parent = game.Workspace
+
+    -- Criar a luz dentro do bloco
+    local light = Instance.new("PointLight")
+    light.Parent = lightBlock
+    light.Brightness = 5 -- Intensidade da luz
+    light.Range = 50 -- Alcance da luz
+    light.Color = Color3.fromRGB(255, 255, 255) -- Cor da luz
+
+    -- Aplicar uma força inicial para o bloco cair naturalmente
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(math.random(-10, 10), 5, math.random(-10, 10)) -- Movimento inicial aleatório
+    bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000) -- Força máxima para empurrar o bloco
+    bodyVelocity.Parent = lightBlock
+
+    -- Remover a força após 0.1 segundos para a física normal agir
+    task.delay(0.1, function()
+        bodyVelocity:Destroy()
+    end)
+    end},
+    
+    {name = "Cubo", func = function()
+    local cube = Instance.new("Part", game.Workspace)
+    cube.Size = Vector3.new(5, 5, 5)
+    cube.Position = character.HumanoidRootPart.Position + Vector3.new(0, 0, -5)
+    cube.BrickColor = BrickColor.new("Bright white")
+    cube.Anchored = true
+    end},
+    {name = "sphere", func = function()
+    local sphere = Instance.new("Part", game.Workspace)
+    sphere.Shape = Enum.PartType.Ball
+    sphere.Size = Vector3.new(5, 5, 5)
+    sphere.Position = character.HumanoidRootPart.Position + Vector3.new(0, 0, -5)
+    sphere.BrickColor = BrickColor.new("Bright blue")
+    sphere.Anchored = true
+    end},
+        
+},
+
+}
+    
+if #extraPanel:GetChildren() == 0 then
+    extraPanel.Visible = false
+end
+
+-- Evento para permitir o pulo no ar (fora da tabela do botão)
+game:GetService("UserInputService").JumpRequest:Connect(function()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid and allowAirJump then
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping) -- Permite pular no ar
+            end
+        end
+    end
+end)
+
+
+
+-- Função para limpar os botões de ação existentes no painel direito
+local function clearRightPanel()
+    for _, child in ipairs(rightPanel:GetChildren()) do
+        if not child:IsA("UIListLayout") then
+            child:Destroy()
+        end
+    end
+end
+
+-- Função para carregar as ações de uma categoria no painel direito
+local function clearRightPanel()
+    for _, child in ipairs(rightPanel:GetChildren()) do
+        if not child:IsA("UIListLayout") then
+            child:Destroy()
+        end
+    end
+end
+
+-- Função para carregar as ações de uma categoria no painel direito
+local function loadActions(categoryName)
+    clearRightPanel()
+    local actions = categories[categoryName]
+    if actions then
+        for _, action in ipairs(actions) do
+            createButton(rightPanel, action.name, action.func)
+        end
+    end
+end
+
+-- Função para criar os botões de categorias no painel esquerdo
+local function loadCategories()
+    for categoryName, _ in pairs(categories) do
+        createButton(leftPanel, categoryName, function()
+            loadActions(categoryName)
+        end)
+    end
+end
+
+-- Inicializa os botões de categorias e carrega uma categoria padrão (a primeira encontrada)
+-- após a criação do mainFrame, leftPanel e rightPanel
+
+-- cria os botões das categorias
+
+loadCategories()
+
+print("Categorias detectadas:")
+for name, actions in pairs(categories) do
+    print("Categoria:", name)
+    for _, action in ipairs(actions) do
+        print(" - Ação:", action.name)
+    end
+end
+
+for categoryName, _ in pairs(categories) do
+    loadActions(categoryName)
+    break
+end
