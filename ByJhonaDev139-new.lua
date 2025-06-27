@@ -397,7 +397,7 @@ end
 -- Painel esquerdo 
 local leftPanel = Instance.new("ScrollingFrame")
 leftPanel.Name = "leftPanel"
-leftPanel.Size = UDim2.new(0, 100, 1, -27)
+leftPanel.Size = UDim2.new(0, 100, 1, 0)
 leftPanel.Position = UDim2.new(0, 0, 0, 35)
 leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 leftPanel.BackgroundTransparency = 1
