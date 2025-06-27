@@ -43,7 +43,7 @@ local function aplicarEstilo(ui, cor, raio)
 
 	local stroke = Instance.new("UIStroke")
 	stroke.Thickness = 1.2
-	stroke.Color = cor or Color3.fromRGB(70, 70, 70)
+	stroke.Color = cor or Color3.fromRGB(30, 30, 30)
 	stroke.Parent = ui
 end
 
