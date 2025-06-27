@@ -57,7 +57,7 @@ screenGui.Parent = game.CoreGui
 -- Cria a janela principal (MainFrame)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 480, 0, 330)
+mainFrame.Size = UDim2.new(0, 488, 0, 338)
 mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 mainFrame.BackgroundTransparency = 0
