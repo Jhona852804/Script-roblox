@@ -59,13 +59,13 @@ local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 480, 0, 330)
 mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+mainFrame.BackgroundColor3 = Color3.fromRGB(73, 121, 181)
 mainFrame.BackgroundTransparency = 0
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
 mainFrame.Draggable = true
 mainFrame.Parent = screenGui
-aplicarEstilo(mainFrame, Color3.fromRGB(0, 155, 255), 10)
+aplicarEstilo(mainFrame, Color3.fromRGB(73, 121, 181), 10)
 
 local ParticleCanvas = Instance.new("Frame")
 ParticleCanvas.Name = "ParticleCanvas"
