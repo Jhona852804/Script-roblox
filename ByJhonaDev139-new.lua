@@ -397,7 +397,7 @@ end
 -- Painel esquerdo 
 local leftPanel = Instance.new("ScrollingFrame")
 leftPanel.Name = "leftPanel"
-leftPanel.Size = UDim2.new(0, 100, 1, -30)
+leftPanel.Size = UDim2.new(0, 100, 1, -27)
 leftPanel.Position = UDim2.new(0, 0, 0, 35)
 leftPanel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 leftPanel.BackgroundTransparency = 1
@@ -415,7 +415,7 @@ leftLayout.Padding = UDim.new(0, 5)  -- espaçamento de 5 pixels
 -- Painel Direito para Ações
 local rightPanel = Instance.new("ScrollingFrame")
 rightPanel.Name = "rightPanel"
-rightPanel.Size = UDim2.new(1, -100, 1, -30)
+rightPanel.Size = UDim2.new(1, -100, 1, -27)
 rightPanel.Position = UDim2.new(0, 100, 0, 35)
 rightPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 rightPanel.BackgroundTransparency = 1
