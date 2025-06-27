@@ -65,7 +65,7 @@ mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
 mainFrame.Draggable = true
 mainFrame.Parent = screenGui
-aplicarEstilo(mainFrame, Color3.fromRGB(60, 60, 60), 10)
+aplicarEstilo(mainFrame, Color3.fromRGB(0, 155, 255), 10)
 
 local ParticleCanvas = Instance.new("Frame")
 ParticleCanvas.Name = "ParticleCanvas"
