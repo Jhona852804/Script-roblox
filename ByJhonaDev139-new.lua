@@ -11,6 +11,8 @@ local TweenService = game:GetService("TweenService")
 local hrp = character:FindFirstChild("HumanoidRootPart")  
 local humanoid = character:WaitForChild("Humanoid")
 
+local connections = nil
+
 local espEnabled = false  
 local espLines = {}  
 local espColor = Color3.fromRGB(255, 255, 255)  
@@ -1460,6 +1462,98 @@ end},
         isFrozen = false
     end
     end},
+
+		{name = "TP Follow ", func = function()
+    if teleportEnabled == 0 then
+        teleportEnabled = 1
+
+        -- Cria a linha
+        if not line then
+            line = Drawing.new("Line")
+            line.Thickness = 2
+            line.Color = Color3.fromRGB(255, 0, 0)
+        end
+
+        -- Atualiza a linha
+        connection = RunService.RenderStepped:Connect(function()
+            local closestPlayer = nil
+            local closestDist = math.huge
+
+            for _, otherPlayer in pairs(Players:GetPlayers()) do
+                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+                    if onScreen then
+                        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                        local dist = (screenCenter - Vector2.new(targetPos.X, targetPos.Y)).Magnitude
+                        if dist < closestDist then
+                            closestDist = dist
+                            closestPlayer = otherPlayer
+                        end
+                    end
+                end
+            end
+
+            if closestPlayer then
+                local pos = Camera:WorldToViewportPoint(closestPlayer.Character.HumanoidRootPart.Position)
+                line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                line.To = Vector2.new(pos.X, pos.Y)
+                line.Visible = true
+            else
+                line.Visible = false
+            end
+        end)
+
+    elseif teleportEnabled == 1 then
+        teleportEnabled = 2
+
+        if line then line:Remove(); line = nil end
+        if connection then connection:Disconnect(); connection = nil end
+
+        -- Encontrar jogador mais próximo novamente
+        local closestPlayer = nil
+        local closestDist = math.huge
+        for _, otherPlayer in pairs(Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local targetPos, onScreen = Camera:WorldToViewportPoint(otherPlayer.Character.HumanoidRootPart.Position)
+                if onScreen then
+                    local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                    local dist = (screenCenter - Vector2.new(targetPos.X, targetPos.Y)).Magnitude
+                    if dist < closestDist then
+                        closestDist = dist
+                        closestPlayer = otherPlayer
+                    end
+                end
+            end
+        end
+
+        -- TP + Seguir com offset atrás do jogador
+        if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            followPlayer = closestPlayer
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local targetHRP = followPlayer.Character.HumanoidRootPart
+                local backOffset = targetHRP.CFrame.LookVector * -3 -- 3 studs atrás
+                hrp.CFrame = targetHRP.CFrame + backOffset
+                followConnection = RunService.RenderStepped:Connect(function()
+                    if followPlayer and followPlayer.Character and followPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        local tHRP = followPlayer.Character.HumanoidRootPart
+                        local behind = tHRP.CFrame.Position - (tHRP.CFrame.LookVector * 3)
+                        hrp.CFrame = CFrame.new(behind, tHRP.Position)
+                    end
+                end)
+            end
+        end
+
+    elseif teleportEnabled == 2 then
+        teleportEnabled = 0
+
+        if followConnection then
+            followConnection:Disconnect()
+            followConnection = nil
+        end
+        followPlayer = nil
+    end
+end},
     
             	{name = "TP Follow ", func = function()
    
