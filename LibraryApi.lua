@@ -154,7 +154,10 @@ function DarkUILib.init(config)
     miniLabel.BackgroundTransparency = 1
 
     -- content area
-    local contentArea = createFrame{ Size = UDim2.new(1, -16, 1, -68), Position = UDim2.new(0,8,0,100), Parent = main }
+    local contentArea = createFrame{ 
+        Size = UDim2.new(1, -16, 1, -68), 
+        Position = UDim2.new(0,8,0.3,100), 
+        Parent = main }
     contentArea.Name = "ContentArea"
 
         -- categories bar
