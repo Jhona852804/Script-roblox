@@ -116,7 +116,9 @@ function DarkUILib.init(config)
     main.AnchorPoint = Vector2.new(0,0)
 
     -- title bar (primary)
-    local titleBar = createFrame{ Size = UDim2.new(1,0,0,48), Parent = main }
+    local titleBar = createFrame{ 
+        Size = UDim2.new(1,0,0,48), 
+        Parent = main }
     titleBar.Name = "TitleBar"
     titleBar.BackgroundTransparency = 0
 
@@ -156,7 +158,7 @@ function DarkUILib.init(config)
     contentArea.Name = "ContentArea"
 
         -- categories bar
-    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
+    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,100), Parent = contentArea }
     categoriesBar.Name = "CategoriesBar"
     local catList = Instance.new("UIListLayout", categoriesBar)
     catList.FillDirection = Enum.FillDirection.Horizontal
@@ -167,7 +169,7 @@ function DarkUILib.init(config)
     local pagesHolder = Instance.new("Frame", contentArea)
     pagesHolder.Name = "PagesHolder"
     pagesHolder.Size = UDim2.new(1, -16, 1, -64)
-    pagesHolder.Position = UDim2.new(0,8,0,56)
+    pagesHolder.Position = UDim2.new(0,8,0,100)
     pagesHolder.BackgroundTransparency = 1
     pagesHolder.ClipsDescendants = true
 
