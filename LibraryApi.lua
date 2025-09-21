@@ -411,16 +411,25 @@ contentArea.Position = UDim2.new(0, 8, 0, 56)
         end)
     end
 
-    -- Minimize / restore behavior
-    minimizeBtn.MouseButton1Click:Connect(function()
-        instanceAPI.minimize()
-    end)
+    -- Minimize / restore visibility pelo botão
+minimizeBtn.MouseButton1Click:Connect(function()
+    if main.Visible then
+        main.Visible = false
+        minimizedBar.Visible = true
+    else
+        main.Visible = true
+        minimizedBar.Visible = false
+    end
+end)
 
-    minimizedBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            instanceAPI.open()
-        end
-    end)
+-- remove esta parte, pois não quer clique no título para restaurar
+--[[
+minimizedBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        instanceAPI.open()
+    end
+end)
+]]
 
     -- Final touches: ensure parent and visibility rules
     screenGui.Parent = playerGui
