@@ -172,7 +172,7 @@ function DarkUILib.init(config)
 
     -- apply padding inside contentArea to control spacing (so children follow relative positions)
     local contentPadding = Instance.new("UIPadding", contentArea)
-    contentPadding.PaddingTop = UDim.new(0,8)
+    contentPadding.PaddingTop = UDim.new(0,100)
     contentPadding.PaddingLeft = UDim.new(0,8)
     contentPadding.PaddingRight = UDim.new(0,8)
     contentPadding.PaddingBottom = UDim.new(0,8)
