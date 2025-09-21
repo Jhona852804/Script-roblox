@@ -156,7 +156,10 @@ function DarkUILib.init(config)
     contentArea.Name = "ContentArea"
 
     -- categories bar
-    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
+    local categoriesBar = createFrame{ 
+        Size = UDim2.new(1, -16, 0, 30), 
+        Position = UDim2.new(0,8,0,18), 
+        Parent = contentArea }
     categoriesBar.Name = "CategoriesBar"
     local catList = Instance.new("UIListLayout", categoriesBar)
     catList.FillDirection = Enum.FillDirection.Horizontal
