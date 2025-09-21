@@ -136,21 +136,32 @@ function DarkUILib.init(config)
 
     local minimizeBtn = createTextButton{ Size = UDim2.new(0,40,0,36), Text = "—", Parent = titleBar }
 
-    -- minimized bar (secondary title) hidden initially
-    local minimizedBar = createFrame{ Size = DEFAULT.MINIMIZED_SIZE, Parent = screenGui }
-    minimizedBar.Name = "DarkUI_Minimized"
-    minimizedBar.Position = UDim2.new(0.5, -100, 0.5, -240)
-    minimizedBar.Visible = false
-    applyStyle(minimizedBar)
-    local miniLayout = Instance.new("UIListLayout", minimizedBar)
-    miniLayout.FillDirection = Enum.FillDirection.Horizontal
-    miniLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    miniLayout.Padding = UDim.new(0,8)
-    local miniIcon = createTextLabel{ Size = UDim2.new(0,32,0,32), Text = iconText, Parent = minimizedBar }
-    miniIcon.BackgroundTransparency = 1
-    local miniLabel = createTextLabel{ Size = UDim2.new(1,0,1,0), Text = titleText, Parent = minimizedBar }
-    miniLabel.BackgroundTransparency = 1
+local minimizedBar = createFrame{
+    Size = DEFAULT.TITLE_SIZE, -- mesmo tamanho do titleBar
+    Parent = screenGui
+}
+minimizedBar.Name = "DarkUI_Minimized"
+minimizedBar.Position = UDim2.new(0.5, -210, 0.5, -260) -- mesma posição do main inicialmente
+minimizedBar.Visible = false
+applyStyle(minimizedBar)
 
+    -- layout
+local miniLayout = Instance.new("UIListLayout", minimizedBar)
+miniLayout.FillDirection = Enum.FillDirection.Horizontal
+miniLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+miniLayout.Padding = UDim.new(0,8)
+
+-- ícone
+local miniIcon = createTextLabel{ Size = UDim2.new(0,48,0,36), Text = iconText, Parent = minimizedBar }
+miniIcon.BackgroundTransparency = 1
+
+-- título
+local miniLabel = createTextLabel{ Size = UDim2.new(1,0,1,0), Text = titleText, Parent = minimizedBar }
+miniLabel.TextXAlignment = Enum.TextXAlignment.Left
+miniLabel.BackgroundTransparency = 1
+
+-- botão de minimizar (ou qualquer ação que quiser)
+local miniBtn = createTextButton{ Size = UDim2.new(0,40,0,36), Text = "—", Parent = minimizedBar }
 -- content area
 local contentArea = createFrame{
     Size = UDim2.new(1, -16, 1, -68),
@@ -421,6 +432,8 @@ minimizeBtn.MouseButton1Click:Connect(function()
         minimizedBar.Visible = false
     end
 end)
+
+
 
 -- remove esta parte, pois não quer clique no título para restaurar
 --[[
