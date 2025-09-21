@@ -1,64 +1,58 @@
--- DarkUI.lua - Library pronta para executores (carregue com loadstring)
--- Uso rápido:
+-- DarkUI.lua - Library pronta para executores (coloque no GitHub e carregue com loadstring)
+-- Uso:
 -- local DarkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/DarkUI.lua"))()
--- local ui = DarkUI.init({
---     Title = "Meu Painel",
---     Icon = "🐔",
---     Position = UDim2.new(0.5, -210, 0.5, -260),
---     Size = UDim2.new(0, 420, 0, 520),
---     ContentAreaPosition = nil,          -- opcional: UDim2 absoluto relativo ao main (se nil usa offset abaixo do title)
---     ContentAreaOffset = 8,              -- offset em pixels abaixo do title (usado se ContentAreaPosition == nil)
---     CategoriesBarHeight = 34            -- altura do bar de categorias
--- })
--- local geral = ui.addCategory("Geral")
--- ui.addButton(geral, "Test", function() print("clicou") end)
--- ui.addToggle(geral, "Ativar", false, function(s) print(s) end)
+-- local ui = DarkUI.init({ Title = "Meu Painel", Icon = "🐔", Position = UDim2.new(0.5, -210, 0.5, -260) })
+-- local cat = ui.addCategory("Geral")
+-- ui.addButton(cat, "Test", function() print("clicou") end)
+-- ui.addToggle(cat, "Ativar", false, function(s) print(s) end)
 
 local DarkUILib = {}
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
--- defaults (somente locais)
+-- DEFAULTS (locais para cada instancia)
 local DEFAULT = {
     BG = Color3.fromRGB(0,0,0),
     STROKE = Color3.fromRGB(30,30,30),
-    CORNER = UDim.new(0,8),
+    CORNER = UDim.new(0, 8),
     STROKE_THICK = 1,
-    TITLE_HEIGHT = 48,
-    DEFAULT_SIZE = UDim2.new(0,420,0,520),
-    DEFAULT_POS = UDim2.new(0.5, -210, 0.5, -260)
+    TITLE_SIZE = UDim2.new(0, 420, 0, 48),
+    WINDOW_SIZE = UDim2.new(0, 420, 0, 520),
+    MINIMIZED_SIZE = UDim2.new(0, 200, 0, 40),
 }
 
--- safe call wrapper
+-- utility: protect pcall wrapper
 local function safeCall(fn, ...)
     if type(fn) == "function" then
         local ok, err = pcall(fn, ...)
-        if not ok then warn("DarkUI callback error:", err) end
+        if not ok then
+            warn("DarkUI callback error:", err)
+        end
     end
 end
 
--- API init
+-- core init: retorna um objeto UI_instance
 function DarkUILib.init(config)
     config = config or {}
     local player = Players.LocalPlayer
-    if not player then error("DarkUI: jogador local não encontrado (execute no cliente).") end
+    if not player then
+        error("DarkUI: jogador local não encontrado (Execute no client).")
+    end
     local playerGui = player:WaitForChild("PlayerGui")
 
-    -- instance config
+    -- instance-specific settings
     local titleText = tostring(config.Title or "Painel")
     local iconText = tostring(config.Icon or "🐔")
-    local mainPos = config.Position or DEFAULT.DEFAULT_POS
-    local mainSize = config.Size or DEFAULT.DEFAULT_SIZE
-    local contentExplicitPos = config.ContentAreaPosition -- optional: UDim2
-    local contentOffset = tonumber(config.ContentAreaOffset) or 8
-    local categoriesBarHeight = tonumber(config.CategoriesBarHeight) or 34
+    local initPos = config.Position or UDim2.new(0.5, -210, 0.5, -260)
+    local initSize = config.Size or DEFAULT.WINDOW_SIZE
 
-    -- storage per instance
-    local categories = {} -- { {name=..., button=..., contentFrame=..., scroll=...} }
+    -- storage
+    local categories = {} -- { { name=..., button=..., frame=..., scroll=... } }
     local currentCategory = nil
 
-    -- style helpers
+    -- helpers: styling
     local function applyStyle(inst, cornerRadius, strokeThickness)
         cornerRadius = cornerRadius or DEFAULT.CORNER
         strokeThickness = strokeThickness or DEFAULT.STROKE_THICK
@@ -108,23 +102,23 @@ function DarkUILib.init(config)
         return fr
     end
 
-    -- build ScreenGui
+    -- build UI (ScreenGui)
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = ("DarkUI_%d"):format(tick() * 1000):gsub("%.", "")
+    screenGui.Name = ("DarkUI_%d"):format(tick() * 1000):gsub("%.", "") -- unique-ish
     screenGui.ResetOnSpawn = false
     screenGui.Parent = playerGui
 
     -- main window
-    local main = createFrame{ Size = mainSize, Parent = screenGui }
+    local main = createFrame{ Size = initSize, Parent = screenGui }
     main.Name = "DarkUI_Main"
-    main.Position = mainPos
+    main.Position = initPos
     main.Active = true
     main.AnchorPoint = Vector2.new(0,0)
 
-    -- title bar
-    local titleBar = createFrame{ Size = UDim2.new(1,0,0,DEFAULT.TITLE_HEIGHT), Parent = main }
+    -- title bar (primary)
+    local titleBar = createFrame{ Size = UDim2.new(1,0,0,48), Parent = main }
     titleBar.Name = "TitleBar"
-    titleBar.ClipsDescendants = false
+    titleBar.BackgroundTransparency = 0
 
     local titleLayout = Instance.new("UIListLayout", titleBar)
     titleLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -137,13 +131,13 @@ function DarkUILib.init(config)
     iconLabel.BackgroundTransparency = 1
 
     local titleLabel = createTextLabel{ Size = UDim2.new(1,0,1,0), Text = titleText, Parent = titleBar }
-    titleLabel.BackgroundTransparency = 1
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.BackgroundTransparency = 1
 
     local minimizeBtn = createTextButton{ Size = UDim2.new(0,40,0,36), Text = "—", Parent = titleBar }
 
-    -- minimized bar (secondary title)
-    local minimizedBar = createFrame{ Size = UDim2.new(0,200,0,40), Parent = screenGui }
+    -- minimized bar (secondary title) hidden initially
+    local minimizedBar = createFrame{ Size = DEFAULT.MINIMIZED_SIZE, Parent = screenGui }
     minimizedBar.Name = "DarkUI_Minimized"
     minimizedBar.Position = UDim2.new(0.5, -100, 0.5, -240)
     minimizedBar.Visible = false
@@ -157,50 +151,31 @@ function DarkUILib.init(config)
     local miniLabel = createTextLabel{ Size = UDim2.new(1,0,1,0), Text = titleText, Parent = minimizedBar }
     miniLabel.BackgroundTransparency = 1
 
-    -- contentArea: position calculado para evitar sobreposição
-    local contentAreaPos = contentExplicitPos
-    if not contentAreaPos then
-        local topY = DEFAULT.TITLE_HEIGHT + contentOffset -- pixels below top of main
-        contentAreaPos = UDim2.new(0, 8, 0, topY)
-    end
-    -- contentArea size default: main size minus top/title and margins
-    local contentAreaSize = config.ContentAreaSize or UDim2.new(1, -16, 1, -( (contentExplicitPos and 0) or (DEFAULT.TITLE_HEIGHT + (contentOffset + 8)) ))
-
-    local contentArea = createFrame{ Size = contentAreaSize, Position = contentAreaPos, Parent = main }
+    -- content area
+    local contentArea = createFrame{ Size = UDim2.new(1, -16, 1, -68), Position = UDim2.new(0,8,0,56), Parent = main }
     contentArea.Name = "ContentArea"
-    contentArea.ClipsDescendants = true
 
-    -- apply padding inside contentArea to control spacing (so children follow relative positions)
-    local contentPadding = Instance.new("UIPadding", contentArea)
-    contentPadding.PaddingTop = UDim.new(0,100)
-    contentPadding.PaddingLeft = UDim.new(0,8)
-    contentPadding.PaddingRight = UDim.new(0,8)
-    contentPadding.PaddingBottom = UDim.new(0,8)
-
-    -- categoriesBar placed at top of contentArea (relative)
-    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, categoriesBarHeight), Position = UDim2.new(0,8,0,8), Parent = contentArea }
+    -- categories bar
+    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
     categoriesBar.Name = "CategoriesBar"
-    -- ensure categoriesBar stays inside contentArea: use Automatic constraints via Clipping and explicit sizing
-
     local catList = Instance.new("UIListLayout", categoriesBar)
     catList.FillDirection = Enum.FillDirection.Horizontal
     catList.Padding = UDim.new(0,8)
     catList.HorizontalAlignment = Enum.HorizontalAlignment.Left
 
-    -- pagesHolder below categoriesBar: compute position and size to avoid overlap
-    local pagesHolderY = 8 + categoriesBarHeight + 8 -- top padding + catbar height + gap
+    -- pages holder
     local pagesHolder = Instance.new("Frame", contentArea)
     pagesHolder.Name = "PagesHolder"
+    pagesHolder.Size = UDim2.new(1, -16, 1, -64)
+    pagesHolder.Position = UDim2.new(0,8,0,56)
     pagesHolder.BackgroundTransparency = 1
-    pagesHolder.Position = UDim2.new(0,8,0,pagesHolderY)
-    pagesHolder.Size = UDim2.new(1, -16, 1, -(pagesHolderY + 8)) -- bottom gap
     pagesHolder.ClipsDescendants = true
 
-    -- helpers to create category content frames
+    -- create category frame (content)
     local function createCategoryFrame(name)
         local frame = Instance.new("Frame")
         frame.Name = name .. "_Content"
-        frame.Size = UDim2.new(1,0,1,0)
+        frame.Size = UDim2.new(1, 0, 1, 0)
         frame.BackgroundColor3 = DEFAULT.BG
         frame.Parent = pagesHolder
         frame.Visible = false
@@ -210,7 +185,7 @@ function DarkUILib.init(config)
         local scroll = Instance.new("ScrollingFrame")
         scroll.Name = "Scroll"
         scroll.Size = UDim2.new(1, -16, 1, -16)
-        scroll.Position = UDim2.new(0,8,0,8)
+        scroll.Position = UDim2.new(0, 8, 0, 8)
         scroll.BackgroundTransparency = 1
         scroll.ScrollBarThickness = 8
         scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -230,9 +205,10 @@ function DarkUILib.init(config)
         return frame, scroll
     end
 
+    -- create category button in bar
     local function createCategoryButton(name)
         local btn = Instance.new("TextButton")
-        btn.Size = UDim2.new(0,96,1, -8)
+        btn.Size = UDim2.new(0,96,1,-8)
         btn.AutoButtonColor = true
         btn.BackgroundColor3 = DEFAULT.BG
         btn.Text = name
@@ -243,6 +219,7 @@ function DarkUILib.init(config)
         return btn
     end
 
+    -- show category
     local function showCategory(targetName)
         for _,c in ipairs(categories) do
             if c.contentFrame then
@@ -258,6 +235,7 @@ function DarkUILib.init(config)
         currentCategory = targetName
     end
 
+    -- create button item inside category
     local function createCategoryButtonItem(containerScroll, text, callback)
         local item = Instance.new("Frame")
         item.Size = UDim2.new(1, 0, 0, 44)
@@ -280,6 +258,7 @@ function DarkUILib.init(config)
         end)
     end
 
+    -- create toggle item
     local function createCategoryToggleItem(containerScroll, text, initialState, callback)
         local item = Instance.new("Frame")
         item.Size = UDim2.new(1,0,0,44)
@@ -318,7 +297,7 @@ function DarkUILib.init(config)
         end)
     end
 
-    -- instance API
+    -- API methods for this instance
     local instanceAPI = {}
 
     function instanceAPI.addCategory(name)
@@ -326,9 +305,13 @@ function DarkUILib.init(config)
         local btn = createCategoryButton(name)
         local frame, scroll = createCategoryFrame(name)
         table.insert(categories, { name = name, button = btn, contentFrame = frame, scroll = scroll })
-        btn.MouseButton1Click:Connect(function() showCategory(name) end)
-        if #categories == 1 then showCategory(name) end
-        return frame
+        btn.MouseButton1Click:Connect(function()
+            showCategory(name)
+        end)
+        if #categories == 1 then
+            showCategory(name)
+        end
+        return frame -- retorna o content frame (usado em addButton/addToggle)
     end
 
     function instanceAPI.addButton(categoryFrame, text, callback)
@@ -361,26 +344,32 @@ function DarkUILib.init(config)
         main.Visible = false
         titleBar.Visible = false
         minimizedBar.Visible = true
-        screenGui.Parent = playerGui
+        screenGui.Parent = playerGui -- keep in PlayerGui but invisible main
     end
 
     function instanceAPI.destroy()
-        pcall(function() screenGui:Destroy() end)
+        pcall(function()
+            screenGui:Destroy()
+        end)
     end
 
-    -- dragging only via titleBar / minimizedBar
+    -- Dragging (only when started on titleBar or minimizedBar)
     do
         local dragging = false
         local dragInput, dragStart, startPos
+
         local function onDragStarted(input)
             dragging = true
             dragInput = input
             dragStart = input.Position
             startPos = main.AbsolutePosition
             input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then dragging = false end
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
             end)
         end
+
         local function onDragChanged(input)
             if not dragging or not dragInput then return end
             local delta = input.Position - dragStart
@@ -391,29 +380,43 @@ function DarkUILib.init(config)
             local clampedY = math.clamp(newY, 0, screenSize.Y - main.AbsoluteSize.Y)
             main.Position = UDim2.new(0, clampedX, 0, clampedY)
         end
+
         titleBar.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then onDragStarted(input) end
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                onDragStarted(input)
+            end
         end)
+
         minimizedBar.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then onDragStarted(input) end
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                onDragStarted(input)
+            end
         end)
+
         UserInputService.InputChanged:Connect(function(input)
-            if input == dragInput then onDragChanged(input) end
+            if input == dragInput then
+                onDragChanged(input)
+            end
         end)
     end
 
-    -- minimize / restore
-    minimizeBtn.MouseButton1Click:Connect(function() instanceAPI.minimize() end)
-    minimizedBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then instanceAPI.open() end
+    -- Minimize / restore behavior
+    minimizeBtn.MouseButton1Click:Connect(function()
+        instanceAPI.minimize()
     end)
 
-    -- ensure parent & visibility
+    minimizedBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            instanceAPI.open()
+        end
+    end)
+
+    -- Final touches: ensure parent and visibility rules
     screenGui.Parent = playerGui
     main.Visible = true
     minimizedBar.Visible = false
 
-    -- return instance API
+    -- retorna API para o usuário (instância)
     return instanceAPI
 end
 
