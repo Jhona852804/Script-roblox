@@ -178,7 +178,7 @@ contentArea.AnchorPoint = Vector2.new(0,0)
 contentArea.Position = UDim2.new(0, 8, 0, 56)
 
     -- categories bar
-    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
+    local categoriesBar = createFrame{ Size = UDim2.new(1, 0, 0, 45), Position = UDim2.new(0,8,0,8), Parent = contentArea }
     categoriesBar.Name = "CategoriesBar"
     local catList = Instance.new("UIListLayout", categoriesBar)
     catList.FillDirection = Enum.FillDirection.Horizontal
@@ -230,7 +230,7 @@ contentArea.Position = UDim2.new(0, 8, 0, 56)
     -- create category button in bar
     local function createCategoryButton(name)
         local btn = Instance.new("TextButton")
-        btn.Size = UDim2.new(0,96,1,-8)
+        btn.Size = UDim2.new(0,90,1,-8)
         btn.AutoButtonColor = true
         btn.BackgroundColor3 = DEFAULT.BG
         btn.Text = name
@@ -260,7 +260,7 @@ contentArea.Position = UDim2.new(0, 8, 0, 56)
     -- create button item inside category
     local function createCategoryButtonItem(containerScroll, text, callback)
         local item = Instance.new("Frame")
-        item.Size = UDim2.new(1, 0, 0, 44)
+        item.Size = UDim2.new(1, -10, 0, 44)
         item.BackgroundColor3 = DEFAULT.BG
         item.Parent = containerScroll
         applyStyle(item)
@@ -283,7 +283,7 @@ contentArea.Position = UDim2.new(0, 8, 0, 56)
     -- create toggle item
     local function createCategoryToggleItem(containerScroll, text, initialState, callback)
         local item = Instance.new("Frame")
-        item.Size = UDim2.new(1,0,0,44)
+        item.Size = UDim2.new(1,-10,0,44)
         item.BackgroundColor3 = DEFAULT.BG
         item.Parent = containerScroll
         applyStyle(item)
