@@ -432,6 +432,10 @@ minimizeBtn.MouseButton1Click:Connect(function()
         minimizedBar.Visible = false
     end
 end)
+    minimizeBtn.MouseButton1Click:Connect(function()
+    main.Visible = true
+    minimizedBar.Visible = false
+end)
 
 
 
