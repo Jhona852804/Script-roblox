@@ -113,7 +113,6 @@ function DarkUILib.init(config)
     main.Name = "DarkUI_Main"
     main.Position = initPos
     main.Active = true
-    main.AnchorPoint = Vector2.new(0,0)
 
     -- title bar (primary)
     local titleBar = createFrame{ 
