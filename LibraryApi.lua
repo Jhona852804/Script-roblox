@@ -152,28 +152,24 @@ function DarkUILib.init(config)
     miniLabel.BackgroundTransparency = 1
 
     -- content area
-    local contentArea = createFrame{ Size = UDim2.new(1, -16, 1, -68), Position = UDim2.new(0,8,0,56), Parent = main }
+    local contentArea = createFrame{ Size = UDim2.new(1, -16, 1, -68), Position = UDim2.new(0,8,0,100), Parent = main }
     contentArea.Name = "ContentArea"
 
-    -- categories bar (menor)
-local categoriesBar = createFrame{ 
-    Size = UDim2.new(1, -16, 0, 28), -- altura menor
-    Position = UDim2.new(0,8,0,8),
-    Parent = contentArea
-}
-categoriesBar.Name = "CategoriesBar"
-
-
+        -- categories bar
+    local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
+    categoriesBar.Name = "CategoriesBar"
     local catList = Instance.new("UIListLayout", categoriesBar)
     catList.FillDirection = Enum.FillDirection.Horizontal
     catList.Padding = UDim.new(0,8)
     catList.HorizontalAlignment = Enum.HorizontalAlignment.Left
 
-    -- pages holder (desce um pouco mais para não sobrepor categorias)
-local pagesHolder = Instance.new("Frame", contentArea)
-pagesHolder.Name = "PagesHolder"
-pagesHolder.Size = UDim2.new(1, -16, 1, -52) -- menos altura
-pagesHolder.Position = UDim2.new(0,8,0,40) -- começa logo abaixo das categorias
+    -- pages holder
+    local pagesHolder = Instance.new("Frame", contentArea)
+    pagesHolder.Name = "PagesHolder"
+    pagesHolder.Size = UDim2.new(1, -16, 1, -64)
+    pagesHolder.Position = UDim2.new(0,8,0,56)
+    pagesHolder.BackgroundTransparency = 1
+    pagesHolder.ClipsDescendants = true
 
     -- create category frame (content)
     local function createCategoryFrame(name)
