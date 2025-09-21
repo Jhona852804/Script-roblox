@@ -159,10 +159,12 @@ local contentArea = createFrame{
 }
 contentArea.Name = "ContentArea"
 
--- garante que o frame já está renderizado antes de mudar posições (Executor-safe)
+-- espera o render para garantir que a Position seja aplicada corretamente
 RunService.RenderStepped:Wait()
+
+-- força AnchorPoint e reposiciona
 contentArea.AnchorPoint = Vector2.new(0,0)
-contentArea.Position = UDim2.new(0, 8, 0, 56) -- reposiciona após RenderStepped
+contentArea.Position = UDim2.new(0, 8, 0, 56)
 
     -- categories bar
     local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
