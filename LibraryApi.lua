@@ -151,21 +151,18 @@ function DarkUILib.init(config)
     local miniLabel = createTextLabel{ Size = UDim2.new(1,0,1,0), Text = titleText, Parent = minimizedBar }
     miniLabel.BackgroundTransparency = 1
 
-    -- content area
-    local contentArea = createFrame{ 
+-- content area
+local contentArea = createFrame{
+    Size = UDim2.new(1, -16, 1, -68),
+    Position = UDim2.new(0, 8, 0, 56),
+    Parent = main,
+}
+contentArea.Name = "ContentArea"
 
-        Parent = main
-        RunService.RenderStepped:Wait()
-        Size = UDim2.new(1, -16, 1, -68), 
-        Position = UDim2.new(0,8,0,56), 
-        
-    }
-
-    
- 
-    
-    contentArea.AnchorPoint = Vector2.new(0,-0.5)
-    contentArea.Name = "ContentArea"
+-- garante que o frame já está renderizado antes de mudar posições (Executor-safe)
+RunService.RenderStepped:Wait()
+contentArea.AnchorPoint = Vector2.new(0,0)
+contentArea.Position = UDim2.new(0, 8, 0, 56) -- reposiciona após RenderStepped
 
     -- categories bar
     local categoriesBar = createFrame{ Size = UDim2.new(1, -16, 0, 40), Position = UDim2.new(0,8,0,8), Parent = contentArea }
