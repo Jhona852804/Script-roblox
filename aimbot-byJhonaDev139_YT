@@ -1,4 +1,4 @@
--- Aimbot - byJhonaDev139 - V0.2 com FOV, interface, filtros e controle de força
+-- Aimbot - byJhonaDev139 - V0.2
 print("Aimbot - byJhonaDev139 - V0.2 com FOV, interface, filtros e controle de força")
 
 local gui = Instance.new("ScreenGui", game.CoreGui)
@@ -88,7 +88,7 @@ local function criarSlider(y, label, min, max, callback)
 	end)
 end
 
--- Toggles e sliders
+-- Toggles
 local yOffset = 30
 criarToggle(yOffset, "Ignorar Mortos", function(val) ignoreDead = val end, true)
 yOffset += 30
@@ -99,7 +99,7 @@ yOffset += 30
 criarSlider(yOffset, "Força do Aimbot", 0.1, 1, function(val) smoothness = val end)
 yOffset += 60
 
--- Botão Ativar Aimbot
+
 local toggleButton = Instance.new("TextButton", frame)
 toggleButton.Size = UDim2.new(1, -10, 0, 30)
 toggleButton.Position = UDim2.new(0, 5, 0, yOffset)
@@ -109,7 +109,7 @@ toggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 
 yOffset += 35
 
--- Ajustes FOV
+
 local incFov = Instance.new("TextButton", frame)
 incFov.Size = UDim2.new(0.5, -7, 0, 25)
 incFov.Position = UDim2.new(0, 5, 0, yOffset)
