@@ -1,1 +1,30 @@
+local _print = print
+
+if not getfenv(1)["xA9k32_f"] then
+    _print("Script inválido")
+    return
+end
+
+-- referência segura de funções importantes (anti-sobrescrita)
+
+local _kick = game.Players.LocalPlayer.Kick
+
+-- função crítica
+local function coreFunc()
+    _print("Script rodando")
+end
+
+-- anti-removal simples: se coreFunc for removida, jogo fecha
+task.spawn(function()
+    while task.wait(2) do
+        if not coreFunc then
+            _print("Função removida / script corrompido")
+            break
+        end
+    end
+end)
+
+-- execução principal
+coreFunc()
+
 print("Teste funcionando")
