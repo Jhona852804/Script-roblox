@@ -1,3 +1,6 @@
+-- By Depthso // All credit to him :D
+-- I just made a simple edit for mobile support.
+
 --// Executor compatability
 protectgui = protectgui or (syn and syn.protect_gui) or function() end
 cloneref = cloneref or function(...) return ... end
