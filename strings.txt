@@ -1,0 +1,824 @@
+[STRING 1] Antes da decodificação:      8cg=
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      c       -> valor mapeado:       3                      Acumulador r atualizado:        7090176 (c =    1       )
+Char lido:      g       -> valor mapeado:       8                      Acumulador r atualizado:        7090688 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil
+[STRING 1] Decodificada:        l
+
+[STRING 2] Antes da decodificação:      8KufajKwU13mImguku==
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        7159808 (c =    1       )
+Char lido:      u       -> valor mapeado:       48                     Acumulador r atualizado:        7162880 (c =    2       )
+Char lido:      f       -> valor mapeado:       50
+Acumulador r atualizado:        7162930 (c =    3       )
+Caractere(s) adicionado(s) à saída:     mL2
+Char lido:      a       -> valor mapeado:       30
+Acumulador r atualizado:        7864320 (c =    0       )
+Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7950336 (c =    1       )
+Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        7951616 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        7951668 (c =    3       )
+Caractere(s) adicionado(s) à saída:     yU4
+Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        7360512 (c =    1       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        7363136 (c =    2       )
+Char lido:      m       -> valor mapeado:       19
+Acumulador r atualizado:        7363155 (c =    3       )
+Caractere(s) adicionado(s) à saída:     pZS                            Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        4456448 (c =    0       )
+Char lido:      m       -> valor mapeado:       19
+Acumulador r atualizado:        4534272 (c =    1       )
+Char lido:      g       -> valor mapeado:       8
+Acumulador r atualizado:        4534784 (c =    2       )
+Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        4534832 (c =    3       )
+Caractere(s) adicionado(s) à saída:     E20
+Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        7012352 (c =    1       )
+Char lido:      =       -> valor mapeado:       nil
+[STRING 2] Decodificada:        mL2yU4pZSE20k
+
+[STRING 3] Antes da decodificação:      572wSt==
+Char lido:      5       -> valor mapeado:       24
+Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      7       -> valor mapeado:       39
+Acumulador r atualizado:        6451200 (c =    1       )
+Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        6453568 (c =    2       )
+Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        6453620 (c =    3       )
+Caractere(s) adicionado(s) à saída:     byt                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      t       -> valor mapeado:       16
+Acumulador r atualizado:        6619136 (c =    1       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 3] Decodificada:        byte
+                                                                       [STRING 4] Antes da decodificação:      SDNPThGZ
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        6774784 (c =    1       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        6778176 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        6778209 (c =    3       )
+Caractere(s) adicionado(s) à saída:     gma                            Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7626752 (c =    1       )              Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        7627584 (c =    2       )              Char lido:      Z       -> valor mapeado:       40
+Acumulador r atualizado:        7627624 (c =    3       )              Caractere(s) adicionado(s) à saída:     tch
+[STRING 4] Decodificada:        gmatch                                 
+[STRING 5] Antes da decodificação:      TKShSpPpkNoBGwX7jt==           Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        7684096 (c =    1       )              Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        7685696 (c =    2       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7685702 (c =    3       )              Caractere(s) adicionado(s) à saída:     uFF
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        6709248 (c =    1       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        6711360 (c =    2       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        6711398 (c =    3       )
+Caractere(s) adicionado(s) à saída:     fhf                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        7032832 (c =    1       )              Char lido:      o       -> valor mapeado:       1
+Acumulador r atualizado:        7032896 (c =    2       )              Char lido:      B       -> valor mapeado:       36
+Acumulador r atualizado:        7032932 (c =    3       )              Caractere(s) adicionado(s) à saída:     kPd
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        3407872 (c =    0       )
+Char lido:      w       -> valor mapeado:       52                     Acumulador r atualizado:        3620864 (c =    1       )
+Char lido:      X       -> valor mapeado:       61                     Acumulador r atualizado:        3624768 (c =    2       )
+Char lido:      7       -> valor mapeado:       39                     Acumulador r atualizado:        3624807 (c =    3       )
+Caractere(s) adicionado(s) à saída:     7Og                            Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        5505024 (c =    0       )              Char lido:      t       -> valor mapeado:       16
+Acumulador r atualizado:        5570560 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 5] Decodificada:        uFFfhfkPd7OgU                          
+[STRING 6] Antes da decodificação:      SLGN5F==                       Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      L       -> valor mapeado:       55
+Acumulador r atualizado:        6778880 (c =    1       )              Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        6779712 (c =    2       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        6779765 (c =    3       )              Caractere(s) adicionado(s) à saída:     gsu
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      F       -> valor mapeado:       32                     Acumulador r atualizado:        6422528 (c =    1       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 6] Decodificada:        gsub
+                                                                       [STRING 7] Antes da decodificação:      jh1eUhjfgbI2ThjRThjBgt==
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        5505024 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        5529600 (c =    1       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        5529920 (c =    2       )
+Char lido:      e       -> valor mapeado:       45                     Acumulador r atualizado:        5529965 (c =    3       )
+Caractere(s) adicionado(s) à saída:     Tam                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7364608 (c =    1       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7365952 (c =    2       )              Char lido:      f       -> valor mapeado:       50
+Acumulador r atualizado:        7366002 (c =    3       )              Caractere(s) adicionado(s) à saída:     per
+Char lido:      g       -> valor mapeado:       8                      Acumulador r atualizado:        2097152 (c =    0       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        2113536 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        2114624 (c =    2       )
+Char lido:      2       -> valor mapeado:       37                     Acumulador r atualizado:        2114661 (c =    3       )
+Caractere(s) adicionado(s) à saída:      De                            Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7626752 (c =    1       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7628096 (c =    2       )              Char lido:      R       -> valor mapeado:       35
+Acumulador r atualizado:        7628131 (c =    3       )              Caractere(s) adicionado(s) à saída:     tec
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        7602176 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        7626752 (c =    1       )
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        7628096 (c =    2       )
+Char lido:      B       -> valor mapeado:       36                     Acumulador r atualizado:        7628132 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ted                            Char lido:      g       -> valor mapeado:       8
+Acumulador r atualizado:        2097152 (c =    0       )              Char lido:      t       -> valor mapeado:       16
+Acumulador r atualizado:        2162688 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 7] Decodificada:        Tamper Detected!                       
+[STRING 8] Antes da decodificação:      O4IwUbT2Tq==                   Char lido:      O       -> valor mapeado:       18
+Acumulador r atualizado:        4718592 (c =    0       )              Char lido:      4       -> valor mapeado:       7
+Acumulador r atualizado:        4747264 (c =    1       )              Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        4748352 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        4748404 (c =    3       )              Caractere(s) adicionado(s) à saída:     Htt
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        7356416 (c =    1       )
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        7358272 (c =    2       )
+Char lido:      2       -> valor mapeado:       37                     Acumulador r atualizado:        7358309 (c =    3       )
+Caractere(s) adicionado(s) à saída:     pGe                            Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      q       -> valor mapeado:       0
+Acumulador r atualizado:        7602176 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 8] Decodificada:        HttpGet                                
+[STRING 9] Antes da decodificação:      0NXeS0IPTh1/8hK=               Char lido:      0       -> valor mapeado:       23
+Acumulador r atualizado:        6029312 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        6246400 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        6250304 (c =    2       )              Char lido:      e       -> valor mapeado:       45
+Acumulador r atualizado:        6250349 (c =    3       )              Caractere(s) adicionado(s) à saída:     __m
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6647808 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        6648896 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        6648929 (c =    3       )
+Caractere(s) adicionado(s) à saída:     eta                            Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7626752 (c =    1       )              Char lido:      1       -> valor mapeado:       5
+Acumulador r atualizado:        7627072 (c =    2       )              Char lido:      /       -> valor mapeado:       34
+Acumulador r atualizado:        7627106 (c =    3       )              Caractere(s) adicionado(s) à saída:     tab
+Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7102464 (c =    1       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        7103744 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 9] Decodificada:        __metatabl                             
+[STRING 10] Antes da decodificação:     m7TfSbexk6lGkcg=               Char lido:      m       -> valor mapeado:       19
+Acumulador r atualizado:        4980736 (c =    0       )              Char lido:      7       -> valor mapeado:       39
+Acumulador r atualizado:        5140480 (c =    1       )              Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        5142336 (c =    2       )              Char lido:      f       -> valor mapeado:       50
+Acumulador r atualizado:        5142386 (c =    3       )              Caractere(s) adicionado(s) à saída:     Nwr
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        6569984 (c =    1       )
+Char lido:      e       -> valor mapeado:       45                     Acumulador r atualizado:        6572864 (c =    2       )
+Char lido:      x       -> valor mapeado:       58                     Acumulador r atualizado:        6572922 (c =    3       )
+Caractere(s) adicionado(s) à saída:     dKz                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        6905856 (c =    1       )              Char lido:      l       -> valor mapeado:       9
+Acumulador r atualizado:        6906432 (c =    2       )              Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        6906445 (c =    3       )              Caractere(s) adicionado(s) à saída:     ibM
+Char lido:      k       -> valor mapeado:       26                     Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      c       -> valor mapeado:       3                      Acumulador r atualizado:        6828032 (c =    1       )
+Char lido:      g       -> valor mapeado:       8                      Acumulador r atualizado:        6828544 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 10] Decodificada:       NwrdKzibMh
+                                                                       [STRING 11] Antes da decodificação:     Up1+ShXe
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        7495680 (c =    1       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        7496000 (c =    2       )
+Char lido:      +       -> valor mapeado:       46                     Acumulador r atualizado:        7496046 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ran                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        6578176 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        6582080 (c =    2       )              Char lido:      e       -> valor mapeado:       45
+Acumulador r atualizado:        6582125 (c =    3       )              Caractere(s) adicionado(s) à saída:     dom
+[STRING 11] Decodificada:       random                                 
+[STRING 12] Antes da decodificação:     0NX75u==                       Char lido:      0       -> valor mapeado:       23
+Acumulador r atualizado:        6029312 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        6246400 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        6250304 (c =    2       )              Char lido:      7       -> valor mapeado:       39
+Acumulador r atualizado:        6250343 (c =    3       )              Caractere(s) adicionado(s) à saída:     __g
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      u       -> valor mapeado:       48                     Acumulador r atualizado:        6488064 (c =    1       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 12] Decodificada:       __gc
+                                                                       [STRING 13] Antes da decodificação:     S0lf8Lg=
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6647808 (c =    1       )
+Char lido:      l       -> valor mapeado:       9                      Acumulador r atualizado:        6648384 (c =    2       )
+Char lido:      f       -> valor mapeado:       50                     Acumulador r atualizado:        6648434 (c =    3       )
+Caractere(s) adicionado(s) à saída:     err
+Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      L       -> valor mapeado:       55
+Acumulador r atualizado:        7303168 (c =    1       )              Char lido:      g       -> valor mapeado:       8
+Acumulador r atualizado:        7303680 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 13] Decodificada:       erro                                   
+[STRING 14] Antes da decodificação:     0NX38pI2aq==                   Char lido:      0       -> valor mapeado:       23
+Acumulador r atualizado:        6029312 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        6246400 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        6250304 (c =    2       )              Char lido:      3       -> valor mapeado:       41
+Acumulador r atualizado:        6250345 (c =    3       )              Caractere(s) adicionado(s) à saída:     __i
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        7233536 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        7234624 (c =    2       )
+Char lido:      2       -> valor mapeado:       37                     Acumulador r atualizado:        7234661 (c =    3       )
+Caractere(s) adicionado(s) à saída:     nde                            Char lido:      a       -> valor mapeado:       30
+Acumulador r atualizado:        7864320 (c =    0       )              Char lido:      q       -> valor mapeado:       0
+Acumulador r atualizado:        7864320 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 14] Decodificada:       __index                                
+[STRING 15] Antes da decodificação:     8cb=                           Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      c       -> valor mapeado:       3
+Acumulador r atualizado:        7090176 (c =    1       )              Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        7090432 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 15] Decodificada:       l                                      
+[STRING 16] Antes da decodificação:     GBlhmbILy1PNkKIoU7Z=           Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        3407872 (c =    0       )              Char lido:      B       -> valor mapeado:       36
+Acumulador r atualizado:        3555328 (c =    1       )              Char lido:      l       -> valor mapeado:       9
+Acumulador r atualizado:        3555904 (c =    2       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        3555910 (c =    3       )              Caractere(s) adicionado(s) à saída:     6BF
+Char lido:      m       -> valor mapeado:       19                     Acumulador r atualizado:        4980736 (c =    0       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        4997120 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        4998208 (c =    2       )
+Char lido:      L       -> valor mapeado:       55                     Acumulador r atualizado:        4998263 (c =    3       )
+Caractere(s) adicionado(s) à saída:     LDw                            Char lido:      y       -> valor mapeado:       14
+Acumulador r atualizado:        3670016 (c =    0       )              Char lido:      1       -> valor mapeado:       5
+Acumulador r atualizado:        3690496 (c =    1       )              Char lido:      P       -> valor mapeado:       33
+Acumulador r atualizado:        3692608 (c =    2       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        3692661 (c =    3       )              Caractere(s) adicionado(s) à saída:     8Xu
+Char lido:      k       -> valor mapeado:       26                     Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        6897664 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        6898752 (c =    2       )
+Char lido:      o       -> valor mapeado:       1                      Acumulador r atualizado:        6898753 (c =    3       )
+Caractere(s) adicionado(s) à saída:     iDA                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      7       -> valor mapeado:       39
+Acumulador r atualizado:        7499776 (c =    1       )              Char lido:      Z       -> valor mapeado:       40
+Acumulador r atualizado:        7502336 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 16] Decodificada:       6BFLDw8XuiDAr                          
+[STRING 17] Antes da decodificação:     Kp2/                           Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        5242880 (c =    0       )              Char lido:      p       -> valor mapeado:       38
+Acumulador r atualizado:        5398528 (c =    1       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        5400896 (c =    2       )              Char lido:      /       -> valor mapeado:       34
+Acumulador r atualizado:        5400930 (c =    3       )              Caractere(s) adicionado(s) à saída:     Rib
+[STRING 17] Decodificada:       Rib                                    
+[STRING 18] Antes da decodificação:     kDS/SKI7aK1QTh2ot0F=
+Char lido:      k       -> valor mapeado:       26                     Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        7036928 (c =    1       )
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        7038528 (c =    2       )
+Char lido:      /       -> valor mapeado:       34                     Acumulador r atualizado:        7038562 (c =    3       )
+Caractere(s) adicionado(s) à saída:     kfb                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        6635520 (c =    1       )              Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        6636608 (c =    2       )              Char lido:      7       -> valor mapeado:       39
+Acumulador r atualizado:        6636647 (c =    3       )              Caractere(s) adicionado(s) à saída:     eDg
+Char lido:      a       -> valor mapeado:       30                     Acumulador r atualizado:        7864320 (c =    0       )
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        7946240 (c =    1       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        7946560 (c =    2       )
+Char lido:      Q       -> valor mapeado:       44                     Acumulador r atualizado:        7946604 (c =    3       )
+Caractere(s) adicionado(s) à saída:     yAl                            Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7626752 (c =    1       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        7629120 (c =    2       )              Char lido:      o       -> valor mapeado:       1
+Acumulador r atualizado:        7629121 (c =    3       )              Caractere(s) adicionado(s) à saída:     tiA
+Char lido:      t       -> valor mapeado:       16                     Acumulador r atualizado:        4194304 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        4288512 (c =    1       )
+Char lido:      F       -> valor mapeado:       32                     Acumulador r atualizado:        4290560 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 18] Decodificada:       kfbeDgyAltiAA
+                                                                       [STRING 19] Antes da decodificação:     SD1eSt==
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        6774784 (c =    1       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        6775104 (c =    2       )
+Char lido:      e       -> valor mapeado:       45                     Acumulador r atualizado:        6775149 (c =    3       )
+Caractere(s) adicionado(s) à saída:     gam                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      t       -> valor mapeado:       16
+Acumulador r atualizado:        6619136 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 19] Decodificada:       game                                   
+[STRING 20] Antes da decodificação:     yF==                           Char lido:      y       -> valor mapeado:       14
+Acumulador r atualizado:        3670016 (c =    0       )              Char lido:      F       -> valor mapeado:       32
+Acumulador r atualizado:        3801088 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 20] Decodificada:       :                                      
+[STRING 21] Antes da decodificação:     yKTnjN2EmbI3GDGoyK5=           Char lido:      y       -> valor mapeado:       14
+Acumulador r atualizado:        3670016 (c =    0       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        3751936 (c =    1       )
+Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        3753792 (c =    2       )
+Char lido:      n       -> valor mapeado:       43                     Acumulador r atualizado:        3753835 (c =    3       )
+Caractere(s) adicionado(s) à saída:     9Gk                            Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        5505024 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        5722112 (c =    1       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        5724480 (c =    2       )              Char lido:      E       -> valor mapeado:       42
+Acumulador r atualizado:        5724522 (c =    3       )              Caractere(s) adicionado(s) à saída:     WYj
+Char lido:      m       -> valor mapeado:       19                     Acumulador r atualizado:        4980736 (c =    0       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        4997120 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        4998208 (c =    2       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        4998249 (c =    3       )
+Caractere(s) adicionado(s) à saída:     LDi                            Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        3407872 (c =    0       )              Char lido:      D       -> valor mapeado:       54
+Acumulador r atualizado:        3629056 (c =    1       )              Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        3629888 (c =    2       )              Char lido:      o       -> valor mapeado:       1
+Acumulador r atualizado:        3629889 (c =    3       )              Caractere(s) adicionado(s) à saída:     7cA
+Char lido:      y       -> valor mapeado:       14                     Acumulador r atualizado:        3670016 (c =    0       )
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        3751936 (c =    1       )
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        3753472 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 21] Decodificada:       9GkWYjLDi7cA9
+                                                                       [STRING 22] Antes da decodificação:     JhbNkjPKIjUvIbNZGww=
+Char lido:      J       -> valor mapeado:       12                     Acumulador r atualizado:        3145728 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        3170304 (c =    1       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        3170560 (c =    2       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        3170613 (c =    3       )
+Caractere(s) adicionado(s) à saída:     0a5                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        6901760 (c =    1       )              Char lido:      P       -> valor mapeado:       33
+Acumulador r atualizado:        6903872 (c =    2       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        6903892 (c =    3       )              Caractere(s) adicionado(s) à saída:     iXT
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        4456448 (c =    0       )
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        4542464 (c =    1       )
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        4544256 (c =    2       )
+Char lido:      v       -> valor mapeado:       49                     Acumulador r atualizado:        4544305 (c =    3       )
+Caractere(s) adicionado(s) à saída:     EW1                            Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        4456448 (c =    0       )              Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        4472832 (c =    1       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        4476224 (c =    2       )              Char lido:      Z       -> valor mapeado:       40
+Acumulador r atualizado:        4476264 (c =    3       )              Caractere(s) adicionado(s) à saída:     DMh
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        3407872 (c =    0       )
+Char lido:      w       -> valor mapeado:       52                     Acumulador r atualizado:        3620864 (c =    1       )
+Char lido:      w       -> valor mapeado:       52                     Acumulador r atualizado:        3624192 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 22] Decodificada:       0a5iXTEW1DMh7
+                                                                       [STRING 23] Antes da decodificação:     UDjw86jw50IP5pv2
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        7561216 (c =    1       )
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        7562560 (c =    2       )
+Char lido:      w       -> valor mapeado:       52                     Acumulador r atualizado:        7562612 (c =    3       )
+Caractere(s) adicionado(s) à saída:     set                            Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        7168000 (c =    1       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7169344 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        7169396 (c =    3       )              Caractere(s) adicionado(s) à saída:     met
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6385664 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        6386752 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        6386785 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ata                            Char lido:      5       -> valor mapeado:       24
+Acumulador r atualizado:        6291456 (c =    0       )              Char lido:      p       -> valor mapeado:       38
+Acumulador r atualizado:        6447104 (c =    1       )              Char lido:      v       -> valor mapeado:       49
+Acumulador r atualizado:        6450240 (c =    2       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        6450277 (c =    3       )              Caractere(s) adicionado(s) à saída:     ble
+[STRING 23] Decodificada:       setmetatable                           
+[STRING 24] Antes da decodificação:     SpvY8Lg=                       Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      p       -> valor mapeado:       38
+Acumulador r atualizado:        6709248 (c =    1       )              Char lido:      v       -> valor mapeado:       49
+Acumulador r atualizado:        6712384 (c =    2       )              Char lido:      Y       -> valor mapeado:       47
+Acumulador r atualizado:        6712431 (c =    3       )              Caractere(s) adicionado(s) à saída:     flo
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      L       -> valor mapeado:       55                     Acumulador r atualizado:        7303168 (c =    1       )
+Char lido:      g       -> valor mapeado:       8                      Acumulador r atualizado:        7303680 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 24] Decodificada:       floo
+                                                                       [STRING 25] Antes da decodificação:     Upje8LS2
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        7495680 (c =    1       )
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        7497024 (c =    2       )
+Char lido:      e       -> valor mapeado:       45                     Acumulador r atualizado:        7497069 (c =    3       )
+Caractere(s) adicionado(s) à saída:     rem                            Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      L       -> valor mapeado:       55
+Acumulador r atualizado:        7303168 (c =    1       )              Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        7304768 (c =    2       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        7304805 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ove                            [STRING 25] Decodificada:       remove
+                                                                       [STRING 26] Antes da decodificação:     UhGP8hu=
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        7364608 (c =    1       )
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        7365440 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        7365473 (c =    3       )
+Caractere(s) adicionado(s) à saída:     pca                            Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7102464 (c =    1       )              Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        7105536 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 26] Decodificada:       pcal                                   
+[STRING 27] Antes da decodificação:     IblrS0oJUBjPUq==               Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        4456448 (c =    0       )              Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        4472832 (c =    1       )              Char lido:      l       -> valor mapeado:       9
+Acumulador r atualizado:        4473408 (c =    2       )              Char lido:      r       -> valor mapeado:       15
+Acumulador r atualizado:        4473423 (c =    3       )              Caractere(s) adicionado(s) à saída:     DBO
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6647808 (c =    1       )
+Char lido:      o       -> valor mapeado:       1                      Acumulador r atualizado:        6647872 (c =    2       )
+Char lido:      J       -> valor mapeado:       12                     Acumulador r atualizado:        6647884 (c =    3       )
+Caractere(s) adicionado(s) à saída:     epL                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      B       -> valor mapeado:       36
+Acumulador r atualizado:        7487488 (c =    1       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7488832 (c =    2       )              Char lido:      P       -> valor mapeado:       33
+Acumulador r atualizado:        7488865 (c =    3       )              Caractere(s) adicionado(s) à saída:     rEa
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      q       -> valor mapeado:       0                      Acumulador r atualizado:        7340032 (c =    1       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 27] Decodificada:       DBOepLrEap
+                                                                       [STRING 28] Antes da decodificação:     ThX+T6N/S0g=
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        7602176 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        7626752 (c =    1       )
+Char lido:      X       -> valor mapeado:       61                     Acumulador r atualizado:        7630656 (c =    2       )
+Char lido:      +       -> valor mapeado:       46                     Acumulador r atualizado:        7630702 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ton                            Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        7692288 (c =    1       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        7695680 (c =    2       )              Char lido:      /       -> valor mapeado:       34
+Acumulador r atualizado:        7695714 (c =    3       )
+Caractere(s) adicionado(s) à saída:     umb
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6647808 (c =    1       )
+Char lido:      g       -> valor mapeado:       8                      Acumulador r atualizado:        6648320 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 28] Decodificada:       tonumbe
+                                                                       [STRING 29] Antes da decodificação:     ULIfk6W7
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      L       -> valor mapeado:       55                     Acumulador r atualizado:        7565312 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        7566400 (c =    2       )
+Char lido:      f       -> valor mapeado:       50                     Acumulador r atualizado:        7566450 (c =    3       )
+Caractere(s) adicionado(s) à saída:     str                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        6905856 (c =    1       )              Char lido:      W       -> valor mapeado:       57
+Acumulador r atualizado:        6909504 (c =    2       )              Char lido:      7       -> valor mapeado:       39
+Acumulador r atualizado:        6909543 (c =    3       )              Caractere(s) adicionado(s) à saída:     ing
+[STRING 29] Decodificada:       string                                 
+[STRING 30] Antes da decodificação:     8hj+                           Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7102464 (c =    1       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7103808 (c =    2       )              Char lido:      +       -> valor mapeado:       46
+Acumulador r atualizado:        7103854 (c =    3       )              Caractere(s) adicionado(s) à saída:     len
+[STRING 30] Decodificada:       len                                    
+[STRING 31] Antes da decodificação:     ThXVT4l38pU=                   Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7626752 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        7630656 (c =    2       )              Char lido:      V       -> valor mapeado:       51
+Acumulador r atualizado:        7630707 (c =    3       )              Caractere(s) adicionado(s) à saída:     tos
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        7602176 (c =    0       )
+Char lido:      4       -> valor mapeado:       7                      Acumulador r atualizado:        7630848 (c =    1       )
+Char lido:      l       -> valor mapeado:       9                      Acumulador r atualizado:        7631424 (c =    2       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        7631465 (c =    3       )
+Caractere(s) adicionado(s) à saída:     tri                            Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      p       -> valor mapeado:       38
+Acumulador r atualizado:        7233536 (c =    1       )              Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7235328 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 31] Decodificada:       tostrin                                
+[STRING 32] Antes da decodificação:     J2gLODWbO4gwkKXP               Char lido:      J       -> valor mapeado:       12
+Acumulador r atualizado:        3145728 (c =    0       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        3297280 (c =    1       )              Char lido:      g       -> valor mapeado:       8
+Acumulador r atualizado:        3297792 (c =    2       )              Char lido:      L       -> valor mapeado:       55
+Acumulador r atualizado:        3297847 (c =    3       )              Caractere(s) adicionado(s) à saída:     2R7
+Char lido:      O       -> valor mapeado:       18                     Acumulador r atualizado:        4718592 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        4939776 (c =    1       )
+Char lido:      W       -> valor mapeado:       57                     Acumulador r atualizado:        4943424 (c =    2       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        4943428 (c =    3       )
+Caractere(s) adicionado(s) à saída:     KnD                            Char lido:      O       -> valor mapeado:       18
+Acumulador r atualizado:        4718592 (c =    0       )              Char lido:      4       -> valor mapeado:       7
+Acumulador r atualizado:        4747264 (c =    1       )              Char lido:      g       -> valor mapeado:       8
+Acumulador r atualizado:        4747776 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        4747828 (c =    3       )              Caractere(s) adicionado(s) à saída:     Hr4
+Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        6897664 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        6901568 (c =    2       )              Char lido:      P       -> valor mapeado:       33
+Acumulador r atualizado:        6901601 (c =    3       )              Caractere(s) adicionado(s) à saída:     iOa
+[STRING 32] Decodificada:       2R7KnDHr4iOa                           
+[STRING 33] Antes da decodificação:     y/F2SHZ3yF==                   Char lido:      y       -> valor mapeado:       14
+Acumulador r atualizado:        3670016 (c =    0       )              Char lido:      /       -> valor mapeado:       34
+Acumulador r atualizado:        3809280 (c =    1       )              Char lido:      F       -> valor mapeado:       32
+Acumulador r atualizado:        3811328 (c =    2       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        3811365 (c =    3       )              Caractere(s) adicionado(s) à saída:     :(%
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      H       -> valor mapeado:       2                      Acumulador r atualizado:        6561792 (c =    1       )
+Char lido:      Z       -> valor mapeado:       40                     Acumulador r atualizado:        6564352 (c =    2       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        6564393 (c =    3       )
+Caractere(s) adicionado(s) à saída:     d*)                            Char lido:      y       -> valor mapeado:       14
+Acumulador r atualizado:        3670016 (c =    0       )              Char lido:      F       -> valor mapeado:       32
+Acumulador r atualizado:        3801088 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 33] Decodificada:       :(%d*):                                
+[STRING 34] Antes da decodificação:                                    [STRING 34] Decodificada:
+                                                                       [STRING 35] Antes da decodificação:     5DX+5D1w
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        6512640 (c =    1       )
+Char lido:      X       -> valor mapeado:       61                     Acumulador r atualizado:        6516544 (c =    2       )
+Char lido:      +       -> valor mapeado:       46                     Acumulador r atualizado:        6516590 (c =    3       )
+Caractere(s) adicionado(s) à saída:     con                            Char lido:      5       -> valor mapeado:       24
+Acumulador r atualizado:        6291456 (c =    0       )              Char lido:      D       -> valor mapeado:       54
+Acumulador r atualizado:        6512640 (c =    1       )              Char lido:      1       -> valor mapeado:       5
+Acumulador r atualizado:        6512960 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        6513012 (c =    3       )              Caractere(s) adicionado(s) à saída:     cat
+[STRING 35] Decodificada:       concat                                 
+[STRING 36] Antes da decodificação:     GpNR50TxI0jRyblhkNF=           Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        3407872 (c =    0       )              Char lido:      p       -> valor mapeado:       38
+Acumulador r atualizado:        3563520 (c =    1       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        3566912 (c =    2       )              Char lido:      R       -> valor mapeado:       35
+Acumulador r atualizado:        3566947 (c =    3       )              Caractere(s) adicionado(s) à saída:     6mc
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6385664 (c =    1       )
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        6387520 (c =    2       )
+Char lido:      x       -> valor mapeado:       58
+Acumulador r atualizado:        6387578 (c =    3       )
+Caractere(s) adicionado(s) à saída:     awz
+Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        4456448 (c =    0       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        4550656 (c =    1       )
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        4552000 (c =    2       )
+Char lido:      R       -> valor mapeado:       35                     Acumulador r atualizado:        4552035 (c =    3       )
+Caractere(s) adicionado(s) à saída:     Euc                            Char lido:      y       -> valor mapeado:       14
+Acumulador r atualizado:        3670016 (c =    0       )              Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        3686400 (c =    1       )              Char lido:      l       -> valor mapeado:       9
+Acumulador r atualizado:        3686976 (c =    2       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        3686982 (c =    3       )              Caractere(s) adicionado(s) à saída:     8BF
+Char lido:      k       -> valor mapeado:       26                     Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        7032832 (c =    1       )
+Char lido:      F       -> valor mapeado:       32                     Acumulador r atualizado:        7034880 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 36] Decodificada:       6mcawzEuc8BFk
+                                                                       [STRING 37] Antes da decodificação:     Th1/8hK=
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        7602176 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        7626752 (c =    1       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        7627072 (c =    2       )
+Char lido:      /       -> valor mapeado:       34                     Acumulador r atualizado:        7627106 (c =    3       )
+Caractere(s) adicionado(s) à saída:     tab                            Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        7077888 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7102464 (c =    1       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        7103744 (c =    2       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 37] Decodificada:       tabl                                   
+[STRING 38] Antes da decodificação:     JpKWURolkN2BTKGyOu==           Char lido:      J       -> valor mapeado:       12
+Acumulador r atualizado:        3145728 (c =    0       )              Char lido:      p       -> valor mapeado:       38
+Acumulador r atualizado:        3301376 (c =    1       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        3302656 (c =    2       )              Char lido:      W       -> valor mapeado:       57
+Acumulador r atualizado:        3302713 (c =    3       )              Caractere(s) adicionado(s) à saída:     2e9
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      R       -> valor mapeado:       35                     Acumulador r atualizado:        7483392 (c =    1       )
+Char lido:      o       -> valor mapeado:       1                      Acumulador r atualizado:        7483456 (c =    2       )
+Char lido:      l       -> valor mapeado:       9                      Acumulador r atualizado:        7483465 (c =    3       )
+Caractere(s) adicionado(s) à saída:     r0I                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        7032832 (c =    1       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        7035200 (c =    2       )              Char lido:      B       -> valor mapeado:       36
+Acumulador r atualizado:        7035236 (c =    3       )              Caractere(s) adicionado(s) à saída:     kYd
+Char lido:      T       -> valor mapeado:       29                     Acumulador r atualizado:        7602176 (c =    0       )
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        7684096 (c =    1       )
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        7684928 (c =    2       )
+Char lido:      y       -> valor mapeado:       14                     Acumulador r atualizado:        7684942 (c =    3       )
+Caractere(s) adicionado(s) à saída:     uCN                            Char lido:      O       -> valor mapeado:       18
+Acumulador r atualizado:        4718592 (c =    0       )              Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        4915200 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 38] Decodificada:       2e9r0IkYduCNK                          
+[STRING 39] Antes da decodificação:     kBIokDJwUclRU6ebj1b=           Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      B       -> valor mapeado:       36                     Acumulador r atualizado:        6963200 (c =    1       )
+Char lido:      I       -> valor mapeado:       17                     Acumulador r atualizado:        6964288 (c =    2       )
+Char lido:      o       -> valor mapeado:       1                      Acumulador r atualizado:        6964289 (c =    3       )
+Caractere(s) adicionado(s) à saída:     jDA                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      D       -> valor mapeado:       54
+Acumulador r atualizado:        7036928 (c =    1       )              Char lido:      J       -> valor mapeado:       12
+Acumulador r atualizado:        7037696 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        7037748 (c =    3       )              Caractere(s) adicionado(s) à saída:     kc4
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      c       -> valor mapeado:       3                      Acumulador r atualizado:        7352320 (c =    1       )
+Char lido:      l       -> valor mapeado:       9                      Acumulador r atualizado:        7352896 (c =    2       )
+Char lido:      R       -> valor mapeado:       35                     Acumulador r atualizado:        7352931 (c =    3       )
+Caractere(s) adicionado(s) à saída:     p2c                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        7430144 (c =    1       )              Char lido:      e       -> valor mapeado:       45
+Acumulador r atualizado:        7433024 (c =    2       )              Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        7433028 (c =    3       )              Caractere(s) adicionado(s) à saída:     qkD
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        5505024 (c =    0       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        5525504 (c =    1       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        5525760 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 39] Decodificada:       jDAkc4p2cqkDT
+                                                                       [STRING 40] Antes da decodificação:     GBNgjb2IKh39jBS58t==
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        3407872 (c =    0       )
+Char lido:      B       -> valor mapeado:       36                     Acumulador r atualizado:        3555328 (c =    1       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        3558720 (c =    2       )
+Char lido:      g       -> valor mapeado:       8                      Acumulador r atualizado:        3558728 (c =    3       )
+Caractere(s) adicionado(s) à saída:     6MH                            Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        5505024 (c =    0       )              Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        5521408 (c =    1       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        5523776 (c =    2       )              Char lido:      I       -> valor mapeado:       17
+Acumulador r atualizado:        5523793 (c =    3       )              Caractere(s) adicionado(s) à saída:     TIQ
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        5242880 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        5267456 (c =    1       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        5270080 (c =    2       )
+Char lido:      9       -> valor mapeado:       11                     Acumulador r atualizado:        5270091 (c =    3       )
+Caractere(s) adicionado(s) à saída:     PjK                            Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        5505024 (c =    0       )              Char lido:      B       -> valor mapeado:       36
+Acumulador r atualizado:        5652480 (c =    1       )              Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        5654080 (c =    2       )              Char lido:      5       -> valor mapeado:       24
+Acumulador r atualizado:        5654104 (c =    3       )              Caractere(s) adicionado(s) à saída:     VFX
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      t       -> valor mapeado:       16                     Acumulador r atualizado:        7143424 (c =    1       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 40] Decodificada:       6MHTIQPjKVFXm
+                                                                       [STRING 41] Antes da decodificação:     5DPPUF==
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        6512640 (c =    1       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        6514752 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        6514785 (c =    3       )
+Caractere(s) adicionado(s) à saída:     cha                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      F       -> valor mapeado:       32
+Acumulador r atualizado:        7471104 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 41] Decodificada:       char                                   
+[STRING 42] Antes da decodificação:     0NXQS6A=                       Char lido:      0       -> valor mapeado:       23
+Acumulador r atualizado:        6029312 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        6246400 (c =    1       )              Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        6250304 (c =    2       )              Char lido:      Q       -> valor mapeado:       44
+Acumulador r atualizado:        6250348 (c =    3       )              Caractere(s) adicionado(s) à saída:     __l
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      6       -> valor mapeado:       22                     Acumulador r atualizado:        6643712 (c =    1       )
+Char lido:      A       -> valor mapeado:       56                     Acumulador r atualizado:        6647296 (c =    2       )
+Char lido:      =       -> valor mapeado:       nil                    [STRING 42] Decodificada:       __le
+                                                                       [STRING 43] Antes da decodificação:     8hXPS4GwUp2+Su==
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        7102464 (c =    1       )
+Char lido:      X       -> valor mapeado:       61                     Acumulador r atualizado:        7106368 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        7106401 (c =    3       )
+Caractere(s) adicionado(s) à saída:     loa                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      4       -> valor mapeado:       7
+Acumulador r atualizado:        6582272 (c =    1       )              Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        6583104 (c =    2       )              Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        6583156 (c =    3       )              Caractere(s) adicionado(s) à saída:     dst
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        7495680 (c =    1       )
+Char lido:      2       -> valor mapeado:       37                     Acumulador r atualizado:        7498048 (c =    2       )
+Char lido:      +       -> valor mapeado:       46                     Acumulador r atualizado:        7498094 (c =    3       )
+Caractere(s) adicionado(s) à saída:     rin                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        6750208 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 43] Decodificada:       loadstring                             
+[STRING 44] Antes da decodificação:     62lLkN2PUjohUN31               Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        5767168 (c =    0       )              Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        5918720 (c =    1       )              Char lido:      l       -> valor mapeado:       9
+Acumulador r atualizado:        5919296 (c =    2       )              Char lido:      L       -> valor mapeado:       55
+Acumulador r atualizado:        5919351 (c =    3       )              Caractere(s) adicionado(s) à saída:     ZRw
+Char lido:      k       -> valor mapeado:       26                     Acumulador r atualizado:        6815744 (c =    0       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        7032832 (c =    1       )
+Char lido:      2       -> valor mapeado:       37                     Acumulador r atualizado:        7035200 (c =    2       )
+Char lido:      P       -> valor mapeado:       33                     Acumulador r atualizado:        7035233 (c =    3       )
+Caractere(s) adicionado(s) à saída:     kYa                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      j       -> valor mapeado:       21
+Acumulador r atualizado:        7426048 (c =    1       )
+Char lido:      o       -> valor mapeado:       1
+Acumulador r atualizado:        7426112 (c =    2       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        7426118 (c =    3       )              Caractere(s) adicionado(s) à saída:     qPF
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        7340032 (c =    0       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        7557120 (c =    1       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        7559744 (c =    2       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        7559749 (c =    3       )
+Caractere(s) adicionado(s) à saída:     sZE                            [STRING 44] Decodificada:       ZRwkYaqPFsZE
+                                                                       [STRING 45] Antes da decodificação:     861wkq==
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        7077888 (c =    0       )
+Char lido:      6       -> valor mapeado:       22                     Acumulador r atualizado:        7168000 (c =    1       )
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        7168320 (c =    2       )
+Char lido:      w       -> valor mapeado:       52                     Acumulador r atualizado:        7168372 (c =    3       )
+Caractere(s) adicionado(s) à saída:     mat                            Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        6815744 (c =    0       )              Char lido:      q       -> valor mapeado:       0
+Acumulador r atualizado:        6815744 (c =    1       )              Char lido:      =       -> valor mapeado:       nil
+[STRING 45] Decodificada:       math                                   
+[STRING 46] Antes da decodificação:     T6Wu56Gn                       Char lido:      T       -> valor mapeado:       29
+Acumulador r atualizado:        7602176 (c =    0       )              Char lido:      6       -> valor mapeado:       22
+Acumulador r atualizado:        7692288 (c =    1       )              Char lido:      W       -> valor mapeado:       57
+Acumulador r atualizado:        7695936 (c =    2       )              Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        7695984 (c =    3       )              Caractere(s) adicionado(s) à saída:     unp
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      6       -> valor mapeado:       22                     Acumulador r atualizado:        6381568 (c =    1       )
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        6382400 (c =    2       )
+Char lido:      n       -> valor mapeado:       43                     Acumulador r atualizado:        6382443 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ack                            [STRING 46] Decodificada:       unpack
+                                                                       [STRING 47] Antes da decodificação:     l3bDXfbAQHmr546GtxmeycuJCREUUcsn5t5UsgGa/hnvKNHLeal9e5Ds6jAsSEMAm/CCuYfM18pJb8eJLrsy2h0FO6z5ndPvPk/z3NXLKkBUzQoNtWxvSkK04iK9wu==
+Char lido:      l       -> valor mapeado:       9                      Acumulador r atualizado:        2359296 (c =    0       )
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        2527232 (c =    1       )
+Char lido:      b       -> valor mapeado:       4                      Acumulador r atualizado:        2527488 (c =    2       )
+Char lido:      D       -> valor mapeado:       54                     Acumulador r atualizado:        2527542 (c =    3       )
+Caractere(s) adicionado(s) à saída:     &�6                            Char lido:      X       -> valor mapeado:       61
+Acumulador r atualizado:        15990784        (c =    0       )      Char lido:      f       -> valor mapeado:       50
+Acumulador r atualizado:        16195584        (c =    1       )      Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        16195840        (c =    2       )      Char lido:      A       -> valor mapeado:       56
+Acumulador r atualizado:        16195896        (c =    3       )      Caractere(s) adicionado(s) à saída:     �!8
+Char lido:      Q       -> valor mapeado:       44                     Acumulador r atualizado:        11534336        (c =    0       )
+Char lido:      H       -> valor mapeado:       2                      Acumulador r atualizado:        11542528        (c =    1       )
+Char lido:      m       -> valor mapeado:       19                     Acumulador r atualizado:        11543744        (c =    2       )
+Char lido:      r       -> valor mapeado:       15
+Acumulador r atualizado:        11543759        (c =    3       )      Caractere(s) adicionado(s) à saída:     �$�
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      4       -> valor mapeado:       7                      Acumulador r atualizado:        6320128 (c =    1       )
+Char lido:      6       -> valor mapeado:       22                     Acumulador r atualizado:        6321536 (c =    2       )
+Char lido:      G       -> valor mapeado:       13                     Acumulador r atualizado:        6321549 (c =    3       )
+Caractere(s) adicionado(s) à saída:     `u�                            Char lido:      t       -> valor mapeado:       16
+Acumulador r atualizado:        4194304 (c =    0       )              Char lido:      x       -> valor mapeado:       58
+Acumulador r atualizado:        4431872 (c =    1       )              Char lido:      m       -> valor mapeado:       19
+Acumulador r atualizado:        4433088 (c =    2       )              Char lido:      e       -> valor mapeado:       45
+Acumulador r atualizado:        4433133 (c =    3       )              Caractere(s) adicionado(s) à saída:     C��
+Char lido:      y       -> valor mapeado:       14                     Acumulador r atualizado:        3670016 (c =    0       )
+Char lido:      c       -> valor mapeado:       3                      Acumulador r atualizado:        3682304 (c =    1       )
+Char lido:      u       -> valor mapeado:       48                     Acumulador r atualizado:        3685376 (c =    2       )
+Char lido:      J       -> valor mapeado:       12                     Acumulador r atualizado:        3685388 (c =    3       )
+Caractere(s) adicionado(s) à saída:     8<                             
+Char lido:      C       -> valor mapeado:       62                     Acumulador r atualizado:        16252928        (c =    0       )
+Char lido:      R       -> valor mapeado:       35                     Acumulador r atualizado:        16396288        (c =    1       )
+Char lido:      E       -> valor mapeado:       42                     Acumulador r atualizado:        16398976        (c =    2       )
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        16399004        (c =    3       )
+Caractere(s) adicionado(s) à saída:     �:�                            Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        7340032 (c =    0       )              Char lido:      c       -> valor mapeado:       3
+Acumulador r atualizado:        7352320 (c =    1       )              Char lido:      s       -> valor mapeado:       63
+Acumulador r atualizado:        7356352 (c =    2       )              Char lido:      n       -> valor mapeado:       43
+Acumulador r atualizado:        7356395 (c =    3       )              Caractere(s) adicionado(s) à saída:     p?�
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6291456 (c =    0       )
+Char lido:      t       -> valor mapeado:       16                     Acumulador r atualizado:        6356992 (c =    1       )
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        6358528 (c =    2       )
+Char lido:      U       -> valor mapeado:       28                     Acumulador r atualizado:        6358556 (c =    3       )
+Caractere(s) adicionado(s) à saída:     a                              Char lido:      s       -> valor mapeado:       63
+Acumulador r atualizado:        16515072        (c =    0       )      Char lido:      g       -> valor mapeado:       8
+Acumulador r atualizado:        16547840        (c =    1       )      Char lido:      G       -> valor mapeado:       13
+Acumulador r atualizado:        16548672        (c =    2       )      Char lido:      a       -> valor mapeado:       30
+Acumulador r atualizado:        16548702        (c =    3       )      Caractere(s) adicionado(s) à saída:     ��^
+Char lido:      /       -> valor mapeado:       34                     Acumulador r atualizado:        8912896 (c =    0       )
+Char lido:      h       -> valor mapeado:       6                      Acumulador r atualizado:        8937472 (c =    1       )
+Char lido:      n       -> valor mapeado:       43                     Acumulador r atualizado:        8940224 (c =    2       )
+Char lido:      v       -> valor mapeado:       49                     Acumulador r atualizado:        8940273 (c =    3       )
+Caractere(s) adicionado(s) à saída:     �j�                            Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        5242880 (c =    0       )              Char lido:      N       -> valor mapeado:       53
+Acumulador r atualizado:        5459968 (c =    1       )              Char lido:      H       -> valor mapeado:       2
+Acumulador r atualizado:        5460096 (c =    2       )              Char lido:      L       -> valor mapeado:       55
+Acumulador r atualizado:        5460151 (c =    3       )              Caractere(s) adicionado(s) à saída:     SP�
+Char lido:      e       -> valor mapeado:       45                     Acumulador r atualizado:        11796480        (c =    0       )
+Char lido:      a       -> valor mapeado:       30                     Acumulador r atualizado:        11919360        (c =    1       )
+Char lido:      l       -> valor mapeado:       9                      Acumulador r atualizado:        11919936        (c =    2       )
+Char lido:      9       -> valor mapeado:       11                     Acumulador r atualizado:        11919947        (c =    3       )
+Caractere(s) adicionado(s) à saída:     ��K                            Char lido:      e       -> valor mapeado:       45
+Acumulador r atualizado:        11796480        (c =    0       )      Char lido:      5       -> valor mapeado:       24
+Acumulador r atualizado:        11894784        (c =    1       )      Char lido:      D       -> valor mapeado:       54
+Acumulador r atualizado:        11898240        (c =    2       )      Char lido:      s       -> valor mapeado:       63
+Acumulador r atualizado:        11898303        (c =    3       )      Caractere(s) adicionado(s) à saída:     ���
+Char lido:      6       -> valor mapeado:       22                     Acumulador r atualizado:        5767168 (c =    0       )
+Char lido:      j       -> valor mapeado:       21                     Acumulador r atualizado:        5853184 (c =    1       )
+Char lido:      A       -> valor mapeado:       56                     Acumulador r atualizado:        5856768 (c =    2       )
+Char lido:      s       -> valor mapeado:       63                     Acumulador r atualizado:        5856831 (c =    3       )
+Caractere(s) adicionado(s) à saída:     Y^?                            Char lido:      S       -> valor mapeado:       25
+Acumulador r atualizado:        6553600 (c =    0       )              Char lido:      E       -> valor mapeado:       42
+Acumulador r atualizado:        6725632 (c =    1       )              Char lido:      M       -> valor mapeado:       59
+Acumulador r atualizado:        6729408 (c =    2       )              Char lido:      A       -> valor mapeado:       56
+Acumulador r atualizado:        6729464 (c =    3       )              Caractere(s) adicionado(s) à saída:     f��
+Char lido:      m       -> valor mapeado:       19                     Acumulador r atualizado:        4980736 (c =    0       )
+Char lido:      /       -> valor mapeado:       34                     Acumulador r atualizado:        5120000 (c =    1       )
+Char lido:      C       -> valor mapeado:       62                     Acumulador r atualizado:        5123968 (c =    2       )
+Char lido:      C       -> valor mapeado:       62                     Acumulador r atualizado:        5124030 (c =    3       )
+Caractere(s) adicionado(s) à saída:     N/�                            Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        12582912        (c =    0       )      Char lido:      Y       -> valor mapeado:       47
+Acumulador r atualizado:        12775424        (c =    1       )      Char lido:      f       -> valor mapeado:       50
+Acumulador r atualizado:        12778624        (c =    2       )      Char lido:      M       -> valor mapeado:       59
+Acumulador r atualizado:        12778683        (c =    3       )      Caractere(s) adicionado(s) à saída:     ���
+Char lido:      1       -> valor mapeado:       5                      Acumulador r atualizado:        1310720 (c =    0       )
+Char lido:      8       -> valor mapeado:       27                     Acumulador r atualizado:        1421312 (c =    1       )
+Char lido:      p       -> valor mapeado:       38                     Acumulador r atualizado:        1423744 (c =    2       )
+Char lido:      J       -> valor mapeado:       12                     Acumulador r atualizado:        1423756 (c =    3       )
+Caractere(s) adicionado(s) à saída:     ��                             Char lido:      b       -> valor mapeado:       4
+Acumulador r atualizado:        1048576 (c =    0       )              Char lido:      8       -> valor mapeado:       27
+Acumulador r atualizado:        1159168 (c =    1       )              Char lido:      e       -> valor mapeado:       45
+Acumulador r atualizado:        1162048 (c =    2       )              Char lido:      J       -> valor mapeado:       12
+Acumulador r atualizado:        1162060 (c =    3       )              Caractere(s) adicionado(s) à saída:     �L
+Char lido:      L       -> valor mapeado:       55                     Acumulador r atualizado:        14417920        (c =    0       )
+Char lido:      r       -> valor mapeado:       15                     Acumulador r atualizado:        14479360        (c =    1       )
+Char lido:      s       -> valor mapeado:       63                     Acumulador r atualizado:        14483392        (c =    2       )
+Char lido:      y       -> valor mapeado:       14                     Acumulador r atualizado:        14483406        (c =    3       )
+Caractere(s) adicionado(s) à saída:     ���                            Char lido:      2       -> valor mapeado:       37
+Acumulador r atualizado:        9699328 (c =    0       )              Char lido:      h       -> valor mapeado:       6
+Acumulador r atualizado:        9723904 (c =    1       )              Char lido:      0       -> valor mapeado:       23
+Acumulador r atualizado:        9725376 (c =    2       )              Char lido:      F       -> valor mapeado:       32
+Acumulador r atualizado:        9725408 (c =    3       )              Caractere(s) adicionado(s) à saída:     �e�
+Char lido:      O       -> valor mapeado:       18                     Acumulador r atualizado:        4718592 (c =    0       )
+Char lido:      6       -> valor mapeado:       22                     Acumulador r atualizado:        4808704 (c =    1       )
+Char lido:      z       -> valor mapeado:       10                     Acumulador r atualizado:        4809344 (c =    2       )
+Char lido:      5       -> valor mapeado:       24                     Acumulador r atualizado:        4809368 (c =    3       )
+Caractere(s) adicionado(s) à saída:     Ib�                            Char lido:      n       -> valor mapeado:       43
+Acumulador r atualizado:        11272192        (c =    0       )      Char lido:      d       -> valor mapeado:       60
+Acumulador r atualizado:        11517952        (c =    1       )      Char lido:      P       -> valor mapeado:       33
+Acumulador r atualizado:        11520064        (c =    2       )      Char lido:      v       -> valor mapeado:       49
+Acumulador r atualizado:        11520113        (c =    3       )      Caractere(s) adicionado(s) à saída:     ��q
+Char lido:      P       -> valor mapeado:       33
+Acumulador r atualizado:        8650752 (c =    0       )
+Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        8757248 (c =    1       )              Char lido:      /       -> valor mapeado:       34
+Acumulador r atualizado:        8759424 (c =    2       )              Char lido:      z       -> valor mapeado:       10
+Acumulador r atualizado:        8759434 (c =    3       )              Caractere(s) adicionado(s) à saída:     ���
+Char lido:      3       -> valor mapeado:       41                     Acumulador r atualizado:        10747904        (c =    0       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        10964992        (c =    1       )
+Char lido:      X       -> valor mapeado:       61                     Acumulador r atualizado:        10968896        (c =    2       )
+Char lido:      L       -> valor mapeado:       55                     Acumulador r atualizado:        10968951        (c =    3       )
+Caractere(s) adicionado(s) à saída:     �_w                            Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        5242880 (c =    0       )              Char lido:      k       -> valor mapeado:       26
+Acumulador r atualizado:        5349376 (c =    1       )              Char lido:      B       -> valor mapeado:       36
+Acumulador r atualizado:        5351680 (c =    2       )              Char lido:      U       -> valor mapeado:       28
+Acumulador r atualizado:        5351708 (c =    3       )              Caractere(s) adicionado(s) à saída:     Q�
+Char lido:      z       -> valor mapeado:       10                     Acumulador r atualizado:        2621440 (c =    0       )
+Char lido:      Q       -> valor mapeado:       44                     Acumulador r atualizado:        2801664 (c =    1       )
+Char lido:      o       -> valor mapeado:       1                      Acumulador r atualizado:        2801728 (c =    2       )
+Char lido:      N       -> valor mapeado:       53                     Acumulador r atualizado:        2801781 (c =    3       )
+Caractere(s) adicionado(s) à saída:     *�u                            Char lido:      t       -> valor mapeado:       16
+Acumulador r atualizado:        4194304 (c =    0       )              Char lido:      W       -> valor mapeado:       57
+Acumulador r atualizado:        4427776 (c =    1       )              Char lido:      x       -> valor mapeado:       58
+Acumulador r atualizado:        4431488 (c =    2       )              Char lido:      v       -> valor mapeado:       49
+Acumulador r atualizado:        4431537 (c =    3       )              Caractere(s) adicionado(s) à saída:     C��
+Char lido:      S       -> valor mapeado:       25                     Acumulador r atualizado:        6553600 (c =    0       )
+Char lido:      k       -> valor mapeado:       26                     Acumulador r atualizado:        6660096 (c =    1       )
+Char lido:      K       -> valor mapeado:       20                     Acumulador r atualizado:        6661376 (c =    2       )
+Char lido:      0       -> valor mapeado:       23                     Acumulador r atualizado:        6661399 (c =    3       )
+Caractere(s) adicionado(s) à saída:     e�                             Char lido:      4       -> valor mapeado:       7
+Acumulador r atualizado:        1835008 (c =    0       )              Char lido:      i       -> valor mapeado:       31
+Acumulador r atualizado:        1961984 (c =    1       )              Char lido:      K       -> valor mapeado:       20
+Acumulador r atualizado:        1963264 (c =    2       )              Char lido:      9       -> valor mapeado:       11
+Acumulador r atualizado:        1963275 (c =    3       )              Caractere(s) adicionado(s) à saída:     �
+                                                                       Char lido:      w       -> valor mapeado:       52
+Acumulador r atualizado:        13631488        (c =    0       )      Char lido:      u       -> valor mapeado:       48
+Acumulador r atualizado:        13828096        (c =    1       )      Char lido:      =       -> valor mapeado:       nil
+[STRING 47] Decodificada:       &�6�!8�$�`u�C��8<                                                                       �:�p?�a��^�j�SP���K���Y^?f��N/�������L��Δe�Ib���q����_wQ�*�uC��e��                                                                       �
+f(40792) ->     __index                                                f(40790) ->     __gc
+f(40820) ->     __le                                                   f(40804) ->     pcal
+f(40807) ->     string                                                 f(40782) ->     gmatch
+f(40792) ->     __index                                                f(40790) ->     __gc
+f(40820) ->     __le                                                   f(40792) ->     __index
+f(40790) ->     __gc                                                   f(40820) ->     __le
