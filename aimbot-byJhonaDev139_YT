@@ -4,6 +4,8 @@ print("Aimbot - byJhonaDev139 - V0.2 com FOV, interface, filtros e controle de f
 local gui = Instance.new("ScreenGui", game.CoreGui)
 gui.Name = "ohcyicyi"
 
+local connections = {}
+
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 220, 0, 300)
 frame.Position = UDim2.new(0, 10, 0.5, -150)
@@ -59,34 +61,18 @@ local localPlayer = players.LocalPlayer
 local camera = workspace.CurrentCamera
 local radius = 100
 
-local function criarSlider(y, label, min, max, callback)
-	local lbl = criarTexto(14, UDim2.new(0, 5, 0, y), label .. ": " .. smoothness)
-	local slider = Instance.new("TextButton", frame)
-	slider.Size = UDim2.new(1, -10, 0, 25)
-	slider.Position = UDim2.new(0, 5, 0, y + 20)
-	slider.Text = "⬅️ Arraste para ajustar ➡️"
-	slider.TextColor3 = Color3.new(1, 1, 1)
-	slider.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	slider.AutoButtonColor = false
+local sliderConn
+sliderConn = runService.RenderStepped:Connect(function()
+	if not gui.Parent then
+		sliderConn:Disconnect()
+		return
+	end
+	if dragging then
+		...
+	end
+end)
+table.insert(connections, sliderConn)
 
-	local dragging = false
-	slider.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
-	end)
-	slider.InputEnded:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
-	end)
-
-	runService.RenderStepped:Connect(function()
-		if dragging then
-			local mouseX = game:GetService("UserInputService"):GetMouseLocation().X
-			local relative = math.clamp((mouseX - slider.AbsolutePosition.X) / slider.AbsoluteSize.X, 0, 1)
-			local valor = math.floor(((min + (max - min) * relative) * 100) + 0.5) / 100
-			lbl.Text = label .. ": " .. valor
-			callback(valor)
-		end
-	end)
-end
 
 -- Toggles
 local yOffset = 30
@@ -184,18 +170,14 @@ local function getClosestPlayer()
 end
 
 local function enableAimbot()
+	if connection then return end -- impede duplicação
 	createFOV()
 	connection = runService.RenderStepped:Connect(function()
-		updateFOVPos()
-		local target = getClosestPlayer()
-		if target then
-			local currentLook = camera.CFrame.LookVector
-			local direction = (target.Position - camera.CFrame.Position).Unit
-			local newLook = currentLook:Lerp(direction, smoothness)
-			camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + newLook)
-		end
+		...
 	end)
+	table.insert(connections, connection)
 end
+
 
 local function disableAimbot()
 	if connection then connection:Disconnect() end
@@ -223,7 +205,9 @@ decFov.MouseButton1Click:Connect(function()
 end)
 
 closeBtn.MouseButton1Click:Connect(function()
-	if connection then connection:Disconnect() end
+	for _, conn in ipairs(connections) do
+		if conn then conn:Disconnect() end
+	end
 	if fovCircle then fovCircle:Remove() end
 	gui:Destroy()
 end)
