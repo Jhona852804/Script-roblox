@@ -113,19 +113,6 @@ local redzlib = {
 			["Color Theme"] = Color3.fromRGB(150, 220, 40),
 			["Color Text"] = Color3.fromRGB(240, 255, 220),
 			["Color Dark Text"] = Color3.fromRGB(160, 190, 120)
-		},
-		Darker = {
-			-- Tema original mantido
-			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(40, 0, 0)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(204, 0, 0))
-			}),
-			["Color Hub 2"] = Color3.fromRGB(15, 0, 0),
-			["Color Stroke"] = Color3.fromRGB(60, 0, 0),
-			["Color Theme"] = Color3.fromRGB(204, 0, 0),
-			["Color Text"] = Color3.fromRGB(255, 230, 230),
-			["Color Dark Text"] = Color3.fromRGB(180, 120, 120)
 		}
 	},
 	Info = {
@@ -2781,5 +2768,6 @@ function redzlib:MakeWindow(Configs)
 	MinimizeButton.Activated:Connect(Window.MinimizeBtn)
 	return Window
 end
+
 
 return redzlib
