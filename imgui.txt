@@ -1,0 +1,1457 @@
+--[[
+    RobloxImGui - Biblioteca de UI inspirada no ImGui
+    Versão: 1.0.0
+    
+    Uma biblioteca modular e flexível para criar interfaces gráficas
+    dinâmicas e interativas no Roblox.
+--]]
+
+local ImGui = {}
+ImGui.__index = ImGui
+ImGui.Version = "1.0.0"
+
+-- Serviços do Roblox
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+-- Constantes
+local FONT = Enum.Font.Gotham
+local HEADER_HEIGHT = 30
+local BORDER_SIZE = 1
+local MIN_WINDOW_SIZE = Vector2.new(200, 100)
+local DRAG_THRESHOLD = 3
+
+--[[
+    Temas de cores predefinidos
+    Permite personalização completa da aparência da UI
+--]]
+ImGui.Themes = {
+    Dark = {
+        WindowBg = Color3.fromRGB(20, 20, 20),
+        WindowBorder = Color3.fromRGB(60, 60, 60),
+        TitleBg = Color3.fromRGB(30, 30, 30),
+        TitleBgActive = Color3.fromRGB(40, 40, 40),
+        TitleText = Color3.fromRGB(255, 255, 255),
+        ButtonBg = Color3.fromRGB(45, 45, 45),
+        ButtonHover = Color3.fromRGB(60, 60, 60),
+        ButtonActive = Color3.fromRGB(75, 75, 75),
+        Text = Color3.fromRGB(255, 255, 255),
+        TextDisabled = Color3.fromRGB(128, 128, 128),
+        Border = Color3.fromRGB(80, 80, 80),
+        FrameBg = Color3.fromRGB(35, 35, 35),
+        FrameBgHovered = Color3.fromRGB(45, 45, 45),
+        FrameBgActive = Color3.fromRGB(55, 55, 55),
+        TabBg = Color3.fromRGB(25, 25, 25),
+        TabActive = Color3.fromRGB(40, 40, 40),
+        TabHover = Color3.fromRGB(35, 35, 35),
+        CheckMark = Color3.fromRGB(100, 200, 100),
+        SliderGrab = Color3.fromRGB(80, 140, 200),
+        SliderGrabActive = Color3.fromRGB(100, 160, 220)
+    },
+    Light = {
+        WindowBg = Color3.fromRGB(240, 240, 240),
+        WindowBorder = Color3.fromRGB(180, 180, 180),
+        TitleBg = Color3.fromRGB(220, 220, 220),
+        TitleBgActive = Color3.fromRGB(200, 200, 200),
+        TitleText = Color3.fromRGB(20, 20, 20),
+        ButtonBg = Color3.fromRGB(200, 200, 200),
+        ButtonHover = Color3.fromRGB(180, 180, 180),
+        ButtonActive = Color3.fromRGB(160, 160, 160),
+        Text = Color3.fromRGB(20, 20, 20),
+        TextDisabled = Color3.fromRGB(128, 128, 128),
+        Border = Color3.fromRGB(150, 150, 150),
+        FrameBg = Color3.fromRGB(230, 230, 230),
+        FrameBgHovered = Color3.fromRGB(220, 220, 220),
+        FrameBgActive = Color3.fromRGB(210, 210, 210),
+        TabBg = Color3.fromRGB(235, 235, 235),
+        TabActive = Color3.fromRGB(200, 200, 200),
+        TabHover = Color3.fromRGB(220, 220, 220),
+        CheckMark = Color3.fromRGB(50, 150, 50),
+        SliderGrab = Color3.fromRGB(60, 120, 180),
+        SliderGrabActive = Color3.fromRGB(80, 140, 200)
+    }
+}
+
+--[[
+    Construtor: Cria uma nova instância do ImGui
+    @param parent: Instância onde a UI será criada (geralmente PlayerGui)
+    @return: Nova instância do ImGui
+--]]
+function ImGui.new(parent)
+    local self = setmetatable({}, ImGui)
+    
+    self.Parent = parent or Players.LocalPlayer:WaitForChild("PlayerGui")
+    self.Windows = {}
+    self.CurrentTheme = ImGui.Themes.Dark
+    self.Hotkeys = {}
+    self.DraggedElement = nil
+    self.FocusedWindow = nil
+    self.IDCounter = 0
+    
+    -- Container principal
+    self.ScreenGui = Instance.new("ScreenGui")
+    self.ScreenGui.Name = "ImGuiContainer"
+    self.ScreenGui.ResetOnSpawn = false
+    self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    self.ScreenGui.Parent = self.Parent
+    
+    -- Configurar eventos de input
+    self:SetupInputHandlers()
+    
+    return self
+end
+
+--[[
+    Gera um ID único para elementos
+    @return: String com ID único
+--]]
+function ImGui:GenerateID()
+    self.IDCounter = self.IDCounter + 1
+    return "ImGui_" .. tostring(self.IDCounter)
+end
+
+--[[
+    Define o tema de cores da UI
+    @param theme: Tabela com cores do tema ou string com nome do tema predefinido
+--]]
+function ImGui:SetTheme(theme)
+    if type(theme) == "string" then
+        self.CurrentTheme = ImGui.Themes[theme] or ImGui.Themes.Dark
+    else
+        self.CurrentTheme = theme
+    end
+    
+    -- Atualizar todas as janelas existentes
+    for _, window in pairs(self.Windows) do
+        window:UpdateTheme(self.CurrentTheme)
+    end
+end
+
+--[[
+    Registra uma hotkey para executar uma ação
+    @param key: Enum.KeyCode da tecla
+    @param callback: Função a ser executada
+--]]
+function ImGui:RegisterHotkey(key, callback)
+    self.Hotkeys[key] = callback
+end
+
+--[[
+    Remove uma hotkey registrada
+    @param key: Enum.KeyCode da tecla
+--]]
+function ImGui:UnregisterHotkey(key)
+    self.Hotkeys[key] = nil
+end
+
+--[[
+    Configura os manipuladores de entrada
+--]]
+function ImGui:SetupInputHandlers()
+    -- Evento de teclas pressionadas
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        
+        -- Verificar hotkeys
+        if self.Hotkeys[input.KeyCode] then
+            self.Hotkeys[input.KeyCode]()
+        end
+    end)
+end
+
+--[[
+    Cria uma nova janela
+    @param title: Título da janela
+    @param options: Tabela com opções (size, position, resizable, closeable)
+    @return: Instância da janela criada
+--]]
+function ImGui:CreateWindow(title, options)
+    options = options or {}
+    
+    local window = {
+        ID = self:GenerateID(),
+        Title = title or "Window",
+        Size = options.size or Vector2.new(400, 300),
+        Position = options.position or Vector2.new(100, 100),
+        Resizable = options.resizable ~= false,
+        Closeable = options.closeable ~= false,
+        Visible = true,
+        Tabs = {},
+        CurrentTab = nil,
+        Elements = {},
+        ImGui = self
+    }
+    
+    setmetatable(window, {__index = ImGui.Window})
+    window:Create()
+    
+    self.Windows[window.ID] = window
+    return window
+end
+
+--[[
+    Remove uma janela
+    @param window: Instância da janela a ser removida
+--]]
+function ImGui:DestroyWindow(window)
+    if window.Frame then
+        window.Frame:Destroy()
+    end
+    self.Windows[window.ID] = nil
+end
+
+-- ============================================================
+-- CLASSE WINDOW
+-- ============================================================
+
+ImGui.Window = {}
+ImGui.Window.__index = ImGui.Window
+
+--[[
+    Cria os elementos visuais da janela
+--]]
+function ImGui.Window:Create()
+    local theme = self.ImGui.CurrentTheme
+    
+    -- Frame principal da janela
+    self.Frame = Instance.new("Frame")
+    self.Frame.Name = self.ID
+    self.Frame.Size = UDim2.new(0, self.Size.X, 0, self.Size.Y)
+    self.Frame.Position = UDim2.new(0, self.Position.X, 0, self.Position.Y)
+    self.Frame.BackgroundColor3 = theme.WindowBg
+    self.Frame.BorderColor3 = theme.WindowBorder
+    self.Frame.BorderSizePixel = BORDER_SIZE
+    self.Frame.ClipsDescendants = true
+    self.Frame.Parent = self.ImGui.ScreenGui
+    
+    -- Barra de título
+    self.TitleBar = Instance.new("Frame")
+    self.TitleBar.Name = "TitleBar"
+    self.TitleBar.Size = UDim2.new(1, 0, 0, HEADER_HEIGHT)
+    self.TitleBar.BackgroundColor3 = theme.TitleBg
+    self.TitleBar.BorderSizePixel = 0
+    self.TitleBar.Parent = self.Frame
+    
+    -- Texto do título
+    self.TitleLabel = Instance.new("TextLabel")
+    self.TitleLabel.Name = "Title"
+    self.TitleLabel.Size = UDim2.new(1, -40, 1, 0)
+    self.TitleLabel.Position = UDim2.new(0, 10, 0, 0)
+    self.TitleLabel.BackgroundTransparency = 1
+    self.TitleLabel.Text = self.Title
+    self.TitleLabel.TextColor3 = theme.TitleText
+    self.TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    self.TitleLabel.Font = FONT
+    self.TitleLabel.TextSize = 14
+    self.TitleLabel.Parent = self.TitleBar
+    
+    -- Botão de fechar
+    if self.Closeable then
+        self:CreateCloseButton()
+    end
+    
+    -- Container de conteúdo
+    self.ContentFrame = Instance.new("Frame")
+    self.ContentFrame.Name = "Content"
+    self.ContentFrame.Size = UDim2.new(1, -10, 1, -HEADER_HEIGHT - 10)
+    self.ContentFrame.Position = UDim2.new(0, 5, 0, HEADER_HEIGHT + 5)
+    self.ContentFrame.BackgroundTransparency = 1
+    self.ContentFrame.Parent = self.Frame
+    
+    -- Layout para organizar elementos
+    self.Layout = Instance.new("UIListLayout")
+    self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
+    self.Layout.Padding = UDim.new(0, 5)
+    self.Layout.Parent = self.ContentFrame
+    
+    -- Configurar drag
+    self:SetupDragging()
+    
+    -- Configurar resize se habilitado
+    if self.Resizable then
+        self:SetupResizing()
+    end
+    
+    -- Configurar foco
+    self:SetupFocus()
+end
+
+--[[
+    Cria o botão de fechar
+--]]
+function ImGui.Window:CreateCloseButton()
+    local theme = self.ImGui.CurrentTheme
+    
+    self.CloseButton = Instance.new("TextButton")
+    self.CloseButton.Name = "CloseButton"
+    self.CloseButton.Size = UDim2.new(0, 30, 0, 30)
+    self.CloseButton.Position = UDim2.new(1, -30, 0, 0)
+    self.CloseButton.BackgroundColor3 = theme.ButtonBg
+    self.CloseButton.BorderSizePixel = 0
+    self.CloseButton.Text = "×"
+    self.CloseButton.TextColor3 = theme.TitleText
+    self.CloseButton.Font = FONT
+    self.CloseButton.TextSize = 18
+    self.CloseButton.Parent = self.TitleBar
+    
+    self.CloseButton.MouseButton1Click:Connect(function()
+        self:Close()
+    end)
+    
+    self.CloseButton.MouseEnter:Connect(function()
+        self.CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    end)
+    
+    self.CloseButton.MouseLeave:Connect(function()
+        self.CloseButton.BackgroundColor3 = theme.ButtonBg
+    end)
+end
+
+--[[
+    Configura o sistema de arrastar janela
+--]]
+function ImGui.Window:SetupDragging()
+    local dragging = false
+    local dragStart = nil
+    local startPos = nil
+    
+    self.TitleBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = self.Frame.Position
+            
+            self.TitleBar.BackgroundColor3 = self.ImGui.CurrentTheme.TitleBgActive
+        end
+    end)
+    
+    self.TitleBar.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+            self.TitleBar.BackgroundColor3 = self.ImGui.CurrentTheme.TitleBg
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            self.Frame.Position = UDim2.new(
+                startPos.X.Scale, startPos.X.Offset + delta.X,
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y
+            )
+        end
+    end)
+end
+
+--[[
+    Configura o sistema de redimensionar janela
+--]]
+function ImGui.Window:SetupResizing()
+    -- Criar handle de resize no canto inferior direito
+    local resizeHandle = Instance.new("Frame")
+    resizeHandle.Name = "ResizeHandle"
+    resizeHandle.Size = UDim2.new(0, 15, 0, 15)
+    resizeHandle.Position = UDim2.new(1, -15, 1, -15)
+    resizeHandle.BackgroundTransparency = 0.5
+    resizeHandle.BackgroundColor3 = self.ImGui.CurrentTheme.Border
+    resizeHandle.BorderSizePixel = 0
+    resizeHandle.Parent = self.Frame
+    
+    local resizing = false
+    local resizeStart = nil
+    local startSize = nil
+    
+    resizeHandle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            resizing = true
+            resizeStart = input.Position
+            startSize = self.Frame.Size
+        end
+    end)
+    
+    resizeHandle.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            resizing = false
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if resizing and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - resizeStart
+            local newWidth = math.max(MIN_WINDOW_SIZE.X, startSize.X.Offset + delta.X)
+            local newHeight = math.max(MIN_WINDOW_SIZE.Y, startSize.Y.Offset + delta.Y)
+            
+            self.Frame.Size = UDim2.new(0, newWidth, 0, newHeight)
+            self.Size = Vector2.new(newWidth, newHeight)
+        end
+    end)
+end
+
+--[[
+    Configura o sistema de foco da janela
+--]]
+function ImGui.Window:SetupFocus()
+    self.Frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            self:BringToFront()
+        end
+    end)
+end
+
+--[[
+    Traz a janela para frente
+--]]
+function ImGui.Window:BringToFront()
+    self.Frame.ZIndex = 10
+    self.ImGui.FocusedWindow = self
+    
+    -- Resetar ZIndex de outras janelas
+    for _, window in pairs(self.ImGui.Windows) do
+        if window ~= self then
+            window.Frame.ZIndex = 1
+        end
+    end
+end
+
+--[[
+    Fecha a janela
+--]]
+function ImGui.Window:Close()
+    self.Visible = false
+    self.Frame.Visible = false
+end
+
+--[[
+    Abre a janela
+--]]
+function ImGui.Window:Open()
+    self.Visible = true
+    self.Frame.Visible = true
+    self:BringToFront()
+end
+
+--[[
+    Alterna visibilidade da janela
+--]]
+function ImGui.Window:Toggle()
+    if self.Visible then
+        self:Close()
+    else
+        self:Open()
+    end
+end
+
+--[[
+    Atualiza o tema da janela
+    @param theme: Novo tema a ser aplicado
+--]]
+function ImGui.Window:UpdateTheme(theme)
+    self.Frame.BackgroundColor3 = theme.WindowBg
+    self.Frame.BorderColor3 = theme.WindowBorder
+    self.TitleBar.BackgroundColor3 = theme.TitleBg
+    self.TitleLabel.TextColor3 = theme.TitleText
+    
+    if self.CloseButton then
+        self.CloseButton.BackgroundColor3 = theme.ButtonBg
+        self.CloseButton.TextColor3 = theme.TitleText
+    end
+    
+    -- Atualizar abas
+    for _, tab in pairs(self.Tabs) do
+        tab:UpdateTheme(theme)
+    end
+    
+    -- Atualizar elementos
+    for _, element in pairs(self.Elements) do
+        if element.UpdateTheme then
+            element:UpdateTheme(theme)
+        end
+    end
+end
+
+--[[
+    Adiciona uma aba à janela
+    @param name: Nome da aba
+    @return: Instância da aba criada
+--]]
+function ImGui.Window:AddTab(name)
+    -- Criar container de abas se não existir
+    if not self.TabContainer then
+        self.TabContainer = Instance.new("Frame")
+        self.TabContainer.Name = "TabContainer"
+        self.TabContainer.Size = UDim2.new(1, 0, 0, 30)
+        self.TabContainer.Position = UDim2.new(0, 0, 0, HEADER_HEIGHT)
+        self.TabContainer.BackgroundColor3 = self.ImGui.CurrentTheme.TabBg
+        self.TabContainer.BorderSizePixel = 0
+        self.TabContainer.Parent = self.Frame
+        
+        -- Ajustar ContentFrame
+        self.ContentFrame.Size = UDim2.new(1, -10, 1, -HEADER_HEIGHT - 40)
+        self.ContentFrame.Position = UDim2.new(0, 5, 0, HEADER_HEIGHT + 35)
+        
+        -- Layout para as abas
+        local tabLayout = Instance.new("UIListLayout")
+        tabLayout.FillDirection = Enum.FillDirection.Horizontal
+        tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        tabLayout.Padding = UDim.new(0, 2)
+        tabLayout.Parent = self.TabContainer
+    end
+    
+    local tab = {
+        Name = name,
+        Window = self,
+        Elements = {},
+        Active = false
+    }
+    
+    setmetatable(tab, {__index = ImGui.Tab})
+    tab:Create()
+    
+    table.insert(self.Tabs, tab)
+    
+    -- Se for a primeira aba, ativá-la
+    if #self.Tabs == 1 then
+        tab:Activate()
+    end
+    
+    return tab
+end
+
+--[[
+    Limpa todos os elementos da janela (não das abas)
+--]]
+function ImGui.Window:Clear()
+    for _, element in pairs(self.Elements) do
+        if element.Frame then
+            element.Frame:Destroy()
+        end
+    end
+    self.Elements = {}
+end
+
+-- Continua no próximo arquivo...
+--[[
+    RobloxImGui - Elementos de UI
+    Parte 2: Componentes interativos
+--]]
+
+-- ============================================================
+-- CLASSE TAB (Aba)
+-- ============================================================
+
+ImGui.Tab = {}
+ImGui.Tab.__index = ImGui.Tab
+
+--[[
+    Cria os elementos visuais da aba
+--]]
+function ImGui.Tab:Create()
+    local theme = self.Window.ImGui.CurrentTheme
+    
+    -- Botão da aba
+    self.Button = Instance.new("TextButton")
+    self.Button.Name = "Tab_" .. self.Name
+    self.Button.Size = UDim2.new(0, 100, 1, 0)
+    self.Button.BackgroundColor3 = theme.TabBg
+    self.Button.BorderSizePixel = 0
+    self.Button.Text = self.Name
+    self.Button.TextColor3 = theme.Text
+    self.Button.Font = FONT
+    self.Button.TextSize = 12
+    self.Button.Parent = self.Window.TabContainer
+    
+    -- Container de conteúdo da aba
+    self.Content = Instance.new("Frame")
+    self.Content.Name = "TabContent_" .. self.Name
+    self.Content.Size = UDim2.new(1, 0, 1, 0)
+    self.Content.BackgroundTransparency = 1
+    self.Content.Visible = false
+    self.Content.Parent = self.Window.ContentFrame
+    
+    -- Layout para organizar elementos
+    self.Layout = Instance.new("UIListLayout")
+    self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
+    self.Layout.Padding = UDim.new(0, 5)
+    self.Layout.Parent = self.Content
+    
+    -- Evento de clique
+    self.Button.MouseButton1Click:Connect(function()
+        self:Activate()
+    end)
+    
+    -- Efeitos de hover
+    self.Button.MouseEnter:Connect(function()
+        if not self.Active then
+            self.Button.BackgroundColor3 = theme.TabHover
+        end
+    end)
+    
+    self.Button.MouseLeave:Connect(function()
+        if not self.Active then
+            self.Button.BackgroundColor3 = theme.TabBg
+        end
+    end)
+end
+
+--[[
+    Ativa a aba
+--]]
+function ImGui.Tab:Activate()
+    local theme = self.Window.ImGui.CurrentTheme
+    
+    -- Desativar outras abas
+    for _, tab in pairs(self.Window.Tabs) do
+        tab.Active = false
+        tab.Button.BackgroundColor3 = theme.TabBg
+        tab.Content.Visible = false
+    end
+    
+    -- Ativar esta aba
+    self.Active = true
+    self.Button.BackgroundColor3 = theme.TabActive
+    self.Content.Visible = true
+    self.Window.CurrentTab = self
+end
+
+--[[
+    Atualiza o tema da aba
+--]]
+function ImGui.Tab:UpdateTheme(theme)
+    if self.Active then
+        self.Button.BackgroundColor3 = theme.TabActive
+    else
+        self.Button.BackgroundColor3 = theme.TabBg
+    end
+    self.Button.TextColor3 = theme.Text
+    
+    -- Atualizar elementos
+    for _, element in pairs(self.Elements) do
+        if element.UpdateTheme then
+            element:UpdateTheme(theme)
+        end
+    end
+end
+
+--[[
+    Adiciona um botão à aba ou janela
+    @param text: Texto do botão
+    @param callback: Função a ser executada ao clicar
+    @return: Instância do botão
+--]]
+function ImGui.Tab:AddButton(text, callback)
+    return self:AddElement("Button", {text = text, callback = callback})
+end
+
+function ImGui.Window:AddButton(text, callback)
+    return self:AddElement("Button", {text = text, callback = callback})
+end
+
+--[[
+    Adiciona um slider à aba ou janela
+    @param label: Texto do label
+    @param min: Valor mínimo
+    @param max: Valor máximo
+    @param default: Valor padrão
+    @param callback: Função chamada ao mudar valor
+    @return: Instância do slider
+--]]
+function ImGui.Tab:AddSlider(label, min, max, default, callback)
+    return self:AddElement("Slider", {
+        label = label,
+        min = min,
+        max = max,
+        value = default or min,
+        callback = callback
+    })
+end
+
+function ImGui.Window:AddSlider(label, min, max, default, callback)
+    return self:AddElement("Slider", {
+        label = label,
+        min = min,
+        max = max,
+        value = default or min,
+        callback = callback
+    })
+end
+
+--[[
+    Adiciona um checkbox à aba ou janela
+    @param label: Texto do label
+    @param default: Valor padrão (true/false)
+    @param callback: Função chamada ao mudar estado
+    @return: Instância do checkbox
+--]]
+function ImGui.Tab:AddCheckbox(label, default, callback)
+    return self:AddElement("Checkbox", {
+        label = label,
+        checked = default or false,
+        callback = callback
+    })
+end
+
+function ImGui.Window:AddCheckbox(label, default, callback)
+    return self:AddElement("Checkbox", {
+        label = label,
+        checked = default or false,
+        callback = callback
+    })
+end
+
+--[[
+    Adiciona um campo de texto à aba ou janela
+    @param label: Texto do label
+    @param placeholder: Texto de placeholder
+    @param callback: Função chamada ao mudar texto
+    @return: Instância do campo de texto
+--]]
+function ImGui.Tab:AddTextBox(label, placeholder, callback)
+    return self:AddElement("TextBox", {
+        label = label,
+        placeholder = placeholder or "",
+        text = "",
+        callback = callback
+    })
+end
+
+function ImGui.Window:AddTextBox(label, placeholder, callback)
+    return self:AddElement("TextBox", {
+        label = label,
+        placeholder = placeholder or "",
+        text = "",
+        callback = callback
+    })
+end
+
+--[[
+    Adiciona um dropdown à aba ou janela
+    @param label: Texto do label
+    @param options: Array com opções
+    @param default: Índice da opção padrão
+    @param callback: Função chamada ao selecionar opção
+    @return: Instância do dropdown
+--]]
+function ImGui.Tab:AddDropdown(label, options, default, callback)
+    return self:AddElement("Dropdown", {
+        label = label,
+        options = options or {},
+        selected = default or 1,
+        callback = callback
+    })
+end
+
+function ImGui.Window:AddDropdown(label, options, default, callback)
+    return self:AddElement("Dropdown", {
+        label = label,
+        options = options or {},
+        selected = default or 1,
+        callback = callback
+    })
+end
+
+--[[
+    Adiciona um separador visual
+--]]
+function ImGui.Tab:AddSeparator()
+    return self:AddElement("Separator", {})
+end
+
+function ImGui.Window:AddSeparator()
+    return self:AddElement("Separator", {})
+end
+
+--[[
+    Adiciona um label de texto
+    @param text: Texto a ser exibido
+--]]
+function ImGui.Tab:AddLabel(text)
+    return self:AddElement("Label", {text = text})
+end
+
+function ImGui.Window:AddLabel(text)
+    return self:AddElement("Label", {text = text})
+end
+
+--[[
+    Método genérico para adicionar elementos
+--]]
+function ImGui.Tab:AddElement(elementType, data)
+    local parent = self.Content
+    local elementsList = self.Elements
+    
+    local element = ImGui.Elements[elementType].new(data, parent, self.Window.ImGui.CurrentTheme)
+    table.insert(elementsList, element)
+    
+    return element
+end
+
+function ImGui.Window:AddElement(elementType, data)
+    local parent = self.CurrentTab and self.CurrentTab.Content or self.ContentFrame
+    local elementsList = self.CurrentTab and self.CurrentTab.Elements or self.Elements
+    
+    local element = ImGui.Elements[elementType].new(data, parent, self.ImGui.CurrentTheme)
+    table.insert(elementsList, element)
+    
+    return element
+end
+
+-- ============================================================
+-- ELEMENTOS DE UI
+-- ============================================================
+
+ImGui.Elements = {}
+
+-- BOTÃO
+ImGui.Elements.Button = {}
+ImGui.Elements.Button.__index = ImGui.Elements.Button
+
+function ImGui.Elements.Button.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.Button)
+    
+    self.Text = data.text or "Button"
+    self.Callback = data.callback
+    
+    -- Frame do botão
+    self.Frame = Instance.new("TextButton")
+    self.Frame.Name = "Button"
+    self.Frame.Size = UDim2.new(1, 0, 0, 30)
+    self.Frame.BackgroundColor3 = theme.ButtonBg
+    self.Frame.BorderSizePixel = 0
+    self.Frame.Text = self.Text
+    self.Frame.TextColor3 = theme.Text
+    self.Frame.Font = FONT
+    self.Frame.TextSize = 14
+    self.Frame.Parent = parent
+    
+    -- Corner arredondado
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 4)
+    corner.Parent = self.Frame
+    
+    -- Eventos
+    self.Frame.MouseButton1Click:Connect(function()
+        if self.Callback then
+            self.Callback()
+        end
+    end)
+    
+    self.Frame.MouseEnter:Connect(function()
+        self.Frame.BackgroundColor3 = theme.ButtonHover
+    end)
+    
+    self.Frame.MouseLeave:Connect(function()
+        self.Frame.BackgroundColor3 = theme.ButtonBg
+    end)
+    
+    self.Frame.MouseButton1Down:Connect(function()
+        self.Frame.BackgroundColor3 = theme.ButtonActive
+    end)
+    
+    self.Frame.MouseButton1Up:Connect(function()
+        self.Frame.BackgroundColor3 = theme.ButtonHover
+    end)
+    
+    return self
+end
+
+function ImGui.Elements.Button:UpdateTheme(theme)
+    self.Frame.BackgroundColor3 = theme.ButtonBg
+    self.Frame.TextColor3 = theme.Text
+end
+
+function ImGui.Elements.Button:SetText(text)
+    self.Text = text
+    self.Frame.Text = text
+end
+
+-- SLIDER
+ImGui.Elements.Slider = {}
+ImGui.Elements.Slider.__index = ImGui.Elements.Slider
+
+function ImGui.Elements.Slider.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.Slider)
+    
+    self.Label = data.label or "Slider"
+    self.Min = data.min or 0
+    self.Max = data.max or 100
+    self.Value = data.value or self.Min
+    self.Callback = data.callback
+    
+    -- Container
+    self.Frame = Instance.new("Frame")
+    self.Frame.Name = "Slider"
+    self.Frame.Size = UDim2.new(1, 0, 0, 50)
+    self.Frame.BackgroundTransparency = 1
+    self.Frame.Parent = parent
+    
+    -- Label
+    self.LabelText = Instance.new("TextLabel")
+    self.LabelText.Name = "Label"
+    self.LabelText.Size = UDim2.new(0.6, 0, 0, 20)
+    self.LabelText.BackgroundTransparency = 1
+    self.LabelText.Text = self.Label
+    self.LabelText.TextColor3 = theme.Text
+    self.LabelText.TextXAlignment = Enum.TextXAlignment.Left
+    self.LabelText.Font = FONT
+    self.LabelText.TextSize = 12
+    self.LabelText.Parent = self.Frame
+    
+    -- Valor atual
+    self.ValueLabel = Instance.new("TextLabel")
+    self.ValueLabel.Name = "Value"
+    self.ValueLabel.Size = UDim2.new(0.4, 0, 0, 20)
+    self.ValueLabel.Position = UDim2.new(0.6, 0, 0, 0)
+    self.ValueLabel.BackgroundTransparency = 1
+    self.ValueLabel.Text = tostring(math.floor(self.Value))
+    self.ValueLabel.TextColor3 = theme.Text
+    self.ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+    self.ValueLabel.Font = FONT
+    self.ValueLabel.TextSize = 12
+    self.ValueLabel.Parent = self.Frame
+    
+    -- Barra do slider
+    self.SliderBar = Instance.new("Frame")
+    self.SliderBar.Name = "Bar"
+    self.SliderBar.Size = UDim2.new(1, 0, 0, 8)
+    self.SliderBar.Position = UDim2.new(0, 0, 0, 25)
+    self.SliderBar.BackgroundColor3 = theme.FrameBg
+    self.SliderBar.BorderSizePixel = 0
+    self.SliderBar.Parent = self.Frame
+    
+    local barCorner = Instance.new("UICorner")
+    barCorner.CornerRadius = UDim.new(0, 4)
+    barCorner.Parent = self.SliderBar
+    
+    -- Grab (parte que se move)
+    self.Grab = Instance.new("Frame")
+    self.Grab.Name = "Grab"
+    self.Grab.Size = UDim2.new(0, 16, 0, 16)
+    self.Grab.Position = UDim2.new(0, -8, 0.5, -8)
+    self.Grab.BackgroundColor3 = theme.SliderGrab
+    self.Grab.BorderSizePixel = 0
+    self.Grab.Parent = self.SliderBar
+    
+    local grabCorner = Instance.new("UICorner")
+    grabCorner.CornerRadius = UDim.new(1, 0)
+    grabCorner.Parent = self.Grab
+    
+    -- Configurar interação
+    self:SetupInteraction(theme)
+    self:UpdateGrabPosition()
+    
+    return self
+end
+
+function ImGui.Elements.Slider:SetupInteraction(theme)
+    local dragging = false
+    
+    local function updateValue(input)
+        local barSize = self.SliderBar.AbsoluteSize.X
+        local barPos = self.SliderBar.AbsolutePosition.X
+        local mouseX = input.Position.X
+        
+        local relativePos = math.clamp(mouseX - barPos, 0, barSize)
+        local percentage = relativePos / barSize
+        
+        self.Value = self.Min + (self.Max - self.Min) * percentage
+        self:UpdateGrabPosition()
+        self.ValueLabel.Text = tostring(math.floor(self.Value))
+        
+        if self.Callback then
+            self.Callback(self.Value)
+        end
+    end
+    
+    self.SliderBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            self.Grab.BackgroundColor3 = theme.SliderGrabActive
+            updateValue(input)
+        end
+    end)
+    
+    self.SliderBar.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+            self.Grab.BackgroundColor3 = theme.SliderGrab
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            updateValue(input)
+        end
+    end)
+end
+
+function ImGui.Elements.Slider:UpdateGrabPosition()
+    local percentage = (self.Value - self.Min) / (self.Max - self.Min)
+    self.Grab.Position = UDim2.new(percentage, -8, 0.5, -8)
+end
+
+function ImGui.Elements.Slider:SetValue(value)
+    self.Value = math.clamp(value, self.Min, self.Max)
+    self:UpdateGrabPosition()
+    self.ValueLabel.Text = tostring(math.floor(self.Value))
+end
+
+function ImGui.Elements.Slider:GetValue()
+    return self.Value
+end
+
+function ImGui.Elements.Slider:UpdateTheme(theme)
+    self.LabelText.TextColor3 = theme.Text
+    self.ValueLabel.TextColor3 = theme.Text
+    self.SliderBar.BackgroundColor3 = theme.FrameBg
+    self.Grab.BackgroundColor3 = theme.SliderGrab
+end
+
+-- Continua no próximo arquivo...
+--[[
+    RobloxImGui - Elementos de UI (Continuação)
+    Parte 3: Checkbox, TextBox, Dropdown e outros
+--]]
+
+-- CHECKBOX
+ImGui.Elements.Checkbox = {}
+ImGui.Elements.Checkbox.__index = ImGui.Elements.Checkbox
+
+function ImGui.Elements.Checkbox.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.Checkbox)
+    
+    self.Label = data.label or "Checkbox"
+    self.Checked = data.checked or false
+    self.Callback = data.callback
+    
+    -- Container
+    self.Frame = Instance.new("Frame")
+    self.Frame.Name = "Checkbox"
+    self.Frame.Size = UDim2.new(1, 0, 0, 30)
+    self.Frame.BackgroundTransparency = 1
+    self.Frame.Parent = parent
+    
+    -- Box do checkbox
+    self.Box = Instance.new("TextButton")
+    self.Box.Name = "Box"
+    self.Box.Size = UDim2.new(0, 20, 0, 20)
+    self.Box.Position = UDim2.new(0, 0, 0, 5)
+    self.Box.BackgroundColor3 = theme.FrameBg
+    self.Box.BorderColor3 = theme.Border
+    self.Box.BorderSizePixel = 1
+    self.Box.Text = ""
+    self.Box.Parent = self.Frame
+    
+    local boxCorner = Instance.new("UICorner")
+    boxCorner.CornerRadius = UDim.new(0, 3)
+    boxCorner.Parent = self.Box
+    
+    -- Checkmark
+    self.CheckMark = Instance.new("TextLabel")
+    self.CheckMark.Name = "CheckMark"
+    self.CheckMark.Size = UDim2.new(1, 0, 1, 0)
+    self.CheckMark.BackgroundTransparency = 1
+    self.CheckMark.Text = "✓"
+    self.CheckMark.TextColor3 = theme.CheckMark
+    self.CheckMark.Font = FONT
+    self.CheckMark.TextSize = 16
+    self.CheckMark.Visible = self.Checked
+    self.CheckMark.Parent = self.Box
+    
+    -- Label
+    self.LabelText = Instance.new("TextLabel")
+    self.LabelText.Name = "Label"
+    self.LabelText.Size = UDim2.new(1, -30, 1, 0)
+    self.LabelText.Position = UDim2.new(0, 30, 0, 0)
+    self.LabelText.BackgroundTransparency = 1
+    self.LabelText.Text = self.Label
+    self.LabelText.TextColor3 = theme.Text
+    self.LabelText.TextXAlignment = Enum.TextXAlignment.Left
+    self.LabelText.Font = FONT
+    self.LabelText.TextSize = 12
+    self.LabelText.Parent = self.Frame
+    
+    -- Evento de clique
+    self.Box.MouseButton1Click:Connect(function()
+        self:Toggle()
+    end)
+    
+    -- Efeitos hover
+    self.Box.MouseEnter:Connect(function()
+        self.Box.BackgroundColor3 = theme.FrameBgHovered
+    end)
+    
+    self.Box.MouseLeave:Connect(function()
+        self.Box.BackgroundColor3 = theme.FrameBg
+    end)
+    
+    return self
+end
+
+function ImGui.Elements.Checkbox:Toggle()
+    self.Checked = not self.Checked
+    self.CheckMark.Visible = self.Checked
+    
+    if self.Callback then
+        self.Callback(self.Checked)
+    end
+end
+
+function ImGui.Elements.Checkbox:SetChecked(checked)
+    self.Checked = checked
+    self.CheckMark.Visible = checked
+end
+
+function ImGui.Elements.Checkbox:IsChecked()
+    return self.Checked
+end
+
+function ImGui.Elements.Checkbox:UpdateTheme(theme)
+    self.Box.BackgroundColor3 = theme.FrameBg
+    self.Box.BorderColor3 = theme.Border
+    self.CheckMark.TextColor3 = theme.CheckMark
+    self.LabelText.TextColor3 = theme.Text
+end
+
+-- TEXTBOX
+ImGui.Elements.TextBox = {}
+ImGui.Elements.TextBox.__index = ImGui.Elements.TextBox
+
+function ImGui.Elements.TextBox.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.TextBox)
+    
+    self.Label = data.label or "TextBox"
+    self.Placeholder = data.placeholder or ""
+    self.Text = data.text or ""
+    self.Callback = data.callback
+    
+    -- Container
+    self.Frame = Instance.new("Frame")
+    self.Frame.Name = "TextBox"
+    self.Frame.Size = UDim2.new(1, 0, 0, 55)
+    self.Frame.BackgroundTransparency = 1
+    self.Frame.Parent = parent
+    
+    -- Label
+    self.LabelText = Instance.new("TextLabel")
+    self.LabelText.Name = "Label"
+    self.LabelText.Size = UDim2.new(1, 0, 0, 20)
+    self.LabelText.BackgroundTransparency = 1
+    self.LabelText.Text = self.Label
+    self.LabelText.TextColor3 = theme.Text
+    self.LabelText.TextXAlignment = Enum.TextXAlignment.Left
+    self.LabelText.Font = FONT
+    self.LabelText.TextSize = 12
+    self.LabelText.Parent = self.Frame
+    
+    -- Input
+    self.Input = Instance.new("TextBox")
+    self.Input.Name = "Input"
+    self.Input.Size = UDim2.new(1, 0, 0, 30)
+    self.Input.Position = UDim2.new(0, 0, 0, 25)
+    self.Input.BackgroundColor3 = theme.FrameBg
+    self.Input.BorderSizePixel = 0
+    self.Input.Text = self.Text
+    self.Input.PlaceholderText = self.Placeholder
+    self.Input.TextColor3 = theme.Text
+    self.Input.PlaceholderColor3 = theme.TextDisabled
+    self.Input.Font = FONT
+    self.Input.TextSize = 12
+    self.Input.TextXAlignment = Enum.TextXAlignment.Left
+    self.Input.ClearTextOnFocus = false
+    self.Input.Parent = self.Frame
+    
+    local inputCorner = Instance.new("UICorner")
+    inputCorner.CornerRadius = UDim.new(0, 4)
+    inputCorner.Parent = self.Input
+    
+    local padding = Instance.new("UIPadding")
+    padding.PaddingLeft = UDim.new(0, 8)
+    padding.PaddingRight = UDim.new(0, 8)
+    padding.Parent = self.Input
+    
+    -- Eventos
+    self.Input.FocusLost:Connect(function()
+        self.Text = self.Input.Text
+        if self.Callback then
+            self.Callback(self.Text)
+        end
+    end)
+    
+    self.Input.Focused:Connect(function()
+        self.Input.BackgroundColor3 = theme.FrameBgActive
+    end)
+    
+    self.Input.FocusLost:Connect(function()
+        self.Input.BackgroundColor3 = theme.FrameBg
+    end)
+    
+    return self
+end
+
+function ImGui.Elements.TextBox:SetText(text)
+    self.Text = text
+    self.Input.Text = text
+end
+
+function ImGui.Elements.TextBox:GetText()
+    return self.Input.Text
+end
+
+function ImGui.Elements.TextBox:UpdateTheme(theme)
+    self.LabelText.TextColor3 = theme.Text
+    self.Input.BackgroundColor3 = theme.FrameBg
+    self.Input.TextColor3 = theme.Text
+    self.Input.PlaceholderColor3 = theme.TextDisabled
+end
+
+-- DROPDOWN
+ImGui.Elements.Dropdown = {}
+ImGui.Elements.Dropdown.__index = ImGui.Elements.Dropdown
+
+function ImGui.Elements.Dropdown.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.Dropdown)
+    
+    self.Label = data.label or "Dropdown"
+    self.Options = data.options or {"Option 1", "Option 2", "Option 3"}
+    self.Selected = data.selected or 1
+    self.Callback = data.callback
+    self.Expanded = false
+    
+    -- Container
+    self.Frame = Instance.new("Frame")
+    self.Frame.Name = "Dropdown"
+    self.Frame.Size = UDim2.new(1, 0, 0, 55)
+    self.Frame.BackgroundTransparency = 1
+    self.Frame.ZIndex = 1
+    self.Frame.Parent = parent
+    
+    -- Label
+    self.LabelText = Instance.new("TextLabel")
+    self.LabelText.Name = "Label"
+    self.LabelText.Size = UDim2.new(1, 0, 0, 20)
+    self.LabelText.BackgroundTransparency = 1
+    self.LabelText.Text = self.Label
+    self.LabelText.TextColor3 = theme.Text
+    self.LabelText.TextXAlignment = Enum.TextXAlignment.Left
+    self.LabelText.Font = FONT
+    self.LabelText.TextSize = 12
+    self.LabelText.Parent = self.Frame
+    
+    -- Botão do dropdown
+    self.Button = Instance.new("TextButton")
+    self.Button.Name = "Button"
+    self.Button.Size = UDim2.new(1, 0, 0, 30)
+    self.Button.Position = UDim2.new(0, 0, 0, 25)
+    self.Button.BackgroundColor3 = theme.FrameBg
+    self.Button.BorderSizePixel = 0
+    self.Button.Text = self.Options[self.Selected]
+    self.Button.TextColor3 = theme.Text
+    self.Button.Font = FONT
+    self.Button.TextSize = 12
+    self.Button.TextXAlignment = Enum.TextXAlignment.Left
+    self.Button.Parent = self.Frame
+    
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 4)
+    buttonCorner.Parent = self.Button
+    
+    local padding = Instance.new("UIPadding")
+    padding.PaddingLeft = UDim.new(0, 8)
+    padding.PaddingRight = UDim.new(0, 28)
+    padding.Parent = self.Button
+    
+    -- Seta
+    self.Arrow = Instance.new("TextLabel")
+    self.Arrow.Name = "Arrow"
+    self.Arrow.Size = UDim2.new(0, 20, 1, 0)
+    self.Arrow.Position = UDim2.new(1, -25, 0, 0)
+    self.Arrow.BackgroundTransparency = 1
+    self.Arrow.Text = "▼"
+    self.Arrow.TextColor3 = theme.Text
+    self.Arrow.Font = FONT
+    self.Arrow.TextSize = 10
+    self.Arrow.Parent = self.Button
+    
+    -- Lista de opções (inicialmente oculta)
+    self.OptionsList = Instance.new("ScrollingFrame")
+    self.OptionsList.Name = "OptionsList"
+    self.OptionsList.Size = UDim2.new(1, 0, 0, math.min(#self.Options * 30, 150))
+    self.OptionsList.Position = UDim2.new(0, 0, 0, 56)
+    self.OptionsList.BackgroundColor3 = theme.FrameBg
+    self.OptionsList.BorderColor3 = theme.Border
+    self.OptionsList.BorderSizePixel = 1
+    self.OptionsList.Visible = false
+    self.OptionsList.ScrollBarThickness = 4
+    self.OptionsList.CanvasSize = UDim2.new(0, 0, 0, #self.Options * 30)
+    self.OptionsList.ZIndex = 10
+    self.OptionsList.Parent = self.Frame
+    
+    local listCorner = Instance.new("UICorner")
+    listCorner.CornerRadius = UDim.new(0, 4)
+    listCorner.Parent = self.OptionsList
+    
+    local listLayout = Instance.new("UIListLayout")
+    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    listLayout.Parent = self.OptionsList
+    
+    -- Criar opções
+    for i, option in ipairs(self.Options) do
+        local optionButton = Instance.new("TextButton")
+        optionButton.Name = "Option_" .. i
+        optionButton.Size = UDim2.new(1, 0, 0, 30)
+        optionButton.BackgroundColor3 = theme.FrameBg
+        optionButton.BorderSizePixel = 0
+        optionButton.Text = option
+        optionButton.TextColor3 = theme.Text
+        optionButton.Font = FONT
+        optionButton.TextSize = 12
+        optionButton.TextXAlignment = Enum.TextXAlignment.Left
+        optionButton.ZIndex = 11
+        optionButton.Parent = self.OptionsList
+        
+        local optionPadding = Instance.new("UIPadding")
+        optionPadding.PaddingLeft = UDim.new(0, 8)
+        optionPadding.Parent = optionButton
+        
+        optionButton.MouseButton1Click:Connect(function()
+            self:Select(i)
+        end)
+        
+        optionButton.MouseEnter:Connect(function()
+            optionButton.BackgroundColor3 = theme.FrameBgHovered
+        end)
+        
+        optionButton.MouseLeave:Connect(function()
+            optionButton.BackgroundColor3 = theme.FrameBg
+        end)
+    end
+    
+    -- Evento de toggle
+    self.Button.MouseButton1Click:Connect(function()
+        self:Toggle()
+    end)
+    
+    self.Button.MouseEnter:Connect(function()
+        if not self.Expanded then
+            self.Button.BackgroundColor3 = theme.FrameBgHovered
+        end
+    end)
+    
+    self.Button.MouseLeave:Connect(function()
+        if not self.Expanded then
+            self.Button.BackgroundColor3 = theme.FrameBg
+        end
+    end)
+    
+    return self
+end
+
+function ImGui.Elements.Dropdown:Toggle()
+    self.Expanded = not self.Expanded
+    self.OptionsList.Visible = self.Expanded
+    
+    if self.Expanded then
+        self.Frame.Size = UDim2.new(1, 0, 0, 55 + self.OptionsList.Size.Y.Offset + 5)
+        self.Arrow.Text = "▲"
+    else
+        self.Frame.Size = UDim2.new(1, 0, 0, 55)
+        self.Arrow.Text = "▼"
+    end
+end
+
+function ImGui.Elements.Dropdown:Select(index)
+    if index >= 1 and index <= #self.Options then
+        self.Selected = index
+        self.Button.Text = self.Options[index]
+        self:Toggle()
+        
+        if self.Callback then
+            self.Callback(index, self.Options[index])
+        end
+    end
+end
+
+function ImGui.Elements.Dropdown:GetSelected()
+    return self.Selected, self.Options[self.Selected]
+end
+
+function ImGui.Elements.Dropdown:UpdateTheme(theme)
+    self.LabelText.TextColor3 = theme.Text
+    self.Button.BackgroundColor3 = theme.FrameBg
+    self.Button.TextColor3 = theme.Text
+    self.Arrow.TextColor3 = theme.Text
+    self.OptionsList.BackgroundColor3 = theme.FrameBg
+    self.OptionsList.BorderColor3 = theme.Border
+    
+    for _, child in pairs(self.OptionsList:GetChildren()) do
+        if child:IsA("TextButton") then
+            child.BackgroundColor3 = theme.FrameBg
+            child.TextColor3 = theme.Text
+        end
+    end
+end
+
+-- SEPARATOR (Separador visual)
+ImGui.Elements.Separator = {}
+ImGui.Elements.Separator.__index = ImGui.Elements.Separator
+
+function ImGui.Elements.Separator.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.Separator)
+    
+    self.Frame = Instance.new("Frame")
+    self.Frame.Name = "Separator"
+    self.Frame.Size = UDim2.new(1, 0, 0, 10)
+    self.Frame.BackgroundTransparency = 1
+    self.Frame.Parent = parent
+    
+    local line = Instance.new("Frame")
+    line.Name = "Line"
+    line.Size = UDim2.new(1, 0, 0, 1)
+    line.Position = UDim2.new(0, 0, 0.5, 0)
+    line.BackgroundColor3 = theme.Border
+    line.BorderSizePixel = 0
+    line.Parent = self.Frame
+    
+    return self
+end
+
+function ImGui.Elements.Separator:UpdateTheme(theme)
+    self.Frame:FindFirstChild("Line").BackgroundColor3 = theme.Border
+end
+
+-- LABEL (Texto simples)
+ImGui.Elements.Label = {}
+ImGui.Elements.Label.__index = ImGui.Elements.Label
+
+function ImGui.Elements.Label.new(data, parent, theme)
+    local self = setmetatable({}, ImGui.Elements.Label)
+    
+    self.Text = data.text or "Label"
+    
+    self.Frame = Instance.new("TextLabel")
+    self.Frame.Name = "Label"
+    self.Frame.Size = UDim2.new(1, 0, 0, 20)
+    self.Frame.BackgroundTransparency = 1
+    self.Frame.Text = self.Text
+    self.Frame.TextColor3 = theme.Text
+    self.Frame.TextXAlignment = Enum.TextXAlignment.Left
+    self.Frame.Font = FONT
+    self.Frame.TextSize = 12
+    self.Frame.TextWrapped = true
+    self.Frame.Parent = parent
+    
+    return self
+end
+
+function ImGui.Elements.Label:SetText(text)
+    self.Text = text
+    self.Frame.Text = text
+end
+
+function ImGui.Elements.Label:UpdateTheme(theme)
+    self.Frame.TextColor3 = theme.Text
+end
+
+return ImGui
